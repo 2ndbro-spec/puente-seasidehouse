@@ -2,11 +2,12 @@
 
 ## プロジェクト概要
 逗子海岸の美容特化海の家「PUENTE seaside house」の公式サイト。
-HTML / CSS / JavaScript の静的サイト（4ページ構成）。
+HTML / CSS / JavaScript の静的サイト（5ページ構成）。
 
 ## ファイル構成
 ```
 index.html     — TOPページ
+story.html     — PUENTEの想い（ブランドストーリー）
 amenity.html   — アメニティ＆スポンサー
 owner.html     — オーナー＆スタッフ
 reserve.html   — 予約・料金・アクセス
@@ -29,7 +30,7 @@ HTML内の `<!-- EDIT: ○○ -->` コメントが編集箇所の目印。
 
 ### ヘッダー・フッターの変更
 ヘッダーとフッターは4ページすべてに同じ内容がある。
-変更時は **全4ファイルを同時に更新** すること。
+変更時は **全5ファイルを同時に更新** すること。
 
 ### カラーパレット
 CSS変数で管理（`css/style.css` 冒頭の `:root`）。
