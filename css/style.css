@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* ============================================
    PUENTE seaside house — Global Stylesheet
    Mobile First Responsive Design
@@ -328,10 +329,6 @@ p {
   font-size: 2.5rem;
   color: var(--deep-ocean);
   margin-bottom: 0.5rem;
-  letter-spacing: 0.1em;
-  text-shadow:
-    0 0 20px rgba(255, 255, 255, 0.9),
-    0 0 40px rgba(255, 255, 255, 0.6);
 }
 
 .hero-content .tagline {
@@ -608,6 +605,64 @@ p {
   color: var(--white);
 }
 
+/* --- FAQ --- */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.faq-item {
+  background: var(--white);
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.faq-item summary {
+  padding: 1rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.faq-item summary::before {
+  content: "Q.";
+  color: var(--coral);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.faq-item summary::after {
+  content: "+";
+  margin-left: auto;
+  font-size: 1.2rem;
+  color: var(--teal);
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after {
+  content: "-";
+}
+.faq-item p {
+  padding: 0 1.25rem 1rem 2.75rem;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #555;
+}
+
+/* --- SR Only (SEO) --- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ============================================
    Responsive — Tablet (768px+)
    ============================================ */
@@ -661,7 +716,6 @@ p {
   .hero-content h1 {
     font-size: 3.5rem;
   }
-
   .hero-content .tagline {
     font-size: 1.2rem;
   }
