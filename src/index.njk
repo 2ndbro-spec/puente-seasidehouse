@@ -17,7 +17,7 @@ permalink: /index.html
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="text-accent" style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--deep-ocean); text-shadow: 0 0 16px rgba(255,255,255,0.8); letter-spacing: 0.15em;">Zushi Beach</p>
+      <p class="text-accent" style="font-family: var(--font-handwrite); font-size: 1.2rem; margin-bottom: 0.5rem; color: var(--deep-ocean); text-shadow: 0 0 16px rgba(255,255,255,0.8); letter-spacing: 0.05em;">Zushi Beach</p>
       <h1><span class="hero-h1-visual">PUENTE</span><span class="sr-only">逗子海岸唯一の美容特化海の家「PUENTE seaside house」</span></h1>
       <p class="tagline">{{ hero.tagline }}</p>
       <a href="reserve.html" class="btn btn-primary">{{ hero.cta_text }}</a>
@@ -94,10 +94,34 @@ permalink: /index.html
     </div>
   </section>
 
+  <!-- 1-Day Journey -->
+  <section class="journey-section">
+    <div class="container" style="max-width: 900px;">
+      <div class="section-title">
+        <span>{{ journey.title }}</span>
+        <h2>{{ journey.subtitle }}</h2>
+      </div>
+      {% for step in journey.steps %}
+      <div class="journey-step reveal">
+        <div class="journey-img">
+          <img src="{{ step.image }}" alt="{{ step.alt }}" loading="lazy">
+        </div>
+        <div class="journey-body">
+          <div class="journey-number">{{ step.number }}</div>
+          <div class="journey-time">{{ step.time }}</div>
+          <h3>{{ step.title }}</h3>
+          <p class="journey-problem">{{ step.problem }}</p>
+          <p class="journey-solution">{{ step.solution }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
   <!-- EDIT: cta-bottom — CTAコピー・MAP -->
   <section class="cta-section">
     <div class="container">
-      <h2>この夏、逗子で美容体験を。</h2>
+      <h2>海に来たのに、来る前より綺麗になれる夏。</h2>
       <p>逗子海岸まで新宿から約60分。湘南新宿ラインで日帰り圏内。</p>
       <div class="map-container" style="margin-bottom: 2rem;">
         <iframe src="{{ site.maps_embed_url }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

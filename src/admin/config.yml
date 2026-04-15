@@ -68,6 +68,24 @@ collections:
     editor:
       preview: false
     files:
+      - name: "journey"
+        label: "1-Day Journey"
+        file: "src/_data/journey.json"
+        fields:
+          - { label: "タイトル", name: "title", widget: "string" }
+          - { label: "サブタイトル", name: "subtitle", widget: "string" }
+          - label: "ステップ"
+            name: "steps"
+            widget: "list"
+            fields:
+              - { label: "番号（01〜）", name: "number", widget: "string" }
+              - { label: "時間帯", name: "time", widget: "string" }
+              - { label: "タイトル", name: "title", widget: "string" }
+              - { label: "ユーザーの悩み", name: "problem", widget: "string" }
+              - { label: "PUENTEの解決策", name: "solution", widget: "text" }
+              - { label: "写真", name: "image", widget: "image" }
+              - { label: "写真の説明", name: "alt", widget: "string" }
+
       - name: "features"
         label: "3つの特徴"
         file: "src/_data/features.json"

@@ -55,12 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- Scroll Reveal Animation ---
+  // --- Scroll Reveal Animation (staggered) ---
   const reveals = document.querySelectorAll('.reveal');
   if (reveals.length > 0) {
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          // Stagger siblings inside the same parent
+          const parent = entry.target.parentElement;
+          const siblings = Array.from(parent.querySelectorAll('.reveal'));
+          const index = siblings.indexOf(entry.target);
+          const delay = index * 120;
+          entry.target.style.transitionDelay = delay + 'ms';
           entry.target.classList.add('revealed');
           revealObserver.unobserve(entry.target);
         }

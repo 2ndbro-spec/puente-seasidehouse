@@ -1,0 +1,42 @@
+{
+  "title": "PUENTE 1-Day Journey",
+  "subtitle": "PUENTEで過ごす、最高の1日。",
+  "steps": [
+    {
+      "number": "01",
+      "time": "Morning",
+      "title": "Morning Charge",
+      "problem": "まずは海を楽しみたいけど、暑さが…",
+      "solution": "冷えたアサイーボウルでヘルシーにスタート。パラソルの下でゆったり海を眺めながら、一日のエネルギーをチャージ。",
+      "image": "/images/beach-food-ocean-view.jpg",
+      "alt": "海を眺めながらのフード"
+    },
+    {
+      "number": "02",
+      "time": "Midday",
+      "title": "Midday Relax",
+      "problem": "人混みを避けて、美味しいご飯が食べたい",
+      "solution": "2階テラス席で、料理家監修の本格フードを堪能。逗子の海を見下ろす特等席で、ゆったりランチ。",
+      "image": "/images/rooftop-terrace-seats.jpg",
+      "alt": "2階テラス席"
+    },
+    {
+      "number": "03",
+      "time": "Afternoon",
+      "title": "Afternoon Reset",
+      "problem": "海あがりの髪がボサボサ。これじゃ帰れない…",
+      "solution": "ReFaのシャワーヘッドで潮を落とし、プロ仕様のアイロンで艶髪に。ライスフォースで肌もしっかりリセット。",
+      "image": "/images/hair-arrange-beach.jpg",
+      "alt": "ヘアアレンジ"
+    },
+    {
+      "number": "04",
+      "time": "Sunset",
+      "title": "Sunset Chill",
+      "problem": "せっかくの夏、もうちょっとこの時間を楽しみたい",
+      "solution": "テラスで逗子の夕景を眺めながら、冷たいドリンクを片手に。来る前より綺麗な自分で、最高の夏の記憶を。",
+      "image": "/images/sunset-terrace-view.jpg",
+      "alt": "テラスからの夕景"
+    }
+  ]
+}

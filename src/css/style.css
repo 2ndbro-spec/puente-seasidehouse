@@ -10,6 +10,7 @@
   --teal: #36B5A0;
   --turquoise: #7EE8D0;
   --coral: #F08870;
+  --sunset-orange: #FF8C5A;
   --warm-gold: #FFD96A;
   --sand: #FAFAF6;
   --dark-text: #2D3748;
@@ -20,6 +21,7 @@
   --font-heading-jp: 'Noto Serif JP', serif;
   --font-body: 'Noto Sans JP', sans-serif;
   --font-accent: 'Cormorant Garamond', serif;
+  --font-handwrite: 'Caveat', cursive;
 
   --max-width: 1200px;
   --section-padding: 60px 20px;
@@ -123,11 +125,10 @@ p {
 
 .section-title span {
   display: block;
-  font-family: var(--font-accent);
-  font-size: 0.875rem;
+  font-family: var(--font-handwrite);
+  font-size: 1.1rem;
   color: var(--teal);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
 }
 
@@ -478,9 +479,70 @@ p {
   border: none;
 }
 
+/* --- Journey Section --- */
+.journey-section {
+  background: var(--sand);
+  padding: var(--section-padding);
+}
+.journey-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+.journey-step:last-child {
+  margin-bottom: 0;
+}
+.journey-img {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.journey-img img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+}
+.journey-body {
+  flex: 1;
+}
+.journey-number {
+  font-family: var(--font-handwrite);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--sunset-orange);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+.journey-time {
+  font-family: var(--font-handwrite);
+  font-size: 1rem;
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+}
+.journey-body h3 {
+  font-size: 1.15rem;
+  color: var(--dark-text);
+  margin-bottom: 0.5rem;
+}
+.journey-problem {
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 0.5rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--turquoise);
+}
+.journey-solution {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--dark-text);
+}
+
 /* --- CTA Section --- */
 .cta-section {
-  background: var(--deep-ocean);
+  background: linear-gradient(135deg, var(--deep-ocean) 0%, #2A7BA3 50%, var(--sunset-orange) 100%);
   color: var(--white);
   text-align: center;
   padding: 60px 20px;
@@ -728,6 +790,21 @@ p {
   .gallery-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+  }
+
+  .journey-step {
+    flex-direction: row;
+    align-items: center;
+  }
+  .journey-step:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+  .journey-img {
+    width: 45%;
+    flex-shrink: 0;
+  }
+  .journey-img img {
+    height: 280px;
   }
 
   .profile {
