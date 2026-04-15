@@ -1,0 +1,130 @@
+---
+permalink: /reserve.html
+---
+{% set page_title = "予約・アクセス — PUENTE seaside house" %}
+{% set page_description = "PUENTE seaside houseの予約・料金・アクセス情報。逗子海岸の美容特化海の家。" %}
+{% set og_title = "予約・アクセス — PUENTE seaside house" %}
+{% set og_description = "予約・料金・アクセス情報。逗子海岸駅から徒歩10分。" %}
+{% set og_image = "images/ogp-reserve.jpg" %}
+{% include "header.njk" %}
+
+  <!-- EDIT: reserve-header -->
+  <section class="page-header">
+    <p class="text-accent" style="opacity: 0.8; margin-bottom: 0.5rem;">Reservation</p>
+    <h1>予約・アクセス</h1>
+    <p>お気軽にご予約ください。当日のご来店も歓迎です。</p>
+  </section>
+
+  <!-- EDIT: reservation-form — Googleフォーム iframe / LINE公式リンク -->
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>Reserve</span>
+        <h2>ご予約</h2>
+      </div>
+
+      <div class="info-box">
+        <p class="text-center">以下のフォームからご予約いただけます。<br>お急ぎの方はLINE公式アカウントからもお問い合わせ可能です。</p>
+        <!-- Googleフォーム埋め込み（URLを差し替えてください） -->
+        <div style="margin-top: 1.5rem; background: var(--sand); border-radius: var(--radius-card); padding: 40px 20px; text-align: center;">
+          <p class="text-muted">Googleフォーム埋め込みエリア</p>
+          <p class="text-muted" style="font-size: 0.8rem;">※ Google フォームのURLを設定後に表示されます</p>
+          <!-- <iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true" width="100%" height="800" frameborder="0">読み込んでいます…</iframe> -->
+        </div>
+      </div>
+
+      <!-- EDIT: line-official — LINE URL・QRコード -->
+      <div class="info-box text-center">
+        <h3>💬 LINEでもご予約・お問い合わせOK</h3>
+        <p>友だち追加で予約確認・当日の空き状況をお問い合わせいただけます。</p>
+        <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line" style="margin-top: 1rem;">LINE公式アカウントを追加 →</a>
+        <p class="text-muted mt-2" style="font-size: 0.75rem;">※ QRコードはLINE公式アカウント開設後に掲載します</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: price-table — 料金プラン・金額 -->
+  <section class="section" style="background: var(--white);">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>Price</span>
+        <h2>料金</h2>
+      </div>
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th>プラン</th>
+            <th>料金（税込）</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in pricing.plans %}
+          <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="text-muted mt-2" style="font-size: 0.8rem;">※ 料金は変更になる場合があります。最新情報はLINEでお問い合わせください。</p>
+    </div>
+  </section>
+
+  <!-- EDIT: access-info — MAP・駅からの所要時間・駐車場 -->
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>Access</span>
+        <h2>アクセス</h2>
+      </div>
+
+      <div class="map-container mb-4">
+        <iframe src="{{ site.maps_embed_url }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+
+      <div class="cards-grid" style="grid-template-columns: 1fr 1fr;">
+        <div class="info-box">
+          <h3>🚃 電車でお越しの方</h3>
+          <p style="font-size: 0.9rem;">{% for t in business.access.train %}{{ t.line }} {{ t.time }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+          <p class="text-muted" style="font-size: 0.8rem;">{% for f in business.access.from_major_stations %}{{ f.station }}から{{ f.time }}（{{ f.route }}）{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+        </div>
+        <div class="info-box">
+          <h3>🚗 お車でお越しの方</h3>
+          <p style="font-size: 0.9rem;">{{ business.access.car }}</p>
+          <p class="text-muted" style="font-size: 0.8rem;">{{ business.access.parking_note | safe }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: business-hours — 営業期間・時間・定休日 -->
+  <section class="section" style="background: var(--white);">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>Info</span>
+        <h2>営業情報</h2>
+      </div>
+      <div class="info-box">
+        <table style="width: 100%; font-size: 0.9rem;">
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; width: 120px; vertical-align: top;">営業期間</td>
+            <td style="padding: 8px 0;">{{ business.period }}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">営業時間</td>
+            <td style="padding: 8px 0;">{{ business.hours }}（ラストオーダー {{ business.last_order }}）</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">定休日</td>
+            <td style="padding: 8px 0;">{{ business.holidays }}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">悪天候時</td>
+            <td style="padding: 8px 0;">{{ business.weather_notice }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+{% include "footer.njk" %}

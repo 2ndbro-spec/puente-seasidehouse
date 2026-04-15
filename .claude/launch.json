@@ -4,7 +4,7 @@
     {
       "name": "puente-static",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "/Users/chamac/puente-seasidehouse"],
+      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "/Users/chamac/puente-seasidehouse/_site"],
       "port": 8080
     }
   ]

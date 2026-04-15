@@ -1,0 +1,31 @@
+{
+  "description": "PUENTEのコンセプトに共感いただいたブランドの皆様にご協賛いただいています。",
+  "brands": [
+    {
+      "name": "ReFa",
+      "company": "MTG",
+      "product": "シャワーヘッド・ドライヤー"
+    },
+    {
+      "name": "RICE FORCE",
+      "company": "ライスフォース",
+      "product": "スキンケアライン"
+    },
+    {
+      "name": "PROUDMEN.",
+      "company": "",
+      "product": "ボディケア"
+    },
+    {
+      "name": "RAFRA",
+      "company": "",
+      "product": "クレンジング"
+    },
+    {
+      "name": "Mieu Mieu",
+      "company": "",
+      "product": "フレグランス"
+    }
+  ],
+  "owner_comment": "「海の後、髪も肌もボロボロで帰る…そんな経験ありませんか？PUENTEでは\u201C海に来たのにキレイになって帰る\u201Dを実現したくて、自分が現場で本当に良いと思ったブランドだけを選びました。」"
+}

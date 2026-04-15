@@ -1,0 +1,173 @@
+locale: ja
+
+backend:
+  name: git-gateway
+  branch: master
+
+media_folder: "src/images"
+public_folder: "/images"
+
+collections:
+  - name: "settings"
+    label: "サイト設定"
+    editor:
+      preview: false
+    files:
+      - name: "site"
+        label: "基本設定（SNSリンク等）"
+        file: "src/_data/site.json"
+        fields:
+          - { label: "Instagram URL", name: "instagram_url", widget: "string" }
+          - { label: "LINE公式 URL", name: "line_url", widget: "string" }
+          - { label: "Google MAP URL", name: "map_url", widget: "string" }
+          - { label: "コピーライト年", name: "copyright_year", widget: "string" }
+          - { label: "Google Maps 埋め込みURL", name: "maps_embed_url", widget: "string" }
+
+      - name: "hero"
+        label: "トップ ヒーロー画像"
+        file: "src/_data/hero.json"
+        fields:
+          - { label: "ヒーロー画像", name: "image", widget: "image" }
+          - { label: "画像の説明", name: "alt", widget: "string" }
+          - { label: "キャッチコピー", name: "tagline", widget: "string" }
+          - { label: "ボタンテキスト", name: "cta_text", widget: "string", default: "予約する" }
+
+      - name: "owner"
+        label: "オーナー情報"
+        file: "src/_data/owner.json"
+        fields:
+          - { label: "写真", name: "photo", widget: "image" }
+          - { label: "肩書き", name: "title", widget: "string" }
+          - { label: "サブタイトル", name: "subtitle", widget: "string" }
+          - { label: "経歴", name: "bio", widget: "text" }
+          - { label: "Instagram URL", name: "instagram", widget: "string" }
+          - { label: "トップページ紹介文", name: "preview_text", widget: "text" }
+          - { label: "想いテキスト1", name: "story_text_1", widget: "text" }
+          - { label: "想いテキスト2", name: "story_text_2", widget: "text" }
+          - { label: "名前の由来", name: "name_origin", widget: "text" }
+
+      - name: "business"
+        label: "営業情報・アクセス"
+        file: "src/_data/business.json"
+        fields:
+          - { label: "店舗名", name: "store_name", widget: "string" }
+          - { label: "住所", name: "address", widget: "string" }
+          - { label: "営業期間", name: "period", widget: "string" }
+          - { label: "営業時間", name: "hours", widget: "string" }
+          - { label: "ラストオーダー", name: "last_order", widget: "string" }
+          - { label: "定休日", name: "holidays", widget: "string" }
+          - { label: "悪天候時の対応", name: "weather_note", widget: "string" }
+          - { label: "設備", name: "facilities", widget: "string" }
+          - { label: "JRアクセス", name: "access_jr", widget: "string" }
+          - { label: "京急アクセス", name: "access_keikyu", widget: "string" }
+          - { label: "都心からの所要時間", name: "access_from_tokyo", widget: "string" }
+          - { label: "駐車場情報", name: "parking", widget: "text" }
+
+  - name: "lists"
+    label: "コンテンツ管理"
+    editor:
+      preview: false
+    files:
+      - name: "features"
+        label: "3つの特徴"
+        file: "src/_data/features.json"
+        fields:
+          - label: "特徴一覧"
+            name: "items"
+            widget: "list"
+            max: 3
+            fields:
+              - { label: "アイコン（絵文字）", name: "icon", widget: "string" }
+              - { label: "タイトル", name: "title", widget: "string" }
+              - { label: "説明", name: "description", widget: "text" }
+
+      - name: "staff"
+        label: "スタッフ"
+        file: "src/_data/staff.json"
+        fields:
+          - label: "スタッフ一覧"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "名前", name: "name", widget: "string" }
+              - { label: "写真", name: "photo", widget: "image" }
+              - { label: "コメント", name: "comment", widget: "text" }
+              - { label: "Instagram ID", name: "instagram", widget: "string", required: false }
+
+      - name: "amenities"
+        label: "アメニティ"
+        file: "src/_data/amenities.json"
+        fields:
+          - label: "アメニティ一覧"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "ブランド名", name: "brand", widget: "string" }
+              - { label: "カテゴリー（例: Hair Care）", name: "category", widget: "string" }
+              - { label: "タイトル", name: "title", widget: "string" }
+              - { label: "写真", name: "photo", widget: "image" }
+              - { label: "説明", name: "description", widget: "text" }
+
+      - name: "sponsors"
+        label: "スポンサー"
+        file: "src/_data/sponsors.json"
+        fields:
+          - label: "スポンサー一覧"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "ブランド名", name: "brand", widget: "string" }
+              - { label: "会社名", name: "company", widget: "string", required: false }
+              - { label: "提供品", name: "product", widget: "string" }
+
+      - name: "faq"
+        label: "よくある質問"
+        file: "src/_data/faq.json"
+        fields:
+          - label: "質問一覧"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "質問", name: "question", widget: "string" }
+              - { label: "回答", name: "answer", widget: "text" }
+
+      - name: "pricing"
+        label: "料金表"
+        file: "src/_data/pricing.json"
+        fields:
+          - label: "料金一覧"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "プラン名", name: "plan", widget: "string" }
+              - { label: "料金", name: "price", widget: "string" }
+              - { label: "備考", name: "note", widget: "string", required: false }
+
+      - name: "gallery"
+        label: "ギャラリー"
+        file: "src/_data/gallery.json"
+        fields:
+          - label: "トップページ ギャラリー"
+            name: "index"
+            widget: "list"
+            fields:
+              - { label: "画像", name: "image", widget: "image" }
+              - { label: "説明（alt）", name: "alt", widget: "string" }
+          - label: "アメニティ プレビュー（トップページ）"
+            name: "amenity_preview"
+            widget: "list"
+            fields:
+              - { label: "画像", name: "image", widget: "image" }
+              - { label: "説明（alt）", name: "alt", widget: "string" }
+          - label: "ヘアメイク実績"
+            name: "works"
+            widget: "list"
+            fields:
+              - { label: "画像", name: "image", widget: "image" }
+              - { label: "説明（alt）", name: "alt", widget: "string" }
+          - label: "ストーリー ギャラリー"
+            name: "story"
+            widget: "list"
+            fields:
+              - { label: "画像", name: "image", widget: "image" }
+              - { label: "説明（alt）", name: "alt", widget: "string" }

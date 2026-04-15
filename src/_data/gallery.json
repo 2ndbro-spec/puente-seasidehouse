@@ -1,0 +1,30 @@
+{
+  "index": [
+    { "image": "/images/zushi-beach-puente-interior.jpg", "alt": "店内の様子" },
+    { "image": "/images/event-group-photo.jpg", "alt": "イベント集合写真" },
+    { "image": "/images/staff-group-photo.jpg", "alt": "スタッフ集合写真" },
+    { "image": "/images/zushi-beach-puente-exterior-day.jpg", "alt": "昼の外観" },
+    { "image": "/images/live-event-stage.jpg", "alt": "ライブイベント" },
+    { "image": "/images/sunset-terrace-view.jpg", "alt": "夕日テラス" },
+    { "image": "/images/beach-food-ocean-view.jpg", "alt": "フード×海" },
+    { "image": "/images/rooftop-terrace-seats.jpg", "alt": "2Fテラス席" }
+  ],
+  "amenity_preview": [
+    { "image": "/images/refa-shower-head-box.jpg", "alt": "ReFa シャワーヘッド" },
+    { "image": "/images/riceforce-skincare-beach.jpg", "alt": "ライスフォース×海" },
+    { "image": "/images/amenity-shelf-display.jpg", "alt": "アメニティ棚" },
+    { "image": "/images/riceforce-skincare-table.jpg", "alt": "ライスフォース×テーブル" }
+  ],
+  "works": [
+    { "image": "/images/hair-makeup-scene.jpg", "alt": "ヘアアレンジシーン" },
+    { "image": "/images/hair-arrange-beach.jpg", "alt": "ヘアアレンジ 海バック" },
+    { "image": "/images/hair-arrange-styling.jpg", "alt": "ヘアアレンジ完成" },
+    { "image": "/images/hair-makeup-indoor.jpg", "alt": "ヘアメイク店内" }
+  ],
+  "story": [
+    { "image": "/images/zushi-beach-puente-exterior-day.jpg", "alt": "昼の外観" },
+    { "image": "/images/hair-arrange-beach.jpg", "alt": "ヘアアレンジ" },
+    { "image": "/images/rooftop-terrace-seats.jpg", "alt": "テラス" },
+    { "image": "/images/puente-night-exterior.jpg", "alt": "夜の外観" }
+  ]
+}

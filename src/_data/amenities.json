@@ -1,0 +1,42 @@
+[
+  {
+    "brand": "ReFa",
+    "product": "シャワーヘッド＆ドライヤー",
+    "badge": "Hair Care",
+    "image": "/images/refa-shower-head-box.jpg",
+    "alt": "ReFa シャワーヘッド・ドライヤー",
+    "description": "美容サロンでも採用されるReFaのシャワーヘッドとドライヤーを完備。マイクロバブルで頭皮汚れを落とし、遠赤外線ドライヤーで海水後のダメージヘアもサラサラに仕上げます。"
+  },
+  {
+    "brand": "RICE FORCE",
+    "product": "スキンケアライン",
+    "badge": "Skin Care",
+    "image": "/images/riceforce-skincare-beach.jpg",
+    "alt": "RICE FORCE スキンケア",
+    "description": "お米由来の保湿成分「ライスパワーNo.11」を配合した化粧水・美容液・クリームのフルラインを用意。紫外線を浴びた肌にしっかり潤いを補給できます。"
+  },
+  {
+    "brand": "PROUDMEN.",
+    "product": "ボディケア",
+    "badge": "Body Care",
+    "image": "/images/amenity-shelf-display.jpg",
+    "alt": "PROUDMEN. ボディケア",
+    "description": "男性にも女性にも使えるボディケアアイテム。海上がりの清潔感をキープするグルーミングアイテムを取り揃えています。"
+  },
+  {
+    "brand": "RAFRA",
+    "product": "クレンジング",
+    "badge": "Cleansing",
+    "image": "/images/amenity-rafra-shelf.jpg",
+    "alt": "ReFa・アメニティ棚",
+    "description": "温感バームクレンジングで日焼け止め・メイクをするんと落とす。肌に優しいのにしっかり落ちる、海の後の肌リセットに最適。"
+  },
+  {
+    "brand": "Mieu Mieu",
+    "product": "フレグランスミスト",
+    "badge": "Fragrance",
+    "image": "/images/riceforce-skincare-table.jpg",
+    "alt": "スキンケアアイテム",
+    "description": "海上がりに心地よい香りをまとえるフレグランスミスト。帰りの電車でも爽やかな印象をキープ。"
+  }
+]

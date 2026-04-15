@@ -1,0 +1,33 @@
+{
+  "note": "※ スタッフ情報はオープン後に更新予定です。",
+  "members": [
+    {
+      "name": "スタッフ名",
+      "image": "/images/staff-member-1.jpg",
+      "alt": "スタッフ1",
+      "comment": "一言コメントが入ります",
+      "instagram": "#"
+    },
+    {
+      "name": "スタッフ名",
+      "image": "/images/hair-arrange-beach.jpg",
+      "alt": "スタッフ2",
+      "comment": "一言コメントが入ります",
+      "instagram": "#"
+    },
+    {
+      "name": "スタッフ名",
+      "image": "/images/hair-arrange-styling.jpg",
+      "alt": "スタッフ3",
+      "comment": "一言コメントが入ります",
+      "instagram": "#"
+    },
+    {
+      "name": "スタッフ名",
+      "image": "/images/staff-member-4.jpg",
+      "alt": "スタッフ4",
+      "comment": "一言コメントが入ります",
+      "instagram": "#"
+    }
+  ]
+}

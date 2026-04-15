@@ -1,0 +1,164 @@
+{
+  "hero": {
+    "image": "/images/zushi-beach-puente-exterior-day.jpg",
+    "alt": "PUENTE seaside house 昼の外観",
+    "label": "Our Story",
+    "title": "自然と出会い、\n笑顔がつながる場所。",
+    "tagline": "PUENTEは、ただの海の家ではありません。"
+  },
+  "about": {
+    "section_label": "What is PUENTE?",
+    "section_title": "PUENTEとは？",
+    "cards": [
+      {
+        "icon": "🌊",
+        "title": "自然とふれあう",
+        "description": "海・風・空を五感で感じる体験。日常から離れて、自然の力で心をリセットする場所。"
+      },
+      {
+        "icon": "😊",
+        "title": "子どもの笑顔を育てる",
+        "description": "キッズプレート、ヘアセット、特別な夏の記憶。「自分っていいかもしれない」と思える体験を届ける。"
+      },
+      {
+        "icon": "🤝",
+        "title": "人と人がつながる",
+        "description": "家族、友人、地域、初めて会う人。海辺だから生まれる自然な交流とあたたかいつながり。"
+      }
+    ]
+  },
+  "why": {
+    "section_label": "Why we started",
+    "section_title": "なぜPUENTEをつくったのか",
+    "paragraphs": [
+      "子どもが夢や自信を持ちにくい時代。大人もまた、日々の忙しさの中で心の余白を失いやすくなっています。",
+      "でも、海に来ると不思議と肩の力が抜ける。波の音を聞いていると、素直な自分に戻れる。そんな自然の力を、もっと多くの人に届けたい。",
+      "PUENTEという名前はスペイン語で「橋」。人と海、子どもと大人、日常と非日常をつなぐ架け橋でありたい — そんな想いからこの場所は生まれました。"
+    ],
+    "quote": "「子どもたちが海で過ごした一日が、いつか大人になったときに思い出す\u201C特別な夏の記憶\u201Dになってほしい。そして大人にとっても、ここに来ると自分らしくいられる場所でありたい。」",
+    "quote_author": "— PUENTE seaside house 代表"
+  },
+  "challenge": {
+    "section_label": "Challenge",
+    "section_title": "2025年の挑戦",
+    "image": "/images/staff-group-photo.jpg",
+    "alt": "PUENTEチーム",
+    "title": "クラウドファンディングへの挑戦",
+    "paragraphs": [
+      "2025年、PUENTEはCAMPFIREでクラウドファンディングに挑戦しました。想いを形にするために、仲間とともに一歩を踏み出した記録です。",
+      "数字ではなく、「なぜやるのか」「誰のためにやるのか」を伝えたい。それは単なる資金調達ではなく、PUENTEの想いに共感してくれる仲間を見つける旅でもありました。"
+    ],
+    "note": "※ クラウドファンディングページへのリンクはオープン後に掲載予定"
+  },
+  "kids": {
+    "section_label": "For Kids",
+    "section_title": "子どもたちに届けたい体験",
+    "lead": "海で遊んで、おいしいものを食べて、かわいくヘアセットしてもらう。\nその一日が、子どもにとって「自分っていいかもしれない」と思える特別な記憶になる。",
+    "scenes": [
+      {
+        "image": "/images/beach-food-ocean-view.jpg",
+        "alt": "キッズプレート",
+        "title": "海を見ながらの食事",
+        "description": "目の前に広がる海を眺めながら、焼きそばやスムージーを楽しむ。それだけで特別な夏の思い出に。"
+      },
+      {
+        "image": "/images/hair-arrange-styling.jpg",
+        "alt": "ヘアアレンジ",
+        "title": "プロのヘアセット体験",
+        "description": "プロのスタッフが子どもたちにもヘアアレンジ。鏡を見た時の笑顔が、自信の芽になる。"
+      }
+    ]
+  },
+  "adults": {
+    "section_label": "For Adults",
+    "section_title": "大人にとってのPUENTE",
+    "lead": "海辺で食事を楽しむ。仲間と語る。夕景を眺めてぼんやりする。\nPUENTEは、大人がふと素の自分に戻れる場所でもあります。",
+    "scenes": [
+      {
+        "image": "/images/sunset-terrace-view.jpg",
+        "alt": "夕日テラス",
+        "title": "夕景を眺めるテラス",
+        "description": "2Fテラスから見る逗子の夕日。仕事のことも日常のことも忘れて、ただ空を眺める贅沢な時間。"
+      },
+      {
+        "image": "/images/event-group-photo.jpg",
+        "alt": "イベント",
+        "title": "イベント・貸切利用",
+        "description": "誕生日パーティー、企業イベント、音楽ライブ。海の家だからこそ生まれる特別な時間を、貸切で。"
+      }
+    ]
+  },
+  "timeline": {
+    "section_label": "A Day at PUENTE",
+    "section_title": "PUENTEの1日",
+    "items": [
+      {
+        "time": "Morning",
+        "title": "朝 — 波の音で目覚める海辺",
+        "description": "まだ静かなビーチに、PUENTEの準備が始まる。白い建物にターコイズのアクセントが朝日に映える。"
+      },
+      {
+        "time": "Noon",
+        "title": "昼 — 海と美容と笑顔の時間",
+        "description": "海で遊んだ後はシャワーでリフレッシュ。ReFaのドライヤーで髪を整え、ヘアアレンジをしてもらう。"
+      },
+      {
+        "time": "Evening",
+        "title": "夕方 — テラスで見る逗子の夕景",
+        "description": "2Fテラスに上がって、海に沈む夕日を眺める。冷たいドリンクを片手に、今日一日を振り返る時間。"
+      },
+      {
+        "time": "Night",
+        "title": "夜 — ライトアップされたPUENTE",
+        "description": "電球ライトが灯るPUENTEは、昼とはまた違う表情。仲間と過ごす特別な夏の夜。"
+      }
+    ]
+  },
+  "future": {
+    "section_label": "The Future",
+    "section_title": "これからのPUENTE",
+    "paragraphs": [
+      "PUENTEは、ひと夏だけの場所では終わりません。",
+      "毎年この海辺に帰ってこられる場所として、子どもたちの成長を見守り、大人たちの心の拠り所であり続けたい。地域の人たちとつながり、海を通じた体験を未来へつないでいく。",
+      "それが、PUENTE — 橋 — という名前に込めた約束です。"
+    ]
+  },
+  "cta": {
+    "title": "PUENTEとつながる",
+    "subtitle": "応援・協賛・イベント貸切のご相談もお気軽にどうぞ。",
+    "cards": [
+      {
+        "icon": "📸",
+        "title": "Instagram",
+        "description": "最新情報・雰囲気をチェック",
+        "link_text": "フォローする",
+        "link_url": "https://www.instagram.com/puente_riversidehouse/",
+        "external": true
+      },
+      {
+        "icon": "💬",
+        "title": "お問い合わせ",
+        "description": "貸切・協賛・コラボ相談",
+        "link_text": "問い合わせる",
+        "link_url": "/reserve/",
+        "external": false
+      },
+      {
+        "icon": "🎪",
+        "title": "イベント・貸切",
+        "description": "誕生日・企業イベントなど",
+        "link_text": "相談する",
+        "link_url": "/reserve/",
+        "external": false
+      },
+      {
+        "icon": "🤝",
+        "title": "協賛・スポンサー",
+        "description": "PUENTEを一緒に育てる",
+        "link_text": "相談する",
+        "link_url": "/reserve/",
+        "external": false
+      }
+    ]
+  }
+}

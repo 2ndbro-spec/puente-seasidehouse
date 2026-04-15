@@ -1,0 +1,101 @@
+---
+permalink: /owner.html
+---
+{% set page_title = "オーナー＆スタッフ — PUENTE seaside house" %}
+{% set page_description = "PUENTE seaside houseのオーナー・スタッフ紹介。芸能界ヘアメイクアーティストが手がける海の家。" %}
+{% set og_title = "オーナー＆スタッフ — PUENTE seaside house" %}
+{% set og_description = "芸能界ヘアメイクアーティストがオーナー。PUENTEを支えるスタッフをご紹介。" %}
+{% set og_image = "images/ogp-owner.jpg" %}
+{% include "header.njk" %}
+
+  <!-- EDIT: owner-header -->
+  <section class="page-header">
+    <p class="text-accent" style="opacity: 0.8; margin-bottom: 0.5rem;">Owner & Staff</p>
+    <h1>つくる人たち</h1>
+    <p>PUENTEを支えるオーナーとスタッフをご紹介します。</p>
+  </section>
+
+  <!-- EDIT: owner-profile — 写真・肩書き・経歴・SNS -->
+  <section class="section">
+    <div class="container">
+      <div class="profile reveal">
+        <img src="{{ owner.image }}" alt="{{ owner.alt }}" class="profile-img">
+        <div>
+          <span class="badge">{{ owner.badge }}</span>
+          <h2 class="mt-2">{{ owner.title }}</h2>
+          <p class="text-muted">{{ owner.subtitle }}</p>
+          <p>{{ owner.bio }}</p>
+          <div style="display: flex; gap: 12px; margin-top: 1rem;">
+            <a href="{{ owner.instagram }}" target="_blank" rel="noopener" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.8rem;">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: owner-story — オーナーの言葉・名前の由来 -->
+  <section class="section" style="background: var(--white);">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>Story</span>
+        <h2>PUENTEへの思い</h2>
+      </div>
+      <div class="info-box">
+        {% for text in owner.story_texts %}
+        <p>{{ text }}</p>
+        {% endfor %}
+        <p style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E2E8F0;">
+          <strong style="color: var(--teal);">{{ owner.name_origin.label }}</strong><br>
+          {{ owner.name_origin.text }}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: staff — スタッフ写真・名前・コメント・SNS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span>Staff</span>
+        <h2>スタッフ紹介</h2>
+      </div>
+      <div class="staff-grid">
+        {% for s in staff.members %}
+        <div class="staff-card reveal">
+          <img src="{{ s.image }}" alt="{{ s.alt }}">
+          <h3 style="font-size: 1rem;">{{ s.name }}</h3>
+          <p class="text-muted" style="font-size: 0.8rem;">{{ s.comment }}</p>
+          <a href="{{ s.instagram }}" class="text-muted" style="font-size: 0.75rem;">@instagram</a>
+        </div>
+        {% endfor %}
+      </div>
+      <p class="text-center text-muted mt-3" style="font-size: 0.8rem;">{{ staff.note }}</p>
+    </div>
+  </section>
+
+  <!-- EDIT: works-gallery — ヘアメイク実績写真 -->
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <div class="section-title">
+        <span>Works</span>
+        <h2>ヘアメイク実績</h2>
+      </div>
+      <div class="gallery-grid">
+        {% for img in gallery.works %}
+        <div class="gallery-item"><img src="{{ img.image }}" alt="{{ img.alt }}" loading="lazy"></div>
+        {% endfor %}
+      </div>
+      <p class="text-center text-muted mt-3" style="font-size: 0.8rem;">※ 掲載許諾済みのもののみ表示しています。</p>
+    </div>
+  </section>
+
+  <!-- EDIT: cta -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>プロの空間で、海を楽しもう。</h2>
+      <p>ヘアメイクのプロが作った海の家で、ワンランク上のビーチ体験を。</p>
+      <a href="reserve.html" class="btn btn-primary">予約する →</a>
+    </div>
+  </section>
+
+{% include "footer.njk" %}

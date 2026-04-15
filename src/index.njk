@@ -1,0 +1,169 @@
+---
+permalink: /index.html
+---
+{% set page_title = "PUENTE seaside house — 逗子海岸の美容特化海の家" %}
+{% set page_description = "逗子海岸で唯一の美容特化海の家『PUENTE seaside house』。芸能界で活躍するヘアメイクアーティストがオーナーを務め、ReFaのシャワーヘッドやライスフォース等の高級アメニティが無料で使い放題。SNS映えする空間で、海を満喫したあとも美しい仕上がりをお約束します。ご予約受付中。" %}
+{% set og_title = "PUENTE seaside house — 逗子海岸の美容特化海の家" %}
+{% set og_description = "海水浴後も美しく。ReFaシャワーヘッド・ドライヤー、ライスフォースなどスキンケアが無料で使える逗子海岸唯一の美容特化海の家。" %}
+{% set og_image = "images/ogp-top.jpg" %}
+{% set og_type = "website" %}
+{% set twitter_card = "summary_large_image" %}
+{% include "header.njk" %}
+
+  <!-- EDIT: hero-image / hero-copy — FV写真・キャッチコピー -->
+  <section class="hero">
+    <div class="hero-bg">
+      <img src="{{ hero.image }}" alt="{{ hero.alt }}" loading="eager">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="text-accent" style="font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--deep-ocean); text-shadow: 0 0 16px rgba(255,255,255,0.8); letter-spacing: 0.15em;">Zushi Beach</p>
+      <h1><span class="hero-h1-visual">PUENTE</span><span class="sr-only">逗子海岸唯一の美容特化海の家「PUENTE seaside house」</span></h1>
+      <p class="tagline">{{ hero.tagline }}</p>
+      <a href="reserve.html" class="btn btn-primary">{{ hero.cta_text }}</a>
+    </div>
+  </section>
+
+  <!-- EDIT: feature-1 / feature-2 / feature-3 — 3つの特徴カード -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span>Features</span>
+        <h2>PUENTEの3つの特徴</h2>
+      </div>
+      <div class="cards-grid">
+        {% for f in features %}
+        <div class="card reveal">
+          <div class="card-icon">{{ f.icon }}</div>
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.description }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: amenity-preview — アメニティ写真4枚 -->
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <div class="section-title">
+        <span>Amenity</span>
+        <h2>充実のビューティーアメニティ</h2>
+      </div>
+      <p class="text-muted" style="max-width: 700px; margin: 0 auto 2rem; font-size: 0.95rem; line-height: 1.8;">海から上がった後も美しく。PUENTEでは、ReFaのシャワーヘッドや高性能ドライヤーを完備した清潔なパウダールームをご用意しています。逗子海岸で唯一、ライスフォース等の高級スキンケアも無料で使い放題。海水浴後もしっかりと髪と肌のケアが可能です。</p>
+      <div class="gallery-grid">
+        {% for img in gallery.amenity_preview %}
+        <div class="gallery-item">
+          <img src="{{ img.image }}" alt="{{ img.alt }}" loading="lazy">
+        </div>
+        {% endfor %}
+      </div>
+      <div class="text-center mt-3">
+        <a href="amenity.html" class="btn btn-outline">アメニティを詳しく見る →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: owner-preview — オーナー写真・肩書き・コメント -->
+  <section class="section">
+    <div class="container">
+      <div class="profile reveal">
+        <img src="{{ owner.image }}" alt="オーナー" class="profile-img">
+        <div>
+          <span class="badge">{{ owner.index_preview.badge }}</span>
+          <h2 class="mt-2">{{ owner.index_preview.title }}</h2>
+          <p>{{ owner.index_preview.description }}</p>
+          <a href="owner.html" class="btn btn-outline">もっと見る →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: gallery — 雰囲気ギャラリー写真8枚 -->
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <div class="section-title">
+        <span>Gallery</span>
+        <h2>PUENTEの雰囲気</h2>
+      </div>
+      <div class="gallery-grid">
+        {% for img in gallery.index %}
+        <div class="gallery-item"><img src="{{ img.image }}" alt="{{ img.alt }}" loading="lazy"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: cta-bottom — CTAコピー・MAP -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>この夏、逗子で美容体験を。</h2>
+      <p>逗子海岸まで新宿から約60分。湘南新宿ラインで日帰り圏内。</p>
+      <div class="map-container" style="margin-bottom: 2rem;">
+        <iframe src="{{ site.maps_embed_url }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <a href="reserve.html" class="btn btn-primary">予約する</a>
+    </div>
+  </section>
+
+  <!-- EDIT: shop-info — 店舗情報（ローカルSEO） -->
+  <section class="section" style="background: var(--white);">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>Information</span>
+        <h2>店舗情報</h2>
+      </div>
+      <div class="info-box">
+        <table style="width: 100%; font-size: 0.9rem;">
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; width: 120px; vertical-align: top;">店舗名</td>
+            <td style="padding: 8px 0;">{{ business.store_name }}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">所在地</td>
+            <td style="padding: 8px 0;">{{ business.address }}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">営業期間</td>
+            <td style="padding: 8px 0;">{{ business.period }}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">営業時間</td>
+            <td style="padding: 8px 0;">{{ business.hours }}（ラストオーダー {{ business.last_order }}）</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">アクセス</td>
+            <td style="padding: 8px 0;">{% for t in business.access.train %}{{ t.line }}より{{ t.time }}{% if not loop.last %} / {% endif %}{% endfor %}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">設備</td>
+            <td style="padding: 8px 0;">{{ business.facilities }}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">定休日</td>
+            <td style="padding: 8px 0;">{{ business.holidays }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: faq — よくある質問（ロングテールSEO） -->
+  <section class="section">
+    <div class="container" style="max-width: 800px;">
+      <div class="section-title">
+        <span>FAQ</span>
+        <h2>よくある質問</h2>
+      </div>
+      <div class="faq-list">
+        {% for item in faq %}
+        <details class="faq-item">
+          <summary>{{ item.question }}</summary>
+          <p>{{ item.answer }}</p>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% include "footer.njk" %}

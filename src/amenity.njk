@@ -1,0 +1,76 @@
+---
+permalink: /amenity.html
+---
+{% set page_title = "アメニティ＆スポンサー — PUENTE seaside house" %}
+{% set page_description = "ReFaシャワーヘッド・ドライヤー、ライスフォースのスキンケアなど、PUENTEで無料で使える美容アメニティをご紹介。" %}
+{% set og_title = "アメニティ＆スポンサー — PUENTE seaside house" %}
+{% set og_description = "ReFaシャワーヘッド・ドライヤー、ライスフォースのスキンケアなど、海水浴後も美しくいられる充実のアメニティ。" %}
+{% set og_image = "images/ogp-amenity.jpg" %}
+{% include "header.njk" %}
+
+  <!-- EDIT: amenity-header — ページヘッダーコピー -->
+  <section class="page-header">
+    <p class="text-accent" style="opacity: 0.8; margin-bottom: 0.5rem;">Amenity & Sponsors</p>
+    <h1>美容は、海の後こそ。</h1>
+    <p>プロが選んだ美容アメニティを、すべて無料でご利用いただけます。</p>
+  </section>
+
+  <!-- ===== アメニティ一覧 ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-title">
+        <span>Amenity</span>
+        <h2>無料で使えるビューティーアイテム</h2>
+      </div>
+
+      {% for a in amenities %}
+      <!-- EDIT: amenity-{{ loop.index }} -->
+      <div class="amenity-item reveal">
+        <img src="{{ a.image }}" alt="{{ a.alt }}" class="amenity-img">
+        <div>
+          <span class="badge">{{ a.badge }}</span>
+          <h3 class="mt-2">{{ a.brand }} — {{ a.product }}</h3>
+          <p>{{ a.description }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- EDIT: sponsors — スポンサーブランドカード -->
+  <section class="section" style="background: var(--white);">
+    <div class="container">
+      <div class="section-title">
+        <span>Sponsors</span>
+        <h2>パートナーブランド</h2>
+      </div>
+      <p class="text-center text-muted mb-4">{{ sponsors.description }}</p>
+
+      <div class="cards-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        {% for s in sponsors.brands %}
+        <div class="card text-center">
+          <h3 style="font-size: 1.1rem;">{{ s.name }}</h3>
+          <p class="text-muted" style="font-size: 0.85rem;">{% if s.company %}{{ s.company }}{% else %}&nbsp;{% endif %}</p>
+          <p style="font-size: 0.875rem;">{{ s.product }}</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- EDIT: owner-comment -->
+      <div class="info-box mt-3">
+        <h3>💬 オーナーコメント</h3>
+        <p>{{ sponsors.owner_comment }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDIT: cta — CTAコピー -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>このアメニティを体験しませんか？</h2>
+      <p>すべて無料でご利用いただけます。海水浴後の「キレイ」をお約束。</p>
+      <a href="reserve.html" class="btn btn-primary">予約する →</a>
+    </div>
+  </section>
+
+{% include "footer.njk" %}
