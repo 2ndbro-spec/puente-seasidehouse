@@ -2,9 +2,9 @@
 permalink: /index.html
 ---
 {% set page_title = "PUENTE seaside house — 逗子海岸の美容特化海の家" %}
-{% set page_description = "逗子海岸で唯一の美容特化海の家『PUENTE seaside house』。芸能界で活躍するヘアメイクアーティストがオーナーを務め、ReFaのシャワーヘッドやライスフォース等の高級アメニティが無料で使い放題。SNS映えする空間で、海を満喫したあとも美しい仕上がりをお約束します。ご予約受付中。" %}
+{% set page_description = "逗子海岸で唯一の美容特化海の家『PUENTE seaside house』。芸能界で活躍するヘアメイクアーティストがオーナーを務め、Refaのシャワーヘッドやライスフォース等の高級アメニティが無料で使い放題。SNS映えする空間で、海を満喫したあとも美しい仕上がりをお約束します。ご予約受付中。" %}
 {% set og_title = "PUENTE seaside house — 逗子海岸の美容特化海の家" %}
-{% set og_description = "海水浴後も美しく。ReFaシャワーヘッド・ドライヤー、ライスフォースなどスキンケアが無料で使える逗子海岸唯一の美容特化海の家。" %}
+{% set og_description = "海水浴後も美しく。Refaシャワーヘッド・ドライヤー、ライスフォースなどスキンケアが無料で使える逗子海岸唯一の美容特化海の家。" %}
 {% set og_image = "images/ogp-top.jpg" %}
 {% set og_type = "website" %}
 {% set twitter_card = "summary_large_image" %}
@@ -34,7 +34,7 @@ permalink: /index.html
       <div class="cards-grid">
         {% for f in features %}
         <div class="card reveal">
-          <div class="card-icon">{{ f.icon }}</div>
+          <div class="card-icon"><i data-lucide="{{ f.icon }}"></i></div>
           <h3>{{ f.title }}</h3>
           <p>{{ f.description }}</p>
         </div>
@@ -50,7 +50,7 @@ permalink: /index.html
         <span>Amenity</span>
         <h2>充実のビューティーアメニティ</h2>
       </div>
-      <p class="text-muted" style="max-width: 700px; margin: 0 auto 2rem; font-size: 0.95rem; line-height: 1.8;">海から上がった後も美しく。PUENTEでは、ReFaのシャワーヘッドや高性能ドライヤーを完備した清潔なパウダールームをご用意しています。逗子海岸で唯一、ライスフォース等の高級スキンケアも無料で使い放題。海水浴後もしっかりと髪と肌のケアが可能です。</p>
+      <p class="text-muted" style="max-width: 700px; margin: 0 auto 2rem; font-size: 0.95rem; line-height: 1.8;">海から上がった後も美しく。PUENTEでは、Refaのシャワーヘッドや高性能ドライヤーを完備した清潔なパウダールームをご用意しています。逗子海岸で唯一、ライスフォース等の高級スキンケアも無料で使い放題。海水浴後もしっかりと髪と肌のケアが可能です。</p>
       <div class="gallery-grid">
         {% for img in gallery.amenity_preview %}
         <div class="gallery-item">
