@@ -28,7 +28,7 @@ permalink: /reserve.html
         <!-- Googleフォーム埋め込み（URLを差し替えてください） -->
         <div style="margin-top: 1.5rem; background: var(--sand); border-radius: var(--radius-card); padding: 40px 20px; text-align: center;">
           <p class="text-muted">Googleフォーム埋め込みエリア</p>
-          <p class="text-muted" style="font-size: 0.8rem;">※ Google フォームのURLを設定後に表示されます</p>
+          <p class="text-muted" style="font-size: 0.9rem;">※ Google フォームのURLを設定後に表示されます</p>
           <!-- <iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true" width="100%" height="800" frameborder="0">読み込んでいます…</iframe> -->
         </div>
       </div>
@@ -38,7 +38,7 @@ permalink: /reserve.html
         <h3>💬 LINEでもご予約・お問い合わせOK</h3>
         <p>友だち追加で予約確認・当日の空き状況をお問い合わせいただけます。</p>
         <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line" style="margin-top: 1rem;">LINE公式アカウントを追加 →</a>
-        <p class="text-muted mt-2" style="font-size: 0.75rem;">※ QRコードはLINE公式アカウント開設後に掲載します</p>
+        <p class="text-muted mt-2" style="font-size: 0.85rem;">※ QRコードはLINE公式アカウント開設後に掲載します</p>
       </div>
     </div>
   </section>
@@ -66,7 +66,7 @@ permalink: /reserve.html
           {% endfor %}
         </tbody>
       </table>
-      <p class="text-muted mt-2" style="font-size: 0.8rem;">※ 料金は変更になる場合があります。最新情報はLINEでお問い合わせください。</p>
+      <p class="text-muted mt-2" style="font-size: 0.9rem;">※ 料金は変更になる場合があります。最新情報はLINEでお問い合わせください。</p>
     </div>
   </section>
 
@@ -86,12 +86,12 @@ permalink: /reserve.html
         <div class="info-box">
           <h3>🚃 電車でお越しの方</h3>
           <p style="font-size: 0.9rem;">{% for t in business.access.train %}{{ t.line }} {{ t.time }}{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
-          <p class="text-muted" style="font-size: 0.8rem;">{% for f in business.access.from_major_stations %}{{ f.station }}から{{ f.time }}（{{ f.route }}）{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
+          <p class="text-muted" style="font-size: 0.9rem;">{% for f in business.access.from_major_stations %}{{ f.station }}から{{ f.time }}（{{ f.route }}）{% if not loop.last %}<br>{% endif %}{% endfor %}</p>
         </div>
         <div class="info-box">
           <h3>🚗 お車でお越しの方</h3>
           <p style="font-size: 0.9rem;">{{ business.access.car }}</p>
-          <p class="text-muted" style="font-size: 0.8rem;">{{ business.access.parking_note | safe }}</p>
+          <p class="text-muted" style="font-size: 0.9rem;">{{ business.access.parking_note | safe }}</p>
         </div>
       </div>
     </div>

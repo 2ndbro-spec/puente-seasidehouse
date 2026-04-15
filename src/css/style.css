@@ -98,7 +98,7 @@ p {
 
 .text-muted {
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 
 .text-accent {
@@ -126,7 +126,7 @@ p {
 .section-title span {
   display: block;
   font-family: var(--font-handwrite);
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   color: var(--teal);
   letter-spacing: 0.05em;
   margin-bottom: 0.5rem;
@@ -411,7 +411,7 @@ p {
   color: var(--white);
   padding: 4px 12px;
   border-radius: var(--radius-badge);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
 }
 
@@ -509,7 +509,7 @@ p {
 }
 .journey-number {
   font-family: var(--font-handwrite);
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
   color: var(--sunset-orange);
   line-height: 1;
@@ -517,7 +517,7 @@ p {
 }
 .journey-time {
   font-family: var(--font-handwrite);
-  font-size: 1rem;
+  font-size: 1.3rem;
   color: var(--teal);
   margin-bottom: 0.75rem;
 }
@@ -658,7 +658,7 @@ p {
 }
 
 .footer-copy {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   opacity: 0.6;
 }
 
