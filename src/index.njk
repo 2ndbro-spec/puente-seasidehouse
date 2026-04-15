@@ -137,38 +137,36 @@ permalink: /index.html
         <span>Information</span>
         <h2>店舗情報</h2>
       </div>
-      <div class="info-box">
-        <table style="width: 100%; font-size: 0.9rem;">
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; width: 120px; vertical-align: top;">店舗名</td>
-            <td style="padding: 8px 0;">{{ business.store_name }}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">所在地</td>
-            <td style="padding: 8px 0;">{{ business.address }}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">営業期間</td>
-            <td style="padding: 8px 0;">{{ business.period }}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">営業時間</td>
-            <td style="padding: 8px 0;">{{ business.hours }}（ラストオーダー {{ business.last_order }}）</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">アクセス</td>
-            <td style="padding: 8px 0;">{% for t in business.access.train %}{{ t.line }}より{{ t.time }}{% if not loop.last %} / {% endif %}{% endfor %}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">設備</td>
-            <td style="padding: 8px 0;">{{ business.facilities }}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; font-weight: 600; vertical-align: top;">定休日</td>
-            <td style="padding: 8px 0;">{{ business.holidays }}</td>
-          </tr>
-        </table>
-      </div>
+      <dl class="shop-info-list">
+        <div class="shop-info-item">
+          <dt>店舗名</dt>
+          <dd>{{ business.store_name }}</dd>
+        </div>
+        <div class="shop-info-item">
+          <dt>所在地</dt>
+          <dd>{{ business.address }}</dd>
+        </div>
+        <div class="shop-info-item">
+          <dt>営業期間</dt>
+          <dd>{{ business.period }}</dd>
+        </div>
+        <div class="shop-info-item">
+          <dt>営業時間</dt>
+          <dd>{{ business.hours }}（ラストオーダー {{ business.last_order }}）</dd>
+        </div>
+        <div class="shop-info-item">
+          <dt>アクセス</dt>
+          <dd>{% for t in business.access.train %}{{ t.line }}より{{ t.time }}{% if not loop.last %} / {% endif %}{% endfor %}</dd>
+        </div>
+        <div class="shop-info-item">
+          <dt>設備</dt>
+          <dd>{{ business.facilities }}</dd>
+        </div>
+        <div class="shop-info-item">
+          <dt>定休日</dt>
+          <dd>{{ business.holidays }}</dd>
+        </div>
+      </dl>
     </div>
   </section>
 
