@@ -1,11 +1,11 @@
 [
   {
-    "brand": "Refa",
+    "brand": "ReFa",
     "product": "シャワーヘッド＆ドライヤー",
     "badge": "Hair Care",
     "image": "/images/refa-shower-head-box.jpg",
-    "alt": "Refa シャワーヘッド・ドライヤー",
-    "description": "美容サロンでも採用されるRefaのシャワーヘッドとドライヤーを完備。マイクロバブルで頭皮汚れを落とし、遠赤外線ドライヤーで海水後のダメージヘアもサラサラに仕上げます。"
+    "alt": "ReFa シャワーヘッド・ドライヤー",
+    "description": "美容サロンでも採用されるReFaのシャワーヘッドとドライヤーを完備。マイクロバブルで頭皮汚れを落とし、遠赤外線ドライヤーで海水後のダメージヘアもサラサラに仕上げます。"
   },
   {
     "brand": "RICE FORCE",
@@ -28,7 +28,7 @@
     "product": "クレンジング",
     "badge": "Cleansing",
     "image": "/images/amenity-rafra-shelf.jpg",
-    "alt": "Refa・アメニティ棚",
+    "alt": "ReFa・アメニティ棚",
     "description": "温感バームクレンジングで日焼け止め・メイクをするんと落とす。肌に優しいのにしっかり落ちる、海の後の肌リセットに最適。"
   },
   {
