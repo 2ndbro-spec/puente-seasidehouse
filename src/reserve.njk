@@ -15,30 +15,159 @@ permalink: /reserve.html
     <p>お気軽にご予約ください。当日のご来店も歓迎です。</p>
   </section>
 
-  <!-- EDIT: reservation-form — Googleフォーム iframe / LINE公式リンク -->
+  <!-- 予約フォーム -->
   <section class="section">
-    <div class="container" style="max-width: 800px;">
+    <div class="container" style="max-width: 740px;">
       <div class="section-title">
         <span>Reserve</span>
         <h2>ご予約</h2>
       </div>
 
-      <div class="info-box">
-        <p class="text-center">以下のフォームからご予約いただけます。<br>お急ぎの方はLINE公式アカウントからもお問い合わせ可能です。</p>
-        <!-- Googleフォーム埋め込み（URLを差し替えてください） -->
-        <div style="margin-top: 1.5rem; background: var(--sand); border-radius: var(--radius-card); padding: 40px 20px; text-align: center;">
-          <p class="text-muted">Googleフォーム埋め込みエリア</p>
-          <p class="text-muted" style="font-size: 0.9rem;">※ Google フォームのURLを設定後に表示されます</p>
-          <!-- <iframe src="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform?embedded=true" width="100%" height="800" frameborder="0">読み込んでいます…</iframe> -->
+      <div id="reservation-app">
+
+        <!-- メニュータブ -->
+        <div id="menu-tabs" class="menu-tabs"></div>
+
+        <!-- フォーム本体 -->
+        <div id="form-body">
+
+          <!-- 日付 -->
+          <div id="step-date" class="rsv-card hidden">
+            <h3 class="rsv-step-title">日付を選んでください</h3>
+            <input type="date" id="reservation-date" class="rsv-date-input">
+            <div id="availability-loading" class="rsv-loading hidden">空き状況を確認中…</div>
+          </div>
+
+          <!-- BBQ用フィールド -->
+          <div id="bbq-fields" class="hidden">
+            <div class="rsv-card">
+              <h3 class="rsv-step-title">時間帯を選んでください <span class="rsv-note">（2時間制）</span></h3>
+              <div id="time-slots-grid" class="time-slots-grid"></div>
+            </div>
+
+            <div class="rsv-card">
+              <h3 class="rsv-step-title">人数</h3>
+              <div class="number-stepper">
+                <button type="button" class="num-btn" data-target="num-people" data-action="minus">−</button>
+                <span id="num-people-display" class="num-value">2</span>
+                <button type="button" class="num-btn" data-target="num-people" data-action="plus">+</button>
+              </div>
+              <p class="rsv-note mt-1">※ 2名〜100名</p>
+            </div>
+
+            <div id="addon-options" class="rsv-card hidden"></div>
+          </div>
+
+          <!-- ロッカーシャワー用フィールド -->
+          <div id="ls-fields" class="hidden">
+            <div class="rsv-card">
+              <p id="ls-remaining" class="ls-remaining"></p>
+              <div class="ls-gender-row">
+                <div>
+                  <h3 class="rsv-step-title">男性</h3>
+                  <div class="number-stepper">
+                    <button type="button" class="num-btn" data-target="num-male" data-action="minus">−</button>
+                    <span id="num-male-display" class="num-value">0</span>
+                    <input type="hidden" id="num-male" value="0">
+                    <button type="button" class="num-btn" data-target="num-male" data-action="plus">+</button>
+                  </div>
+                </div>
+                <div>
+                  <h3 class="rsv-step-title">女性</h3>
+                  <div class="number-stepper">
+                    <button type="button" class="num-btn" data-target="num-female" data-action="minus">−</button>
+                    <span id="num-female-display" class="num-value">0</span>
+                    <input type="hidden" id="num-female" value="0">
+                    <button type="button" class="num-btn" data-target="num-female" data-action="plus">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rsv-card">
+              <h3 class="rsv-step-title">チェックイン予定時間</h3>
+              <select id="checkin-time" class="rsv-select"></select>
+            </div>
+          </div>
+
+          <!-- 予約種別 -->
+          <div class="rsv-card">
+            <h3 class="rsv-step-title">予約の種類</h3>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="booking-type" value="confirmed" checked>
+                <span>本予約</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="booking-type" value="pending">
+                <span>仮予約 <small>（3日以内に確定してください）</small></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- お客様情報 -->
+          <div class="rsv-card">
+            <h3 class="rsv-step-title">お客様情報</h3>
+            <div class="rsv-fields">
+              <div class="rsv-field">
+                <label class="rsv-label">お名前 <span class="required">必須</span></label>
+                <input type="text" id="customer-name" class="rsv-input" placeholder="山田 花子">
+              </div>
+              <div class="rsv-field">
+                <label class="rsv-label">メールアドレス <span class="required">必須</span></label>
+                <input type="email" id="customer-email" class="rsv-input" placeholder="example@email.com">
+              </div>
+              <div class="rsv-field">
+                <label class="rsv-label">LINE ID <span class="optional">任意 — 通知に使用します</span></label>
+                <input type="text" id="customer-line" class="rsv-input" placeholder="@yourlineid">
+              </div>
+            </div>
+          </div>
+
+          <!-- エラー表示 -->
+          <div id="form-errors" class="rsv-errors hidden"></div>
+
+          <div class="text-center mt-3">
+            <button id="confirm-btn" class="btn btn-primary" style="width: 100%; max-width: 360px;">内容を確認する →</button>
+          </div>
         </div>
+
+        <!-- 確認画面 -->
+        <div id="confirm-screen" class="hidden">
+          <div class="rsv-card">
+            <h3 class="rsv-step-title">予約内容の確認</h3>
+            <div class="confirm-details"></div>
+            <p id="submit-error" class="rsv-submit-error hidden"></p>
+            <div class="rsv-confirm-btns">
+              <button id="back-btn" class="btn btn-outline">← 修正する</button>
+              <button id="submit-btn" class="btn btn-primary">予約を確定する</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 完了画面 -->
+        <div id="success-screen" class="hidden">
+          <div class="rsv-card rsv-success">
+            <div class="success-icon">✓</div>
+            <h2 style="color: var(--teal);">予約が完了しました</h2>
+            <p>ご予約ありがとうございます、<strong id="success-name"></strong> 様。</p>
+            <p class="rsv-note">予約種別: <strong id="success-status"></strong></p>
+            <div class="rsv-code-box">
+              <p class="rsv-note">予約番号</p>
+              <p class="rsv-code" id="success-code"></p>
+            </div>
+            <div id="qr-code" class="qr-wrapper"></div>
+            <p class="rsv-note mt-2">このQRコードを当日スタッフにご提示ください</p>
+            <p class="rsv-note">確認メールをお送りしました。届かない場合はLINEよりお問い合わせください。</p>
+          </div>
+        </div>
+
       </div>
 
-      <!-- EDIT: line-official — LINE URL・QRコード -->
-      <div class="info-box text-center">
-        <h3>💬 LINEでもご予約・お問い合わせOK</h3>
-        <p>友だち追加で予約確認・当日の空き状況をお問い合わせいただけます。</p>
+      <!-- LINE -->
+      <div class="info-box text-center" style="margin-top: 2rem;">
+        <h3>💬 LINEでもお問い合わせOK</h3>
+        <p>空き状況の確認・ご質問はLINE公式アカウントへ。</p>
         <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line" style="margin-top: 1rem;">LINE公式アカウントを追加 →</a>
-        <p class="text-muted mt-2" style="font-size: 0.85rem;">※ QRコードはLINE公式アカウント開設後に掲載します</p>
       </div>
     </div>
   </section>
@@ -127,4 +256,6 @@ permalink: /reserve.html
     </div>
   </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/js/reservation.js"></script>
 {% include "footer.njk" %}
