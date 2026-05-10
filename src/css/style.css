@@ -4,6 +4,8 @@
    Mobile First Responsive Design
    ============================================ */
 
+.hidden { display: none !important; }
+
 /* --- CSS Variables --- */
 :root {
   --deep-ocean: #2E8CB8;
