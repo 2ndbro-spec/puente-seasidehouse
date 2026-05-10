@@ -176,12 +176,50 @@
 
 ---
 
-## 次回以降の予定
+---
 
-### Phase 3 — 仮予約フロー（2026-05-11 20:00〜）
-1. 仮予約の自動期限切れ（n8n cron → 期限超過 `pending` を `expired` に変更）
-2. 仮予約期限3日前のLINE通知（n8n cron）
-3. お客様自身で本予約に変更できるページ（`/confirm`、予約番号＋メール認証）
+## 2026-05-11（Session 3）
+
+### 概要
+Phase 3（仮予約フロー）完了 — 自動期限切れ・リマインダー・お客様自身での本予約変更
+
+---
+
+### 実装内容
+
+#### n8n ワークフロー2本（`n8n-workflows/` に追加）
+
+**① 仮予約自動期限切れ** (`puente-expire-pending.json`)
+- Schedule: 毎日 UTC 0:00（JST 9:00）
+- Supabase に PATCH リクエスト: `status=pending` かつ `provisional_expires_at < now()` → `status='expired'`
+- ノード構成: Schedule → Code（現在時刻取得）→ HTTP PATCH（Supabase）→ Code（件数ログ）
+
+**② 仮予約期限3日前リマインダー** (`puente-pending-reminder.json`)
+- Schedule: 毎日 UTC 0:00（JST 9:00）
+- JST で「3日後」の日付範囲を計算し、その範囲内に `provisional_expires_at` がある `pending` 予約を取得
+- `line_user_id` があるものに `/confirm.html` の URL 付きで LINE Push 送信
+- ノード構成: Schedule → Code（日付範囲計算）→ HTTP GET（Supabase）→ Code（メッセージ組み立て）→ HTTP POST（LINE Push）
+
+#### `/api/confirm-reservation`（`netlify/functions/confirm-reservation.js`）
+- POST: `{ reservation_code, email }` → 予約コード+メールで認証
+- ステータスチェック: 既に `confirmed` / `expired` / `cancelled` の場合は適切なエラーを返す
+- `status='confirmed'`、`provisional_expires_at=null` に更新
+- 本予約確定メール（Resend）を自動送信
+
+#### `/confirm.html`（`src/confirm.njk`）
+- 予約番号（8文字）＋メールアドレス入力フォーム
+- クライアントサイドバリデーション（8文字チェック・メール形式チェック）
+- API 呼び出し → 成功時は予約番号・名前・日付・メニューを表示する完了画面に切り替え
+- エラー時はインラインでエラーメッセージを表示
+
+### 動作確認
+- `/confirm.html` UI: バリデーションエラー表示を確認済み
+- n8n: 2ワークフローともインポート・Activate 完了（オーナー確認済み）
+- Netlify: git push → 自動デプロイ済み
+
+---
+
+## 次回以降の予定
 
 ### Phase 4 — スタッフ管理画面（未着手）
 - 予約一覧（日別）
