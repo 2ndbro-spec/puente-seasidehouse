@@ -104,6 +104,25 @@ permalink: /reserve.html
             </div>
           </div>
 
+          <!-- 通知方法 -->
+          <div class="rsv-card">
+            <h3 class="rsv-step-title">通知方法</h3>
+            <div class="radio-group">
+              <label class="radio-label">
+                <input type="radio" name="notif-channel" value="line" checked>
+                <span>LINE <small>（推奨）</small></span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="notif-channel" value="email">
+                <span>メールのみ</span>
+              </label>
+            </div>
+            <div id="line-cta" class="line-cta-box">
+              <p class="rsv-note">予約確定後、LINE公式アカウントに予約番号を送ると確認・リマインド通知が届きます。</p>
+              <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line btn-sm">LINE 友だち追加 →</a>
+            </div>
+          </div>
+
           <!-- お客様情報 -->
           <div class="rsv-card">
             <h3 class="rsv-step-title">お客様情報</h3>
@@ -115,10 +134,6 @@ permalink: /reserve.html
               <div class="rsv-field">
                 <label class="rsv-label">メールアドレス <span class="required">必須</span></label>
                 <input type="email" id="customer-email" class="rsv-input" placeholder="example@email.com">
-              </div>
-              <div class="rsv-field">
-                <label class="rsv-label">LINE ID <span class="optional">任意 — 通知に使用します</span></label>
-                <input type="text" id="customer-line" class="rsv-input" placeholder="@yourlineid">
               </div>
             </div>
           </div>
@@ -157,7 +172,11 @@ permalink: /reserve.html
             </div>
             <div id="qr-code" class="qr-wrapper"></div>
             <p class="rsv-note mt-2">このQRコードを当日スタッフにご提示ください</p>
-            <p class="rsv-note">確認メールをお送りしました。届かない場合はLINEよりお問い合わせください。</p>
+            <div id="success-line-prompt" class="line-cta-box mt-2">
+              <p class="rsv-note"><strong>LINE通知を受け取るには</strong><br>下記から友だち追加後、この予約番号をLINEで送ってください。</p>
+              <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line btn-sm">LINE 友だち追加 →</a>
+            </div>
+            <p class="rsv-note mt-2">確認メールをお送りしました。届かない場合はLINEよりお問い合わせください。</p>
           </div>
         </div>
 

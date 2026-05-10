@@ -13,7 +13,7 @@ exports.handler = async (event) => {
   catch { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
 
   const { menu_id, date, time_start, num_people, num_male, num_female,
-          checkin_time, status, name, email, line_user_id, addon_ids, provisional_days } = body;
+          checkin_time, status, name, email, notif_channel, addon_ids, provisional_days } = body;
 
   if (!menu_id || !date || !name || !email) {
     return { statusCode: 400, body: JSON.stringify({ error: '必須項目が不足しています' }) };
@@ -84,7 +84,7 @@ exports.handler = async (event) => {
   const insertData = {
     menu_id, date, name, email,
     status: status || 'confirmed',
-    line_user_id: line_user_id || null,
+    notif_channel: notif_channel || 'email',
     provisional_expires_at,
     ...(menu.slot_duration
       ? { time_start, num_people: totalPeople }

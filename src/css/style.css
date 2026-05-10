@@ -700,6 +700,21 @@ p {
   background: #06C755;
   color: var(--white);
 }
+.btn-line.btn-sm {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+}
+.line-cta-box {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f0faf4;
+  border: 1px solid #b7e8c8;
+  border-radius: 8px;
+  text-align: center;
+}
+.line-cta-box .rsv-note {
+  margin-bottom: 0.75rem;
+}
 
 /* --- FAQ --- */
 .faq-list {

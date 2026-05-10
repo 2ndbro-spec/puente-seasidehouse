@@ -12,9 +12,9 @@
     checkinTime: '11:00',
     addonIds: [],
     bookingType: 'confirmed',
+    notifChannel: 'line',
     name: '',
     email: '',
-    lineId: '',
     availability: null,
   };
 
@@ -191,6 +191,16 @@
     });
   }
 
+  function bindNotifChannel() {
+    document.querySelectorAll('input[name="notif-channel"]').forEach(r => {
+      r.addEventListener('change', e => {
+        state.notifChannel = e.target.value;
+        const cta = $('line-cta');
+        if (cta) cta.classList.toggle('hidden', e.target.value !== 'line');
+      });
+    });
+  }
+
   function bindCheckinTime() {
     const sel = $('checkin-time');
     if (!sel) return;
@@ -204,7 +214,6 @@
       if (!validateForm()) return;
       state.name = $('customer-name').value.trim();
       state.email = $('customer-email').value.trim();
-      state.lineId = $('customer-line').value.trim();
       showConfirmScreen();
     });
   }
@@ -256,7 +265,7 @@
         <tr><th>予約種別</th><td>${state.bookingType === 'confirmed' ? '本予約' : '仮予約'}</td></tr>
         <tr><th>お名前</th><td>${state.name}</td></tr>
         <tr><th>メール</th><td>${state.email}</td></tr>
-        ${state.lineId ? `<tr><th>LINE ID</th><td>${state.lineId}</td></tr>` : ''}
+        <tr><th>通知方法</th><td>${state.notifChannel === 'line' ? 'LINE' : 'メールのみ'}</td></tr>
       </table>
     `;
     screen.scrollIntoView({ behavior: 'smooth' });
@@ -287,7 +296,7 @@
       status: state.bookingType,
       name: state.name,
       email: state.email,
-      line_user_id: state.lineId || null,
+      notif_channel: state.notifChannel,
       addon_ids: state.addonIds,
       ...(isBbq
         ? { time_start: state.timeSlot, num_people: state.numPeople }
@@ -321,6 +330,9 @@
     $('success-code').textContent = reservation.reservation_code;
     $('success-name').textContent = reservation.name;
     $('success-status').textContent = reservation.status === 'confirmed' ? '本予約' : '仮予約';
+
+    const linePrompt = $('success-line-prompt');
+    if (linePrompt) linePrompt.classList.toggle('hidden', state.notifChannel !== 'line');
 
     // QRコード生成
     const qrContainer = $('qr-code');
@@ -357,6 +369,7 @@
     init();
     bindNumberButtons();
     bindBookingType();
+    bindNotifChannel();
     bindCheckinTime();
     buildCheckinOptions();
     bindConfirmButton();
