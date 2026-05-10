@@ -1,0 +1,136 @@
+---
+permalink: /confirm.html
+---
+{% set page_title = "仮予約を本予約に変更 — PUENTE seaside house" %}
+{% set page_description = "仮予約を本予約に変更するページです。予約番号とメールアドレスを入力してください。" %}
+{% include "header.njk" %}
+
+  <section class="page-header">
+    <p class="text-accent" style="opacity: 0.8; margin-bottom: 0.5rem;">Confirm Reservation</p>
+    <h1>仮予約を本予約に変更</h1>
+  </section>
+
+  <section class="section">
+    <div class="container" style="max-width: 520px;">
+
+      <!-- 入力フォーム -->
+      <div id="confirm-form-section">
+        <div class="info-box" style="margin-bottom: 1.5rem;">
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.7;">
+            仮予約の際にお送りしたメールに記載の<strong>予約番号</strong>と、ご登録の<strong>メールアドレス</strong>を入力してください。<br>
+            本予約へ変更後、確認メールをお送りします。
+          </p>
+        </div>
+
+        <form id="confirm-form" class="rsv-card" novalidate>
+          <div class="rsv-field">
+            <label class="rsv-label" for="rsv-code">予約番号 <span class="required">必須</span></label>
+            <input id="rsv-code" type="text" class="rsv-input" placeholder="例：ABC12345"
+              maxlength="8" autocomplete="off" autocapitalize="characters" spellcheck="false">
+          </div>
+          <div class="rsv-field">
+            <label class="rsv-label" for="rsv-email">メールアドレス <span class="required">必須</span></label>
+            <input id="rsv-email" type="email" class="rsv-input" placeholder="例：your@email.com"
+              autocomplete="email">
+          </div>
+          <p id="confirm-error" class="rsv-error hidden" role="alert"></p>
+          <button type="submit" id="confirm-btn" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;">
+            本予約に変更する
+          </button>
+        </form>
+
+        <p style="margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted); text-align: center;">
+          ご不明な点は<a href="{{ site.line_url }}" target="_blank" rel="noopener" style="color: var(--ocean);">LINE公式アカウント</a>よりお問い合わせください。
+        </p>
+      </div>
+
+      <!-- 成功画面 -->
+      <div id="confirm-success-section" class="hidden">
+        <div class="rsv-card" style="text-align: center; padding: 2.5rem 2rem;">
+          <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+          <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem; color: var(--deep-ocean);">本予約が確定しました</h2>
+          <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem;">確認メールをお送りしました。当日はスタッフに予約番号をご提示ください。</p>
+          <div style="background: var(--sand-light); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; display: inline-block; min-width: 200px;">
+            <p style="margin: 0 0 0.25rem; font-size: 0.75rem; color: var(--muted); letter-spacing: 1px;">予約番号</p>
+            <p id="success-code" style="margin: 0; font-size: 1.75rem; font-weight: 700; color: var(--ocean); letter-spacing: 4px;"></p>
+          </div>
+          <br>
+          <p id="success-summary" style="font-size: 0.9rem; color: var(--text); margin-bottom: 1.5rem;"></p>
+          <a href="/reserve.html" class="btn btn-secondary">予約ページへ戻る</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+  (function () {
+    const form    = document.getElementById('confirm-form');
+    const btn     = document.getElementById('confirm-btn');
+    const errEl   = document.getElementById('confirm-error');
+    const formSec = document.getElementById('confirm-form-section');
+    const succSec = document.getElementById('confirm-success-section');
+
+    function showError(msg) {
+      errEl.textContent = msg;
+      errEl.classList.remove('hidden');
+    }
+    function clearError() {
+      errEl.textContent = '';
+      errEl.classList.add('hidden');
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearError();
+
+      const code  = document.getElementById('rsv-code').value.trim().toUpperCase();
+      const email = document.getElementById('rsv-email').value.trim().toLowerCase();
+
+      if (!code || code.length !== 8) {
+        showError('予約番号は8文字で入力してください。');
+        return;
+      }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        showError('有効なメールアドレスを入力してください。');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '処理中...';
+
+      try {
+        const res = await fetch('/api/confirm-reservation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reservation_code: code, email })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          showError(data.error || '本予約への変更に失敗しました。');
+          btn.disabled = false;
+          btn.textContent = '本予約に変更する';
+          return;
+        }
+
+        // 成功
+        const r = data.reservation;
+        document.getElementById('success-code').textContent = r.reservation_code;
+        document.getElementById('success-summary').textContent =
+          `${r.name} 様 / ${r.menu_name} / ${r.date}`;
+
+        formSec.classList.add('hidden');
+        succSec.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (err) {
+        showError('通信エラーが発生しました。しばらくしてから再試行してください。');
+        btn.disabled = false;
+        btn.textContent = '本予約に変更する';
+      }
+    });
+  })();
+  </script>
+
+{% include "footer.njk" %}

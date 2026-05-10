@@ -1,0 +1,120 @@
+{
+  "name": "PUENTE 仮予約自動期限切れ",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 * * *"
+            }
+          ]
+        }
+      },
+      "id": "b1c2d3e4-0001-0001-0001-000000000001",
+      "name": "毎朝0時UTC（JST 9時）",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date().toISOString();\nreturn [{ json: { now } }];"
+      },
+      "id": "b1c2d3e4-0002-0002-0002-000000000002",
+      "name": "現在時刻を取得",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "https://rwptdctdiubxjqklogza.supabase.co/rest/v1/reservations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "eq.pending"
+            },
+            {
+              "name": "provisional_expires_at",
+              "value": "={{ 'lt.' + $json.now }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "json",
+        "body": {
+          "values": [
+            {
+              "name": "status",
+              "value": "expired"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b1c2d3e4-0003-0003-0003-000000000003",
+      "name": "Supabase — pending → expired に更新",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json;\nconst count = Array.isArray(items) ? items.length : (items ? 1 : 0);\nconsole.log(`[PUENTE] 期限切れ仮予約を ${count} 件 expired に更新しました。`);\nreturn [{ json: { expired_count: count } }];"
+      },
+      "id": "b1c2d3e4-0004-0004-0004-000000000004",
+      "name": "件数ログ",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "毎朝0時UTC（JST 9時）": {
+      "main": [
+        [{ "node": "現在時刻を取得", "type": "main", "index": 0 }]
+      ]
+    },
+    "現在時刻を取得": {
+      "main": [
+        [{ "node": "Supabase — pending → expired に更新", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase — pending → expired に更新": {
+      "main": [
+        [{ "node": "件数ログ", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}

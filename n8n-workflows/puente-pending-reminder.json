@@ -1,0 +1,148 @@
+{
+  "name": "PUENTE 仮予約期限3日前リマインダー",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 0 * * *"
+            }
+          ]
+        }
+      },
+      "id": "c1d2e3f4-0001-0001-0001-000000000001",
+      "name": "毎朝0時UTC（JST 9時）",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// JST で「3日後」の日付範囲を求める\nconst jstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);\nconst threeDaysLater = new Date(jstNow.getTime() + 3 * 24 * 60 * 60 * 1000);\n\n// 3日後の JST 0:00:00 と 23:59:59 を UTC に変換\nconst dateStr = threeDaysLater.toISOString().slice(0, 10);\nconst rangeStart = new Date(dateStr + 'T00:00:00+09:00').toISOString();\nconst rangeEnd   = new Date(dateStr + 'T23:59:59+09:00').toISOString();\n\nreturn [{ json: { rangeStart, rangeEnd } }];"
+      },
+      "id": "c1d2e3f4-0002-0002-0002-000000000002",
+      "name": "3日後の日付範囲を計算",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://rwptdctdiubxjqklogza.supabase.co/rest/v1/reservations",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "eq.pending"
+            },
+            {
+              "name": "provisional_expires_at",
+              "value": "={{ 'gte.' + $json.rangeStart }}"
+            },
+            {
+              "name": "provisional_expires_at",
+              "value": "={{ 'lte.' + $json.rangeEnd }}"
+            },
+            {
+              "name": "line_user_id",
+              "value": "not.is.null"
+            },
+            {
+              "name": "select",
+              "value": "reservation_code,date,name,line_user_id,provisional_expires_at,menus(name)"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c1d2e3f4-0003-0003-0003-000000000003",
+      "name": "Supabase — 3日後期限の仮予約取得",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.first().json;\nif (!Array.isArray(items) || items.length === 0) return [];\n\nreturn items.map(r => {\n  const expiresDate = new Date(r.provisional_expires_at)\n    .toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric', timeZone:'Asia/Tokyo' });\n\n  const text = `【PUENTE】仮予約の期限が近づいています ⚠️\\n\\n${r.name} 様の仮予約について、本予約への変更期限が近づいています。\\n\\n📋 予約内容\\n━━━━━━━━━━\\n📅 ご利用日：${r.date}\\n🎫 予約番号：${r.reservation_code}\\n⏰ 期限：${expiresDate}\\n━━━━━━━━━━\\n\\n以下のURLから予約番号とメールアドレスを入力して本予約に変更できます。\\nhttps://puente-seasidehouse.com/confirm.html\\n\\n期限を過ぎると自動的にキャンセルとなりますのでご注意ください。`;\n\n  return {\n    json: {\n      line_user_id: r.line_user_id,\n      payload: JSON.stringify({\n        to: r.line_user_id,\n        messages: [{ type: 'text', text }]\n      })\n    }\n  };\n});"
+      },
+      "id": "c1d2e3f4-0004-0004-0004-000000000004",
+      "name": "リマインダーメッセージを組み立て",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.line.me/v2/bot/message/push",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer B3v28n22DjddVaVnOPRx0bqX43kJGhvSU9JAwJ3iAfdEkQffFb8/zdOYOgLMzWttnr8/ckbodijjvCWiaXMJmKIleZnNaFW9/7v8xFpQwB3q4vR6qyoK+UX7LE1jOI5OiO+7vSS4Hui+vp4y67fWAQdB04t89/1O/w1cDnyilFU="
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ $json.payload }}",
+        "options": {}
+      },
+      "id": "c1d2e3f4-0005-0005-0005-000000000005",
+      "name": "LINE Push — 期限リマインダー送信",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1120, 300]
+    }
+  ],
+  "connections": {
+    "毎朝0時UTC（JST 9時）": {
+      "main": [
+        [{ "node": "3日後の日付範囲を計算", "type": "main", "index": 0 }]
+      ]
+    },
+    "3日後の日付範囲を計算": {
+      "main": [
+        [{ "node": "Supabase — 3日後期限の仮予約取得", "type": "main", "index": 0 }]
+      ]
+    },
+    "Supabase — 3日後期限の仮予約取得": {
+      "main": [
+        [{ "node": "リマインダーメッセージを組み立て", "type": "main", "index": 0 }]
+      ]
+    },
+    "リマインダーメッセージを組み立て": {
+      "main": [
+        [{ "node": "LINE Push — 期限リマインダー送信", "type": "main", "index": 0 }]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": []
+}
