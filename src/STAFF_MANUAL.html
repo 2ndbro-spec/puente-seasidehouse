@@ -1,0 +1,815 @@
+---
+layout: null
+permalink: /STAFF_MANUAL.html
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PUENTE — スタッフマニュアル</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ocean:  #2E8CB8;
+  --teal:   #36B5A0;
+  --deep:   #1A5276;
+  --orange: #E8956D;
+  --green:  #36B57A;
+  --red:    #C53030;
+  --yellow: #D69E2E;
+  --bg:     #F0F4F8;
+  --white:  #ffffff;
+  --text:   #2D3748;
+  --muted:  #718096;
+  --border: #E2E8F0;
+  --radius: 14px;
+}
+body {
+  font-family: -apple-system, 'Helvetica Neue', 'Noto Sans JP', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 3.5rem;
+}
+
+/* ===== ヘッダー ===== */
+.header {
+  background: linear-gradient(135deg, var(--deep), var(--ocean));
+  padding: 2rem 1.25rem 1.75rem;
+  text-align: center;
+  color: white;
+}
+.header-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 4px; margin-bottom: 0.2rem; }
+.header-sub  { font-size: 0.8rem; opacity: 0.75; letter-spacing: 1px; }
+
+/* ===== 目次 ===== */
+.toc {
+  background: white;
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.toc::-webkit-scrollbar { display: none; }
+.toc-btn {
+  flex-shrink: 0;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 99px;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s;
+}
+.toc-btn:active, .toc-btn.active {
+  background: var(--deep);
+  border-color: var(--deep);
+  color: white;
+}
+
+/* ===== コンテンツ ===== */
+.content { padding: 0 1rem; }
+
+/* ===== セクション ===== */
+.section {
+  margin-top: 1.5rem;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--deep);
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border);
+}
+.section-icon {
+  font-size: 1.1rem;
+}
+
+/* ===== カード ===== */
+.card {
+  background: white;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+/* ===== アクセス情報 ===== */
+.access-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.access-row:last-child { border-bottom: none; }
+.access-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.15rem;
+}
+.access-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+.access-value a {
+  color: var(--ocean);
+  text-decoration: none;
+  word-break: break-all;
+  font-family: -apple-system, 'Helvetica Neue', sans-serif;
+  font-size: 0.85rem;
+}
+.copy-btn {
+  flex-shrink: 0;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  margin-left: 0.75rem;
+  transition: all 0.15s;
+}
+.copy-btn.copied {
+  background: #C6F6D5;
+  border-color: #68D391;
+  color: #276749;
+}
+
+/* ===== 注記ボックス ===== */
+.note-box {
+  background: #EBF8FF;
+  border-left: 3px solid var(--ocean);
+  border-radius: 0 8px 8px 0;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.82rem;
+  color: #2C5282;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+.note-box.warn {
+  background: #FFFAF0;
+  border-color: var(--yellow);
+  color: #7B341E;
+}
+.note-box.danger {
+  background: #FFF5F5;
+  border-color: var(--red);
+  color: #9B2C2C;
+}
+
+/* ===== ステップリスト ===== */
+.step-list { list-style: none; padding: 0.85rem 1rem; }
+.step-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+  position: relative;
+}
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  width: 2px;
+  bottom: -12px;
+  background: var(--border);
+}
+.step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--deep);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  z-index: 1;
+}
+.step-body { padding-top: 4px; flex: 1; }
+.step-text { font-size: 0.88rem; font-weight: 600; line-height: 1.5; }
+.step-sub  { font-size: 0.78rem; color: var(--muted); margin-top: 0.15rem; }
+.step-sub code {
+  background: var(--bg);
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.75rem;
+  color: var(--ocean);
+  font-family: 'SF Mono', 'Fira Code', monospace;
+}
+
+/* ===== 色分け凡例 ===== */
+.legend-list { padding: 0.75rem 0.85rem; }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.legend-item:last-child { border-bottom: none; }
+.legend-bar {
+  flex-shrink: 0;
+  width: 5px; height: 38px;
+  border-radius: 3px;
+}
+.legend-label { font-size: 0.8rem; font-weight: 700; flex: 1; }
+.legend-desc  { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+
+/* ===== サンプルカード ===== */
+.sample-card {
+  margin: 0 1rem 0.75rem;
+  background: white;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  border-left: 5px solid var(--teal);
+  padding: 0.75rem 0.9rem;
+}
+.sample-code {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+.badge-confirmed { background: #C6F6D5; color: #276749; }
+.badge-pending   { background: #FEEBC8; color: #7B341E; }
+.badge-ci        { background: #BEE3F8; color: #2C5282; }
+.sample-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
+.sample-detail { font-size: 0.78rem; color: var(--muted); }
+.sample-line {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.75rem; margin-top: 0.3rem;
+}
+.line-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+/* ===== テーブル ===== */
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+th {
+  background: var(--bg);
+  font-weight: 700;
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.5;
+}
+tr:last-child td { border-bottom: none; }
+.td-result {
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+.result-ok     { color: #276749; }
+.result-warn   { color: #7B341E; }
+.result-error  { color: #9B2C2C; }
+
+/* ===== FAQ ===== */
+.faq-item {
+  border-bottom: 1px solid var(--border);
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-q {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem 0;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-q-mark {
+  flex-shrink: 0;
+  width: 22px; height: 22px;
+  background: var(--ocean);
+  color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  margin-top: 1px;
+}
+.faq-q-text { flex: 1; line-height: 1.5; }
+.faq-arrow {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 3px;
+  transition: transform 0.2s;
+}
+.faq-item.open .faq-arrow { transform: rotate(90deg); }
+.faq-a {
+  display: none;
+  padding: 0.6rem 1rem 0.9rem 3.3rem;
+  font-size: 0.83rem;
+  color: var(--text);
+  line-height: 1.65;
+}
+.faq-item.open .faq-a { display: block; }
+.faq-a a { color: var(--ocean); word-break: break-all; }
+
+/* ===== 緊急連絡先 ===== */
+.contact-card {
+  background: white;
+  border-radius: var(--radius);
+  border: 1.5px solid #FEB2B2;
+  padding: 1rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.contact-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+.contact-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.15rem; }
+.contact-value { font-weight: 700; font-size: 0.88rem; }
+.contact-value a { color: var(--red); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="header">
+  <div class="header-logo">PUENTE</div>
+  <div class="header-sub">スタッフ管理画面 マニュアル</div>
+</div>
+
+<!-- 目次 -->
+<div class="toc">
+  <button class="toc-btn active" onclick="scrollTo('access')">📱 アクセス</button>
+  <button class="toc-btn" onclick="scrollTo('login')">🔐 ログイン</button>
+  <button class="toc-btn" onclick="scrollTo('tab1')">📋 予約一覧</button>
+  <button class="toc-btn" onclick="scrollTo('tab2')">📅 残枠調整</button>
+  <button class="toc-btn" onclick="scrollTo('tab3')">✅ チェックイン</button>
+  <button class="toc-btn" onclick="scrollTo('faq')">❓ FAQ</button>
+  <button class="toc-btn" onclick="scrollTo('contact')">📞 緊急連絡</button>
+</div>
+
+<div class="content">
+
+  <!-- ① アクセス方法 -->
+  <div class="section" id="access">
+    <div class="section-title"><span class="section-icon">📱</span>アクセス方法</div>
+
+    <div class="card">
+      <div class="access-row">
+        <div>
+          <div class="access-label">URL</div>
+          <div class="access-value"><a href="https://puente-seasidehouse.com/staff.html" target="_blank">puente-seasidehouse.com/staff.html</a></div>
+        </div>
+      </div>
+      <div class="access-row">
+        <div>
+          <div class="access-label">パスワード</div>
+          <div class="access-value">puente2026staff</div>
+        </div>
+        <button class="copy-btn" onclick="copyPw(this)">コピー</button>
+      </div>
+    </div>
+
+    <div class="note-box">
+      Safari / Chrome のどちらからでもアクセスできます。<br>
+      <strong>ホーム画面に追加</strong>しておくと素早く開けて便利です。
+    </div>
+  </div>
+
+  <!-- ② ログイン -->
+  <div class="section" id="login">
+    <div class="section-title"><span class="section-icon">🔐</span>ログイン</div>
+
+    <div class="card">
+      <ol class="step-list">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-text">URLを開くとパスワード入力画面が表示される</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-text">パスワードを入力して「ログイン」ボタンを押す</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-text">ログイン成功 → メイン画面に切り替わる</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="note-box">
+      ブラウザを閉じても同じセッション中はログインが維持されます。<br>
+      「セッションが切れました」と出たら再ログインしてください。
+    </div>
+  </div>
+
+  <!-- ③ 日付の切り替え -->
+  <div class="section" id="date-nav">
+    <div class="section-title"><span class="section-icon">🗓️</span>日付の切り替え</div>
+
+    <div class="card" style="padding: 0.9rem 1rem;">
+      <div style="text-align:center; font-family: monospace; font-size: 1rem; font-weight: 700; color: var(--deep); background: var(--bg); border-radius: 8px; padding: 0.65rem 1rem; margin-bottom: 0.75rem; letter-spacing: 1px;">
+        ‹ &nbsp; 5月17日(土)（今日） &nbsp; ›
+      </div>
+      <div style="display: flex; gap: 0.5rem; font-size: 0.82rem;">
+        <div style="flex:1; background: var(--bg); border-radius: 8px; padding: 0.5rem 0.7rem; text-align:center;">
+          <div style="font-size:1.1rem; margin-bottom:0.2rem;">‹</div>
+          <div style="color:var(--muted);">前日を表示</div>
+        </div>
+        <div style="flex:1; background: var(--bg); border-radius: 8px; padding: 0.5rem 0.7rem; text-align:center;">
+          <div style="font-size:1.1rem; margin-bottom:0.2rem;">›</div>
+          <div style="color:var(--muted);">翌日を表示</div>
+        </div>
+        <div style="flex:1.4; background: #EBF8FF; border-radius: 8px; padding: 0.5rem 0.7rem; text-align:center;">
+          <div style="font-size:0.75rem; font-weight:700; color:var(--ocean); margin-bottom:0.1rem;">（今日）表示</div>
+          <div style="color:var(--muted); font-size:0.75rem;">当日であることを示す</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ タブ①：予約一覧 -->
+  <div class="section" id="tab1">
+    <div class="section-title"><span class="section-icon">📋</span>タブ①「予約一覧」</div>
+
+    <!-- サマリーカード -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">上部サマリーカード</div>
+    <div class="card" style="display:flex; overflow:hidden; margin-bottom:0.75rem;">
+      <div style="flex:1; text-align:center; padding:0.75rem 0.5rem; border-right:1px solid var(--border);">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--muted); margin-bottom:0.25rem;">BBQ</div>
+        <div style="font-size:1.3rem; font-weight:800; color:var(--deep);">—</div>
+        <div style="font-size:0.65rem; color:var(--muted);">BBQ合計人数</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:0.75rem 0.5rem; border-right:1px solid var(--border);">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--muted); margin-bottom:0.25rem;">L/S</div>
+        <div style="font-size:1.3rem; font-weight:800; color:var(--deep);">—</div>
+        <div style="font-size:0.65rem; color:var(--muted);">ロッカー合計</div>
+      </div>
+      <div style="flex:1; text-align:center; padding:0.75rem 0.5rem;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--muted); margin-bottom:0.25rem;">合計</div>
+        <div style="font-size:1.3rem; font-weight:800; color:var(--deep);">—</div>
+        <div style="font-size:0.65rem; color:var(--muted);">全体人数</div>
+      </div>
+    </div>
+
+    <!-- 色分け -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">予約カードの色分け（左端のライン）</div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="legend-list">
+        <div class="legend-item">
+          <div class="legend-bar" style="background:var(--teal);"></div>
+          <div>
+            <div class="legend-label">🟢 緑（ティール）</div>
+            <div class="legend-desc">本予約 — 決済確定済み・通常の来場予定</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-bar" style="background:var(--orange);"></div>
+          <div>
+            <div class="legend-label">🟠 オレンジ</div>
+            <div class="legend-desc">仮予約 — まだ本予約に変更されていない。期限切れで自動キャンセル</div>
+          </div>
+        </div>
+        <div class="legend-item">
+          <div class="legend-bar" style="background:#4A5568;"></div>
+          <div>
+            <div class="legend-label">🔵 ダークブルー（薄め）</div>
+            <div class="legend-desc">CI済 — チェックイン処理が完了済み</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- サンプルカード -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">予約カードの見方</div>
+    <div class="sample-card">
+      <div class="sample-code">
+        <span>A1B2C3D4</span>
+        <span class="badge badge-confirmed">本予約</span>
+      </div>
+      <div class="sample-name">田中 太郎</div>
+      <div class="sample-detail">BBQプラン　11:00〜　4名</div>
+      <div class="sample-line">
+        <div class="line-dot"></div>
+        <span style="font-size:0.75rem; color:var(--green); font-weight:600;">LINE連携済</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="table-wrap">
+        <table>
+          <tr><th>項目</th><th>内容</th></tr>
+          <tr><td>予約コード</td><td>英数字8桁（例：<code style="font-family:monospace; font-size:0.8rem; background:var(--bg); padding:0.1rem 0.35rem; border-radius:4px;">A1B2C3D4</code>）</td></tr>
+          <tr><td>お名前</td><td>予約者名</td></tr>
+          <tr><td>プラン/時間/人数</td><td>詳細情報</td></tr>
+          <tr><td>LINE連携</td><td>🟢 連携済 / 🟡 未連携 / 📧 メールのみ</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ タブ②：残枠調整 -->
+  <div class="section" id="tab2">
+    <div class="section-title"><span class="section-icon">📅</span>タブ②「残枠調整」</div>
+
+    <div class="note-box" style="margin-bottom:0.75rem;">
+      特定の日の定員数を変更できます。<strong>変更は選択した日付のみ</strong>に適用されます。
+    </div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+      <ol class="step-list">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-text">ヘッダーで変更したい日付を選ぶ</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-text">「残枠調整」タブをタップ</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-text">各メニューの「定員」欄に人数を入力</div>
+            <div class="step-sub">カッコ内はデフォルト値（例：<code>デフォルト: 40名</code>）</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-text">「保存」ボタンをタップ</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <div class="step-text">「✓ 保存しました」と表示されれば完了</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div class="card" style="padding: 0.85rem 1rem; margin-bottom:0.75rem;">
+      <div style="font-size:0.75rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem;">使用例</div>
+      <div style="display:flex; flex-direction:column; gap:0.4rem;">
+        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.82rem;">
+          <span style="flex-shrink:0; width:6px; height:6px; background:var(--teal); border-radius:50;"></span>
+          BBQを通常40名 → 30名に減らしたい日
+        </div>
+        <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.82rem;">
+          <span style="flex-shrink:0; width:6px; height:6px; background:var(--teal); border-radius:50%;"></span>
+          ロッカー・シャワーを臨時で増枠したい日
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box warn">
+      デフォルト定員を恒久的に変えたい場合はシステム管理者に連絡してください。
+    </div>
+  </div>
+
+  <!-- ⑥ タブ③：チェックイン -->
+  <div class="section" id="tab3">
+    <div class="section-title"><span class="section-icon">✅</span>タブ③「チェックイン」</div>
+
+    <!-- 方法A -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">方法A：QRコードスキャン（推奨）</div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <ol class="step-list">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-text">「📷 カメラでQRスキャン」ボタンをタップ</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-text">カメラへのアクセスを許可する</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <div class="step-text">お客様の予約QRコードを枠内に収める</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <div class="step-text">自動でスキャンされ、結果が表示される</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- 方法B -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">方法B：予約番号の手入力</div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <ol class="step-list">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <div class="step-text">「予約番号を手入力」の入力欄にコードを入力</div>
+            <div class="step-sub">英数字8桁（例：<code>A1B2C3D4</code>）。自動で大文字変換</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <div class="step-text">「確認」ボタンをタップ（またはEnterキー）</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <!-- 結果の見方 -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">チェックイン結果の見方</div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="table-wrap">
+        <table>
+          <tr><th>表示</th><th>意味</th></tr>
+          <tr>
+            <td><span class="td-result result-ok">✅ チェックイン完了</span></td>
+            <td>正常にチェックイン完了</td>
+          </tr>
+          <tr>
+            <td><span class="td-result result-warn">⚠️ すでにCI済み</span></td>
+            <td>同じ予約番号が2回スキャンされた</td>
+          </tr>
+          <tr>
+            <td><span class="td-result result-error">❌ エラー</span></td>
+            <td>問題あり（下記参照）</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- エラー一覧 -->
+    <div style="font-size:0.78rem; font-weight:700; color:var(--muted); margin-bottom:0.5rem; padding-left:0.25rem;">エラーメッセージと対応</div>
+    <div class="card" style="margin-bottom:0.75rem;">
+      <div class="table-wrap">
+        <table>
+          <tr><th>エラー文</th><th>原因と対応</th></tr>
+          <tr>
+            <td style="font-weight:600; white-space:nowrap;">予約が見つかりません</td>
+            <td>番号が間違っている。お客様の画面を直接確認して再入力</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; white-space:nowrap;">まだ仮予約です</td>
+            <td>仮予約のまま来場。<a href="https://puente-seasidehouse.com/confirm.html" target="_blank" style="color:var(--ocean);">confirm.html</a> で本予約に変更してもらう</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; white-space:nowrap;">チェックイン日が違います</td>
+            <td>予約日と今日が異なる。日付ナビで正しい日を選んで再スキャン</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600; white-space:nowrap;">すでにCI済みです</td>
+            <td>重複スキャン。予約一覧で来場時刻を確認</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑦ FAQ -->
+  <div class="section" id="faq">
+    <div class="section-title"><span class="section-icon">❓</span>よくある質問</div>
+
+    <div class="card" style="margin-bottom:0.75rem;">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <div class="faq-q-mark">Q</div>
+          <div class="faq-q-text">QRコードが読み取れない</div>
+          <div class="faq-arrow">▶</div>
+        </div>
+        <div class="faq-a">お客様のスマホの画面の明るさを上げてもらう、または手入力（方法B）に切り替えてください。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <div class="faq-q-mark">Q</div>
+          <div class="faq-q-text">「セッションが切れました」と表示された</div>
+          <div class="faq-arrow">▶</div>
+        </div>
+        <div class="faq-a">再度パスワードを入力してログインしてください。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <div class="faq-q-mark">Q</div>
+          <div class="faq-q-text">仮予約のお客様が来場した</div>
+          <div class="faq-arrow">▶</div>
+        </div>
+        <div class="faq-a">
+          その場で <a href="https://puente-seasidehouse.com/confirm.html" target="_blank">puente-seasidehouse.com/confirm.html</a> にアクセスしてもらい、予約番号とメールアドレスを入力して本予約に変更してもらってください。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          <div class="faq-q-mark">Q</div>
+          <div class="faq-q-text">「この日の予約はありません」と表示される</div>
+          <div class="faq-arrow">▶</div>
+        </div>
+        <div class="faq-a">日付ナビで正しい日付（今日）が選択されているか確認してください。</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ⑧ 緊急連絡先 -->
+  <div class="section" id="contact">
+    <div class="section-title"><span class="section-icon">📞</span>緊急連絡先</div>
+    <div class="contact-card">
+      <div class="contact-icon">🆘</div>
+      <div>
+        <div class="contact-label">システムに不具合がある場合</div>
+        <div class="contact-value"><a href="mailto:2ndbros.chama@gmail.com">2ndbros.chama@gmail.com</a></div>
+        <div style="font-size:0.72rem; color:var(--muted); margin-top:0.2rem;">システム管理者（Chama）</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<script>
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const y = el.getBoundingClientRect().top + window.scrollY - 60;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+  document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function toggleFaq(el) {
+  el.closest('.faq-item').classList.toggle('open');
+}
+
+function copyPw(btn) {
+  navigator.clipboard.writeText('puente2026staff').then(() => {
+    btn.textContent = '✓ コピー済み';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'コピー';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
