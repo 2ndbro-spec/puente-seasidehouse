@@ -1,0 +1,453 @@
+---
+layout: null
+permalink: /LAUNCH_TODO.html
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PUENTE — 公開前チェックリスト</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ocean:  #2E8CB8;
+  --teal:   #36B5A0;
+  --deep:   #1A5276;
+  --sand:   #F5F0E8;
+  --orange: #E8956D;
+  --red:    #C53030;
+  --yellow: #D69E2E;
+  --green:  #276749;
+  --bg:     #F0F4F8;
+  --white:  #ffffff;
+  --text:   #2D3748;
+  --muted:  #718096;
+  --border: #E2E8F0;
+  --radius: 14px;
+}
+body {
+  font-family: -apple-system, 'Helvetica Neue', 'Noto Sans JP', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 3rem;
+}
+
+/* ヘッダー */
+.header {
+  background: linear-gradient(135deg, var(--deep), var(--ocean));
+  padding: 2rem 1.25rem 1.75rem;
+  text-align: center;
+  color: white;
+}
+.header-logo { font-size: 1.5rem; font-weight: 800; letter-spacing: 4px; margin-bottom: 0.2rem; }
+.header-sub  { font-size: 0.8rem; opacity: 0.75; letter-spacing: 1px; }
+
+/* 進捗バー */
+.progress-wrap {
+  background: white;
+  padding: 1.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.progress-label strong { color: var(--text); font-size: 1rem; }
+.progress-bar-bg {
+  height: 8px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--ocean));
+  border-radius: 99px;
+  transition: width 0.6s ease;
+}
+
+/* セクション */
+.section {
+  margin: 1.25rem 1rem 0;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+}
+.section-header.red    { color: #9B2C2C; background: #FFF5F5; }
+.section-header.yellow { color: #7B341E; background: #FFFAF0; }
+.section-header.green  { color: #276749; background: #F0FFF4; }
+.section-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.red    .section-dot { background: #FC8181; }
+.yellow .section-dot { background: #F6AD55; }
+.green  .section-dot { background: #68D391; }
+
+/* チェックカード */
+.check-card {
+  background: white;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.check-card.done {
+  border-color: #C6F6D5;
+  background: #F0FFF4;
+  opacity: 0.7;
+}
+.check-card-inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.check-card-inner:active { background: #F7FAFC; }
+
+/* カスタムチェックボックス */
+.check-box {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  background: white;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+.check-card.done .check-box {
+  background: #48BB78;
+  border-color: #48BB78;
+}
+.check-icon {
+  display: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 900;
+}
+.check-card.done .check-icon { display: block; }
+
+.check-body { flex: 1; min-width: 0; }
+.check-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+  line-height: 1.4;
+}
+.check-card.done .check-title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.check-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.check-meta span {
+  display: inline-block;
+  background: var(--bg);
+  border-radius: 4px;
+  padding: 0.1rem 0.45rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.7rem;
+  color: var(--ocean);
+}
+.check-note {
+  font-size: 0.78rem;
+  color: #718096;
+  line-height: 1.5;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  margin-top: 0.3rem;
+}
+.check-card.done .check-note { display: none; }
+
+/* 優先バッジ */
+.priority-badge {
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  margin-top: 3px;
+  letter-spacing: 0.3px;
+}
+.badge-red    { background: #FED7D7; color: #9B2C2C; }
+.badge-yellow { background: #FEEBC8; color: #7B341E; }
+.badge-green  { background: #C6F6D5; color: #276749; }
+
+/* フッター */
+.footer-note {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin: 2rem 1rem 0;
+  padding: 1rem;
+  border-top: 1px solid var(--border);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">PUENTE</div>
+  <div class="header-sub">公開前チェックリスト</div>
+</div>
+
+<!-- 進捗バー -->
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>完了タスク</span>
+    <strong id="progress-text">0 / 8</strong>
+  </div>
+  <div class="progress-bar-bg">
+    <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
+  </div>
+</div>
+
+
+<!-- 🔴 要更新 -->
+<div class="section">
+  <div class="section-header red">
+    <span class="section-dot"></span>
+    公開前に必ず対応
+  </div>
+
+  <div class="check-card" data-id="1">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">営業期間を2026年の日程に更新</div>
+        <div class="check-meta"><span>business.json</span></div>
+        <div class="check-note">現在「2025年7月上旬 〜 8月末（予定）」のまま。2026年の確定日程に変更する</div>
+      </div>
+      <div class="priority-badge badge-red">必須</div>
+    </div>
+  </div>
+
+  <div class="check-card" data-id="2">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">スタッフ名（4名）を入力</div>
+        <div class="check-meta"><span>staff.json</span></div>
+        <div class="check-note">全員「スタッフ名」のまま。実際の名前に差し替える</div>
+      </div>
+      <div class="priority-badge badge-red">必須</div>
+    </div>
+  </div>
+
+  <div class="check-card" data-id="3">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">スタッフ一言コメント（4名）を入力</div>
+        <div class="check-meta"><span>staff.json</span></div>
+        <div class="check-note">全員「一言コメントが入ります」のまま</div>
+      </div>
+      <div class="priority-badge badge-red">必須</div>
+    </div>
+  </div>
+
+  <div class="check-card" data-id="4">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">スタッフ写真（4名）を差し替え</div>
+        <div class="check-meta"><span>staff.json → images/</span></div>
+        <div class="check-note">現在はビーチ・ヘアアレンジ等の汎用写真を流用中。本人写真に変更する</div>
+      </div>
+      <div class="priority-badge badge-red">必須</div>
+    </div>
+  </div>
+
+  <div class="check-card" data-id="5">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">飲み放題オプションの価格を設定</div>
+        <div class="check-meta"><span>Supabase → menu_addons</span></div>
+        <div class="check-note">現在 price = ¥0 のまま。Supabase管理画面で実際の金額を設定する</div>
+      </div>
+      <div class="priority-badge badge-red">必須</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- 🟡 確認推奨 -->
+<div class="section">
+  <div class="section-header yellow">
+    <span class="section-dot"></span>
+    確認・更新を推奨
+  </div>
+
+  <div class="check-card" data-id="6">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">スタッフのInstagram URLを設定（または非表示化）</div>
+        <div class="check-meta"><span>staff.json</span></div>
+        <div class="check-note">全員 instagram: "#" のまま。URLが決まれば入力、不要なら項目を削除する</div>
+      </div>
+      <div class="priority-badge badge-yellow">推奨</div>
+    </div>
+  </div>
+
+  <div class="check-card" data-id="7">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">クラウドファンディングURLを追加</div>
+        <div class="check-meta"><span>story.json</span></div>
+        <div class="check-note">「オープン後に掲載予定」のまま。キャンペーンURLが決まったら追記する</div>
+      </div>
+      <div class="priority-badge badge-yellow">推奨</div>
+    </div>
+  </div>
+
+  <div class="check-card" data-id="8">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">スポンサー企業名の空欄を確認</div>
+        <div class="check-meta"><span>sponsors.json</span></div>
+        <div class="check-note">PROUDMEN・RAFRA・Mieu Mieu の company フィールドが空欄。表示不要なら放置でOK</div>
+      </div>
+      <div class="priority-badge badge-yellow">推奨</div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- 🟢 対応済み / 不要 -->
+<div class="section">
+  <div class="section-header green">
+    <span class="section-dot"></span>
+    対応済み・このままでOK
+  </div>
+
+  <div class="check-card done" data-id="9">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">予約システム全フロー実装済み</div>
+        <div class="check-meta"><span>Netlify Functions + Supabase</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card done" data-id="10">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">LINE Webhook・前日リマインダー設定済み</div>
+        <div class="check-meta"><span>n8n + LINE Messaging API</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card done" data-id="11">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">Resend DKIMドメイン認証完了</div>
+        <div class="check-meta"><span>DNS → Netlify</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card done" data-id="12">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">スタッフ管理画面（QRスキャン・残枠調整）稼働中</div>
+        <div class="check-meta"><span>/staff.html</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="check-card done" data-id="13">
+    <div class="check-card-inner" onclick="toggle(this)">
+      <div class="check-box"><span class="check-icon">✓</span></div>
+      <div class="check-body">
+        <div class="check-title">プライバシーポリシー・利用規約ページあり</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">
+  タップしてチェックを切り替えできます（ページを閉じるとリセットされます）<br>
+  最終更新: 2026-05-17
+</div>
+
+<script>
+const STORAGE_KEY = 'puente_todo_checked';
+
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+function save(ids) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+}
+
+function toggle(inner) {
+  const card = inner.closest('.check-card');
+  const id = card.dataset.id;
+  card.classList.toggle('done');
+  const checked = getSaved();
+  const idx = checked.indexOf(id);
+  if (idx === -1) checked.push(id);
+  else checked.splice(idx, 1);
+  save(checked);
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.check-card').length;
+  const done  = document.querySelectorAll('.check-card.done').length;
+  document.getElementById('progress-text').textContent = done + ' / ' + total;
+  document.getElementById('progress-bar').style.width = (done / total * 100).toFixed(0) + '%';
+}
+
+// ページ読み込み時に保存済みの状態を復元
+(function init() {
+  const checked = getSaved();
+  checked.forEach(id => {
+    const card = document.querySelector('[data-id="' + id + '"]');
+    if (card) card.classList.add('done');
+  });
+  updateProgress();
+})();
+</script>
+
+</body>
+</html>
