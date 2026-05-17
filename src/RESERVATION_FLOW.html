@@ -1,0 +1,932 @@
+---
+layout: null
+permalink: /RESERVATION_FLOW.html
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PUENTE 予約フロー</title>
+<style>
+/* ===== リセット & ベース ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ocean:   #2E8CB8;
+  --teal:    #36B5A0;
+  --deep:    #1A5276;
+  --sand:    #F5F0E8;
+  --orange:  #E8956D;
+  --green:   #06C755;
+  --warn:    #DD6B20;
+  --danger:  #C53030;
+  --bg:      #F0F4F8;
+  --white:   #ffffff;
+  --text:    #2D3748;
+  --muted:   #718096;
+  --border:  #E2E8F0;
+  --radius:  14px;
+}
+body {
+  font-family: -apple-system, 'Helvetica Neue', 'Noto Sans JP', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== ヘッダー ===== */
+.header {
+  background: linear-gradient(135deg, var(--deep), var(--ocean));
+  padding: 2rem 1.25rem 1.75rem;
+  text-align: center;
+  color: white;
+}
+.header-logo {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  margin-bottom: 0.25rem;
+}
+.header-sub {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  letter-spacing: 1px;
+}
+
+/* ===== ナビ（タブ） ===== */
+.tab-nav {
+  display: flex;
+  background: white;
+  border-bottom: 2px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  flex: 1;
+  min-width: 80px;
+  padding: 0.85rem 0.5rem;
+  border: none;
+  background: transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab-btn.active {
+  color: var(--ocean);
+  border-bottom-color: var(--ocean);
+}
+
+/* ===== コンテンツ ===== */
+.tab-content { display: none; padding: 1.25rem 1rem 3rem; }
+.tab-content.active { display: block; }
+
+/* ===== セクション見出し ===== */
+.section-head {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin: 1.75rem 0 0.75rem;
+}
+.section-head:first-child { margin-top: 0; }
+
+/* ===== ステップカード ===== */
+.step-list { display: flex; flex-direction: column; }
+.step-item {
+  display: flex;
+  gap: 0;
+  position: relative;
+}
+/* 縦線 */
+.step-item:not(:last-child) .step-line::after {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 42px;
+  width: 2px;
+  bottom: 0;
+  background: var(--border);
+}
+.step-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  flex-shrink: 0;
+  position: relative;
+  padding-top: 12px;
+}
+.step-line { position: relative; width: 100%; display: flex; justify-content: center; }
+.step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+.step-body {
+  flex: 1;
+  padding: 0.6rem 0 1rem 0.75rem;
+}
+.step-who {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.step-action {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.step-result {
+  font-size: 0.78rem;
+  color: var(--muted);
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+  display: inline-block;
+  margin-top: 0.25rem;
+}
+
+/* 担当別カラー */
+.by-customer .step-num { background: var(--ocean); }
+.by-customer .step-who { color: var(--ocean); }
+.by-system   .step-num { background: var(--teal); }
+.by-system   .step-who { color: var(--teal); }
+.by-staff    .step-num { background: var(--deep); }
+.by-staff    .step-who { color: var(--deep); }
+.by-auto     .step-num { background: var(--orange); }
+.by-auto     .step-who { color: var(--warn); }
+.by-done     .step-num { background: #22543D; }
+.by-done     .step-who { color: #22543D; }
+
+/* ===== ステータス遷移 ===== */
+.status-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+}
+.status-node {
+  width: 100%;
+  max-width: 320px;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  text-align: center;
+}
+.status-node .s-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.2rem; }
+.status-node .s-name  { font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; }
+.status-node .s-desc  { font-size: 0.75rem; margin-top: 0.3rem; }
+
+.s-confirmed { background: #E6FFFA; border: 2px solid var(--teal); }
+.s-confirmed .s-name { color: var(--teal); }
+.s-pending   { background: #FFFAF0; border: 2px solid var(--orange); }
+.s-pending   .s-name { color: var(--warn); }
+.s-expired   { background: #FFF5F5; border: 2px solid #FC8181; }
+.s-expired   .s-name { color: var(--danger); }
+.s-checkedin { background: #EBF8FF; border: 2px solid var(--ocean); }
+.s-checkedin .s-name { color: var(--ocean); }
+
+.status-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0;
+  gap: 0.15rem;
+}
+.status-arrow .arr { font-size: 1.3rem; color: var(--border); line-height: 1; }
+.status-arrow .arr-label {
+  font-size: 0.7rem;
+  color: var(--muted);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.15rem 0.6rem;
+}
+
+.status-branch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 320px;
+}
+
+/* ===== 通知カード ===== */
+.notif-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 0.875rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+}
+.notif-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: white;
+}
+.notif-header.email { background: var(--ocean); }
+.notif-header.line  { background: var(--green); }
+.notif-header.auto  { background: var(--orange); }
+.notif-icon { font-size: 1.3rem; }
+.notif-body { padding: 0; }
+.notif-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--bg);
+  font-size: 0.83rem;
+}
+.notif-row:last-child { border-bottom: none; }
+.notif-timing {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.notif-timing.t-email { background: var(--ocean); }
+.notif-timing.t-line  { background: var(--green); }
+.notif-timing.t-auto  { background: var(--orange); }
+.notif-text { color: var(--text); line-height: 1.4; }
+
+/* ===== 在庫カード ===== */
+.inventory-card {
+  background: white;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 0.875rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+}
+.inventory-header {
+  padding: 0.875rem 1rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: var(--deep);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.inventory-row {
+  display: flex;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--bg);
+  font-size: 0.83rem;
+  gap: 0.5rem;
+}
+.inventory-row:last-child { border-bottom: none; }
+.inv-key {
+  color: var(--muted);
+  min-width: 90px;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+}
+.inv-val { color: var(--text); font-weight: 500; }
+
+/* ===== URL一覧 ===== */
+.url-card {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  text-decoration: none;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.url-card:active { transform: scale(0.98); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.url-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.url-info { flex: 1; min-width: 0; }
+.url-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.15rem; }
+.url-link { font-size: 0.72rem; color: var(--ocean); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.url-who {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.url-who.c { background: #EBF8FF; color: #2C5282; }
+.url-who.s { background: #EBF4FF; color: var(--deep); }
+
+/* ===== 注意書き ===== */
+.note {
+  background: #FFFBEB;
+  border: 1px solid #FBD38D;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  font-size: 0.8rem;
+  color: #744210;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+.note::before { content: "⚠️ "; }
+</style>
+</head>
+<body>
+
+<!-- ヘッダー -->
+<div class="header">
+  <div class="header-logo">PUENTE</div>
+  <div class="header-sub">予約フロー ガイド</div>
+</div>
+
+<!-- タブナビ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="showTab('flow1')">本予約</button>
+  <button class="tab-btn" onclick="showTab('flow2')">仮予約</button>
+  <button class="tab-btn" onclick="showTab('status')">ステータス</button>
+  <button class="tab-btn" onclick="showTab('notif')">通知</button>
+  <button class="tab-btn" onclick="showTab('inventory')">在庫</button>
+  <button class="tab-btn" onclick="showTab('urls')">URL</button>
+</nav>
+
+<!-- ========================================
+     タブ①：本予約フロー
+     ======================================== -->
+<div id="tab-flow1" class="tab-content active">
+
+  <div class="section-head">予約する</div>
+  <div class="step-list">
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">1</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">reserve.html でメニューを選択</div>
+        <div class="step-result">BBQ または ロッカー・シャワー</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">2</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">日程・人数・時間帯を入力</div>
+        <div class="step-result">BBQは時間帯も選択</div>
+      </div>
+    </div>
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">3</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">在庫チェック（自動）</div>
+        <div class="step-result">満席の場合は選択肢がグレーアウト</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">4</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">名前・メールアドレスを入力</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">5</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">通知方法を選択</div>
+        <div class="step-result">LINE推奨 または メールのみ</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">6</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">「予約する」ボタンを押す</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">予約完了</div>
+  <div class="step-list">
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">7</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">予約をデータベースに保存</div>
+        <div class="step-result">予約番号（英数字8桁）を発行</div>
+      </div>
+    </div>
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">8</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">確認メールを送信</div>
+        <div class="step-result">予約番号・QRコード・内容明記</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">9</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">QRコードをスクショ or メール保存</div>
+        <div class="step-result">当日の入場に使用</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">LINE通知を設定する（任意）</div>
+  <div class="step-list">
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">10</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">PUENTE LINE公式を友だち追加</div>
+        <div class="step-result">lin.ee/7boYnzG</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">11</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">LINEに予約番号を送信</div>
+        <div class="step-result">例：A1B2C3D4</div>
+      </div>
+    </div>
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">12</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">LINE IDと予約を自動紐付け</div>
+        <div class="step-result">LINEで予約内容の確認返信を送信</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">当日まで</div>
+  <div class="step-list">
+    <div class="step-item by-auto">
+      <div class="step-left"><div class="step-line"><div class="step-num">13</div></div></div>
+      <div class="step-body">
+        <div class="step-who">🤖 自動（前日朝9時）</div>
+        <div class="step-action">LINEでリマインダーを自動送信</div>
+        <div class="step-result">LINE連携済みのお客様のみ</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">当日</div>
+  <div class="step-list">
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">14</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">来場・QRコードを提示</div>
+      </div>
+    </div>
+    <div class="step-item by-staff">
+      <div class="step-left"><div class="step-line"><div class="step-num">15</div></div></div>
+      <div class="step-body">
+        <div class="step-who">🏖️ スタッフ</div>
+        <div class="step-action">staff.html でQRスキャン or 手入力</div>
+        <div class="step-result">チェックイン完了 ✅</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /flow1 -->
+
+
+<!-- ========================================
+     タブ②：仮予約フロー
+     ======================================== -->
+<div id="tab-flow2" class="tab-content">
+
+  <div class="section-head">仮予約する</div>
+  <div class="step-list">
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">1</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">フォーム入力（本予約と同じ手順）</div>
+        <div class="step-result">「仮予約」を選択して送信</div>
+      </div>
+    </div>
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">2</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">仮予約としてデータベースに保存</div>
+        <div class="step-result">期限 = 申込日から3日後を自動設定</div>
+      </div>
+    </div>
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">3</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">仮予約確認メールを送信</div>
+        <div class="step-result">期限日・本予約変換ページのURLを記載</div>
+      </div>
+    </div>
+    <div class="step-item by-auto">
+      <div class="step-left"><div class="step-line"><div class="step-num">4</div></div></div>
+      <div class="step-body">
+        <div class="step-who">🤖 自動（期限3日前の朝9時）</div>
+        <div class="step-action">LINEでリマインダーを自動送信</div>
+        <div class="step-result">「本予約への変更をお急ぎください」</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">本予約に変更する（期限内）</div>
+  <div class="step-list">
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">5</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">confirm.html にアクセス</div>
+        <div class="step-result">メールのリンク、またはURLを直接入力</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">6</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">予約番号 + メールアドレスを入力</div>
+      </div>
+    </div>
+    <div class="step-item by-system">
+      <div class="step-left"><div class="step-line"><div class="step-num">7</div></div></div>
+      <div class="step-body">
+        <div class="step-who">⚙️ システム</div>
+        <div class="step-action">本予約に変更完了</div>
+        <div class="step-result">本予約確定メールを送信（QRコード付き）</div>
+      </div>
+    </div>
+    <div class="step-item by-done">
+      <div class="step-left"><div class="step-line"><div class="step-num">8</div></div></div>
+      <div class="step-body">
+        <div class="step-who">✅ 以降</div>
+        <div class="step-action">本予約フローの手順13〜15に合流</div>
+        <div class="step-result">前日リマインダー → 当日チェックイン</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-head">期限切れになった場合</div>
+  <div class="step-list">
+    <div class="step-item by-auto">
+      <div class="step-left"><div class="step-line"><div class="step-num">A</div></div></div>
+      <div class="step-body">
+        <div class="step-who">🤖 自動（毎朝9時）</div>
+        <div class="step-action">期限切れの仮予約を自動でキャンセル</div>
+        <div class="step-result">ステータスが「expired（期限切れ）」に変更</div>
+      </div>
+    </div>
+    <div class="step-item by-customer">
+      <div class="step-left"><div class="step-line"><div class="step-num">B</div></div></div>
+      <div class="step-body">
+        <div class="step-who">👤 お客様</div>
+        <div class="step-action">confirm.html を開こうとする</div>
+        <div class="step-result">「この仮予約は期限切れです。再度ご予約ください。」と表示</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    期限切れになった場合、在庫は自動的に解放されます。お客様には再度フォームから予約していただく必要があります。
+  </div>
+
+</div><!-- /flow2 -->
+
+
+<!-- ========================================
+     タブ③：ステータス遷移
+     ======================================== -->
+<div id="tab-status" class="tab-content">
+
+  <div class="section-head">予約のステータス一覧</div>
+
+  <div class="status-flow">
+
+    <!-- 起点 -->
+    <div class="status-branch">
+      <div class="status-node s-confirmed">
+        <div class="s-label">本予約として送信</div>
+        <div class="s-name">confirmed</div>
+        <div class="s-desc">予約確定・在庫確保</div>
+      </div>
+      <div class="status-node s-pending">
+        <div class="s-label">仮予約として送信</div>
+        <div class="s-name">pending</div>
+        <div class="s-desc">期限付き・3日以内に変更要</div>
+      </div>
+    </div>
+
+    <!-- pending → 分岐 -->
+    <div class="status-arrow" style="width:100%;max-width:320px;display:flex;flex-direction:row;gap:.5rem;justify-content:center">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.2rem">
+        <div class="arr" style="font-size:1.2rem;color:var(--border);">↓</div>
+        <span class="arr-label" style="font-size:.65rem;color:var(--muted);text-align:center">期限内に変換</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:.2rem">
+        <div class="arr" style="font-size:1.2rem;color:var(--border);">↓</div>
+        <span class="arr-label" style="font-size:.65rem;color:var(--muted);text-align:center">期限切れ（自動）</span>
+      </div>
+    </div>
+
+    <div class="status-branch">
+      <div class="status-node s-confirmed">
+        <div class="s-label">本予約確定</div>
+        <div class="s-name">confirmed</div>
+        <div class="s-desc">本予約完了メール送信</div>
+      </div>
+      <div class="status-node s-expired">
+        <div class="s-label">自動キャンセル</div>
+        <div class="s-name">expired</div>
+        <div class="s-desc">在庫が解放される</div>
+      </div>
+    </div>
+
+    <div class="status-arrow">
+      <div class="arr">↓</div>
+      <span class="arr-label">当日チェックイン</span>
+    </div>
+
+    <div class="status-node s-checkedin" style="max-width:320px;width:100%">
+      <div class="s-label">チェックイン済み</div>
+      <div class="s-name">CI済 ✅</div>
+      <div class="s-desc">checked_in_at に時刻が記録される</div>
+    </div>
+
+  </div>
+
+  <div class="section-head" style="margin-top:2rem">ステータス詳細</div>
+
+  <div class="inventory-card">
+    <div class="inventory-row">
+      <div class="inv-key">confirmed</div>
+      <div class="inv-val">本予約。来場予定確定。</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">pending</div>
+      <div class="inv-val">仮予約。期限内にconfirmページで本予約へ変換が必要。在庫はカウント済み。</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">expired</div>
+      <div class="inv-val">期限切れ。n8nが毎朝9時に自動変更。在庫は解放される。</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">cancelled</div>
+      <div class="inv-val">手動キャンセル（管理者操作）。在庫は解放される。</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">CI済</div>
+      <div class="inv-val">チェックイン完了。checked_in_at カラムに時刻が記録される。</div>
+    </div>
+  </div>
+
+</div><!-- /status -->
+
+
+<!-- ========================================
+     タブ④：通知
+     ======================================== -->
+<div id="tab-notif" class="tab-content">
+
+  <div class="section-head">通知タイミング</div>
+
+  <!-- メール -->
+  <div class="notif-card">
+    <div class="notif-header email">
+      <span class="notif-icon">📧</span>
+      <span>メール（Resend）</span>
+    </div>
+    <div class="notif-body">
+      <div class="notif-row">
+        <span class="notif-timing t-email">即時</span>
+        <span class="notif-text"><strong>本予約完了</strong><br>予約番号・QRコード・予約内容</span>
+      </div>
+      <div class="notif-row">
+        <span class="notif-timing t-email">即時</span>
+        <span class="notif-text"><strong>仮予約完了</strong><br>予約番号・期限日・本予約変換ページのリンク</span>
+      </div>
+      <div class="notif-row">
+        <span class="notif-timing t-email">即時</span>
+        <span class="notif-text"><strong>本予約確定</strong><br>仮予約→本予約に変換完了。QRコード付き</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINE -->
+  <div class="notif-card">
+    <div class="notif-header line">
+      <span class="notif-icon">💬</span>
+      <span>LINE（友だち追加後）</span>
+    </div>
+    <div class="notif-body">
+      <div class="notif-row">
+        <span class="notif-timing t-line">即時</span>
+        <span class="notif-text"><strong>予約確認返信</strong><br>予約番号送信後、予約内容をLINEで確認できる</span>
+      </div>
+      <div class="notif-row">
+        <span class="notif-timing t-line">自動</span>
+        <span class="notif-text"><strong>仮予約リマインダー</strong><br>期限3日前の朝9時。「本予約への変更をお急ぎください」</span>
+      </div>
+      <div class="notif-row">
+        <span class="notif-timing t-line">自動</span>
+        <span class="notif-text"><strong>前日リマインダー</strong><br>来場前日の朝9時。予約内容と持ち物を確認</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- n8n自動処理 -->
+  <div class="notif-card">
+    <div class="notif-header auto">
+      <span class="notif-icon">⚙️</span>
+      <span>n8n 自動処理（毎朝9時）</span>
+    </div>
+    <div class="notif-body">
+      <div class="notif-row">
+        <span class="notif-timing t-auto">自動</span>
+        <span class="notif-text"><strong>仮予約の期限切れ処理</strong><br>provisional_expires_at が過ぎた仮予約を expired に変更</span>
+      </div>
+      <div class="notif-row">
+        <span class="notif-timing t-auto">自動</span>
+        <span class="notif-text"><strong>期限3日前 LINE通知</strong><br>LINE連携済みの仮予約のお客様に送信</span>
+      </div>
+      <div class="notif-row">
+        <span class="notif-timing t-auto">自動</span>
+        <span class="notif-text"><strong>前日 LINE通知</strong><br>LINE連携済みの本予約のお客様に送信</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    LINEを友だち追加していないお客様にはLINE通知は届きません。メールの確認をご案内ください。
+  </div>
+
+</div><!-- /notif -->
+
+
+<!-- ========================================
+     タブ⑤：在庫
+     ======================================== -->
+<div id="tab-inventory" class="tab-content">
+
+  <div class="section-head">在庫チェックのルール</div>
+
+  <div class="inventory-card">
+    <div class="inventory-header">🍖 BBQプラン</div>
+    <div class="inventory-row">
+      <div class="inv-key">管理単位</div>
+      <div class="inv-val">日付 × 時間帯</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">満席条件</div>
+      <div class="inv-val">その時間帯の予約人数合計 ≥ 定員</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">カウント対象</div>
+      <div class="inv-val">confirmed（本予約）+ pending（仮予約）の両方</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">定員変更</div>
+      <div class="inv-val">スタッフ管理画面「残枠調整」タブで日別に変更可</div>
+    </div>
+  </div>
+
+  <div class="inventory-card">
+    <div class="inventory-header">🚿 ロッカー・シャワープラン</div>
+    <div class="inventory-row">
+      <div class="inv-key">管理単位</div>
+      <div class="inv-val">日付のみ（時間帯なし）</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">満席条件</div>
+      <div class="inv-val">その日の予約人数合計 ≥ 定員</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">カウント対象</div>
+      <div class="inv-val">confirmed（本予約）+ pending（仮予約）の両方</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">定員変更</div>
+      <div class="inv-val">スタッフ管理画面「残枠調整」タブで日別に変更可</div>
+    </div>
+  </div>
+
+  <div class="section-head">在庫が解放されるタイミング</div>
+  <div class="inventory-card">
+    <div class="inventory-row">
+      <div class="inv-key">期限切れ</div>
+      <div class="inv-val">仮予約が expired に変わると在庫が解放される</div>
+    </div>
+    <div class="inventory-row">
+      <div class="inv-key">キャンセル</div>
+      <div class="inv-val">cancelled に変更されると在庫が解放される</div>
+    </div>
+  </div>
+
+  <div class="note">
+    仮予約（pending）中は在庫をカウントします。お客様が期限内に本予約へ変更しなかった場合、翌朝9時に自動解放されます。
+  </div>
+
+</div><!-- /inventory -->
+
+
+<!-- ========================================
+     タブ⑥：URL一覧
+     ======================================== -->
+<div id="tab-urls" class="tab-content">
+
+  <div class="section-head">お客様向け</div>
+
+  <a class="url-card" href="https://puente-seasidehouse.com/reserve.html" target="_blank">
+    <div class="url-icon" style="background:#EBF8FF">🏖️</div>
+    <div class="url-info">
+      <div class="url-name">予約フォーム</div>
+      <div class="url-link">puente-seasidehouse.com/reserve.html</div>
+    </div>
+    <span class="url-who c">お客様</span>
+  </a>
+
+  <a class="url-card" href="https://puente-seasidehouse.com/confirm.html" target="_blank">
+    <div class="url-icon" style="background:#FFFAF0">✅</div>
+    <div class="url-info">
+      <div class="url-name">仮予約 → 本予約変換</div>
+      <div class="url-link">puente-seasidehouse.com/confirm.html</div>
+    </div>
+    <span class="url-who c">お客様</span>
+  </a>
+
+  <a class="url-card" href="https://lin.ee/7boYnzG" target="_blank">
+    <div class="url-icon" style="background:#F0FFF4">💬</div>
+    <div class="url-info">
+      <div class="url-name">LINE公式アカウント</div>
+      <div class="url-link">lin.ee/7boYnzG</div>
+    </div>
+    <span class="url-who c">お客様</span>
+  </a>
+
+  <div class="section-head">スタッフ向け</div>
+
+  <a class="url-card" href="https://puente-seasidehouse.com/staff.html" target="_blank">
+    <div class="url-icon" style="background:#EBF4FF">📋</div>
+    <div class="url-info">
+      <div class="url-name">スタッフ管理画面</div>
+      <div class="url-link">puente-seasidehouse.com/staff.html</div>
+    </div>
+    <span class="url-who s">スタッフ</span>
+  </a>
+
+</div><!-- /urls -->
+
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
