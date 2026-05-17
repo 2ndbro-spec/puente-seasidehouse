@@ -1,0 +1,633 @@
+---
+permalink: /staff.html
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>スタッフ管理 — PUENTE seaside house</title>
+  <meta name="robots" content="noindex,nofollow">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <!-- jsQR for QR scanning -->
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ocean: #2E8CB8;
+      --teal: #36B5A0;
+      --deep: #1A5276;
+      --sand: #F5F0E8;
+      --white: #ffffff;
+      --text: #2D3748;
+      --muted: #718096;
+      --border: #E2E8F0;
+      --success: #36B5A0;
+      --warning: #F08870;
+      --danger: #E53E3E;
+    }
+    body { font-family: 'Noto Sans JP', sans-serif; background: #f0f4f8; color: var(--text); min-height: 100vh; }
+
+    /* ===== ログイン画面 ===== */
+    #login-screen {
+      display: flex; align-items: center; justify-content: center; min-height: 100vh;
+      background: linear-gradient(135deg, #2E8CB8, #36B5A0);
+    }
+    .login-card {
+      background: var(--white); border-radius: 16px; padding: 2.5rem 2rem;
+      width: min(360px, 90vw); box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    .login-logo { font-size: 1.5rem; font-weight: 700; color: var(--ocean); letter-spacing: 2px; margin-bottom: 0.25rem; }
+    .login-sub { font-size: 0.75rem; color: var(--muted); margin-bottom: 2rem; }
+    .login-card input {
+      width: 100%; padding: 0.75rem 1rem; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; outline: none;
+      transition: border-color 0.2s;
+    }
+    .login-card input:focus { border-color: var(--ocean); }
+    .login-card button {
+      width: 100%; padding: 0.85rem; background: var(--ocean); color: white;
+      border: none; border-radius: 8px; font-size: 1rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .login-card button:hover { background: var(--deep); }
+    #login-error { color: var(--danger); font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2em; }
+
+    /* ===== メイン画面 ===== */
+    #main-screen { display: none; }
+    .staff-header {
+      background: var(--deep); color: white; padding: 0.875rem 1.25rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .staff-header-title { font-size: 1rem; font-weight: 700; letter-spacing: 1px; }
+    .staff-date-nav { display: flex; align-items: center; gap: 0.5rem; }
+    .date-nav-btn {
+      background: rgba(255,255,255,0.15); color: white; border: none;
+      border-radius: 6px; padding: 0.35rem 0.65rem; cursor: pointer; font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .date-nav-btn:hover { background: rgba(255,255,255,0.25); }
+    #current-date-label { font-size: 0.95rem; font-weight: 600; min-width: 110px; text-align: center; }
+
+    /* タブ */
+    .tab-bar {
+      background: white; display: flex; border-bottom: 2px solid var(--border);
+      position: sticky; top: 52px; z-index: 99;
+    }
+    .tab-btn {
+      flex: 1; padding: 0.75rem 0.5rem; border: none; background: transparent;
+      font-size: 0.85rem; font-weight: 600; color: var(--muted); cursor: pointer;
+      border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.35rem;
+    }
+    .tab-btn.active { color: var(--ocean); border-bottom-color: var(--ocean); }
+
+    /* コンテンツ */
+    .tab-content { display: none; padding: 1rem; }
+    .tab-content.active { display: block; }
+
+    /* サマリーカード */
+    .summary-row { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+    .summary-card {
+      flex: 1; background: white; border-radius: 10px; padding: 0.875rem 1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); text-align: center;
+    }
+    .summary-card .label { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.25rem; }
+    .summary-card .value { font-size: 1.5rem; font-weight: 700; color: var(--ocean); }
+    .summary-card .unit { font-size: 0.75rem; color: var(--muted); }
+
+    /* 予約カード */
+    .rsv-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .rsv-item {
+      background: white; border-radius: 10px; padding: 1rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06); border-left: 4px solid var(--border);
+    }
+    .rsv-item.confirmed { border-left-color: var(--teal); }
+    .rsv-item.pending { border-left-color: var(--warning); }
+    .rsv-item.checked-in { border-left-color: var(--deep); opacity: 0.65; }
+    .rsv-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
+    .rsv-code { font-size: 0.8rem; font-weight: 700; color: var(--ocean); letter-spacing: 1px; }
+    .rsv-status {
+      font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem;
+      border-radius: 4px; background: #e8f8f4; color: var(--teal);
+    }
+    .rsv-status.pending { background: #fff3ed; color: var(--warning); }
+    .rsv-status.checked-in { background: #edf2f7; color: var(--muted); }
+    .rsv-name { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .rsv-detail { font-size: 0.8rem; color: var(--muted); display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .rsv-notif { font-size: 0.7rem; color: var(--muted); margin-top: 0.3rem; }
+    .rsv-notif.line { color: #06C755; }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.9rem; }
+
+    /* 在庫調整 */
+    .capacity-card {
+      background: white; border-radius: 10px; padding: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 1rem;
+    }
+    .capacity-title { font-size: 0.9rem; font-weight: 700; color: var(--deep); margin-bottom: 1rem; }
+    .capacity-row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+    .capacity-row label { font-size: 0.8rem; color: var(--muted); min-width: 80px; }
+    .capacity-row input[type="number"] {
+      width: 80px; padding: 0.4rem 0.6rem; border: 1.5px solid var(--border);
+      border-radius: 6px; font-size: 0.95rem; text-align: center; outline: none;
+    }
+    .capacity-row input:focus { border-color: var(--ocean); }
+    .capacity-row .current { font-size: 0.8rem; color: var(--muted); }
+    .capacity-save-btn {
+      padding: 0.55rem 1.25rem; background: var(--ocean); color: white;
+      border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .capacity-save-btn:hover { background: var(--deep); }
+    .capacity-save-btn:disabled { opacity: 0.5; cursor: default; }
+    .capacity-msg { font-size: 0.8rem; margin-top: 0.5rem; min-height: 1.2em; }
+    .capacity-msg.ok { color: var(--success); }
+    .capacity-msg.err { color: var(--danger); }
+
+    /* QRスキャン */
+    .qr-section { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .qr-video-wrap {
+      width: 100%; max-width: 360px; aspect-ratio: 1;
+      background: #000; border-radius: 12px; overflow: hidden; position: relative;
+    }
+    #qr-video { width: 100%; height: 100%; object-fit: cover; }
+    .qr-overlay {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    .qr-frame {
+      width: 60%; aspect-ratio: 1;
+      border: 3px solid rgba(255,255,255,0.8);
+      border-radius: 8px;
+      box-shadow: 0 0 0 2000px rgba(0,0,0,0.4);
+    }
+    .qr-hint { font-size: 0.85rem; color: var(--muted); text-align: center; }
+    #qr-start-btn, #qr-stop-btn {
+      padding: 0.75rem 2rem; border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    #qr-start-btn { background: var(--ocean); color: white; }
+    #qr-start-btn:hover { background: var(--deep); }
+    #qr-stop-btn { background: #edf2f7; color: var(--text); display: none; }
+    .qr-manual { width: 100%; max-width: 360px; }
+    .qr-manual-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .qr-manual-row { display: flex; gap: 0.5rem; }
+    .qr-manual-row input {
+      flex: 1; padding: 0.6rem 0.75rem; border: 1.5px solid var(--border);
+      border-radius: 8px; font-size: 0.95rem; text-transform: uppercase; outline: none;
+    }
+    .qr-manual-row input:focus { border-color: var(--ocean); }
+    .qr-manual-row button {
+      padding: 0.6rem 1rem; background: var(--ocean); color: white;
+      border: none; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
+    }
+
+    /* チェックイン結果 */
+    .checkin-result {
+      width: 100%; max-width: 360px; border-radius: 12px; padding: 1.25rem;
+      text-align: center; display: none;
+    }
+    .checkin-result.ok { background: #e8f8f4; border: 1.5px solid #b7e8c8; }
+    .checkin-result.err { background: #fff5f5; border: 1.5px solid #fed7d7; }
+    .checkin-result.warn { background: #fffbeb; border: 1.5px solid #fef3c7; }
+    .checkin-result-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .checkin-result-msg { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .checkin-result-detail { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .checkin-result.ok .checkin-result-msg { color: var(--success); }
+    .checkin-result.err .checkin-result-msg { color: var(--danger); }
+    .checkin-result.warn .checkin-result-msg { color: #d97706; }
+
+    /* ローディング */
+    .loading { text-align: center; padding: 2rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<!-- ===== ログイン画面 ===== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">PUENTE</div>
+    <div class="login-sub">スタッフ管理画面</div>
+    <input type="password" id="pw-input" placeholder="パスワードを入力" autocomplete="current-password">
+    <button id="login-btn">ログイン</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ===== メイン画面 ===== -->
+<div id="main-screen">
+  <div class="staff-header">
+    <div class="staff-header-title">PUENTE Staff</div>
+    <div class="staff-date-nav">
+      <button class="date-nav-btn" id="prev-day-btn">‹</button>
+      <span id="current-date-label"></span>
+      <button class="date-nav-btn" id="next-day-btn">›</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="reservations">
+      <i data-lucide="list" style="width:16px;height:16px"></i> 予約一覧
+    </button>
+    <button class="tab-btn" data-tab="capacity">
+      <i data-lucide="sliders" style="width:16px;height:16px"></i> 残枠調整
+    </button>
+    <button class="tab-btn" data-tab="checkin">
+      <i data-lucide="scan-line" style="width:16px;height:16px"></i> チェックイン
+    </button>
+  </div>
+
+  <!-- 予約一覧タブ -->
+  <div class="tab-content active" id="tab-reservations">
+    <div class="summary-row">
+      <div class="summary-card">
+        <div class="label">BBQ</div>
+        <div class="value" id="sum-bbq">—</div>
+        <div class="unit">名</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">L/S</div>
+        <div class="value" id="sum-ls">—</div>
+        <div class="unit">名</div>
+      </div>
+      <div class="summary-card">
+        <div class="label">合計</div>
+        <div class="value" id="sum-total">—</div>
+        <div class="unit">名</div>
+      </div>
+    </div>
+    <div id="rsv-list-container" class="rsv-list">
+      <div class="loading">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- 残枠調整タブ -->
+  <div class="tab-content" id="tab-capacity">
+    <div id="capacity-container">
+      <div class="loading">読み込み中...</div>
+    </div>
+  </div>
+
+  <!-- チェックインタブ -->
+  <div class="tab-content" id="tab-checkin">
+    <div class="qr-section">
+      <div class="qr-video-wrap" id="qr-video-wrap" style="display:none">
+        <video id="qr-video" playsinline muted></video>
+        <div class="qr-overlay"><div class="qr-frame"></div></div>
+      </div>
+      <button id="qr-start-btn">📷 カメラでQRスキャン</button>
+      <button id="qr-stop-btn">スキャン停止</button>
+      <p class="qr-hint">QRコードをフレーム内に収めてください</p>
+
+      <div class="qr-manual">
+        <div class="qr-manual-label">または予約番号を手入力</div>
+        <div class="qr-manual-row">
+          <input type="text" id="manual-code" placeholder="XXXXXXXX" maxlength="8">
+          <button id="manual-checkin-btn">確認</button>
+        </div>
+      </div>
+
+      <div class="checkin-result" id="checkin-result">
+        <div class="checkin-result-icon" id="checkin-icon"></div>
+        <div class="checkin-result-msg" id="checkin-msg"></div>
+        <div class="checkin-result-detail" id="checkin-detail"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  // ===== 状態 =====
+  let staffPw = sessionStorage.getItem('staff_pw') || '';
+  let currentDate = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+  let currentTab = 'reservations';
+  let qrStream = null;
+  let qrAnimFrame = null;
+  let lastQrResult = '';
+  let lastQrTime = 0;
+
+  // ===== ユーティリティ =====
+  const $ = id => document.getElementById(id);
+  const fmt = d => {
+    const dt = new Date(d + 'T00:00:00+09:00');
+    return dt.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' });
+  };
+
+  // ===== ログイン =====
+  async function tryLogin() {
+    const pw = $('pw-input').value;
+    if (!pw) return;
+
+    // パスワードをAPIで検証（予約一覧を1件取得して試す）
+    const res = await fetch(`/api/staff-reservations?date=${currentDate}`, {
+      headers: { 'x-staff-password': pw }
+    });
+    if (res.ok) {
+      staffPw = pw;
+      sessionStorage.setItem('staff_pw', pw);
+      $('login-screen').style.display = 'none';
+      $('main-screen').style.display = 'block';
+      initMain();
+    } else {
+      $('login-error').textContent = 'パスワードが違います';
+    }
+  }
+
+  $('login-btn').addEventListener('click', tryLogin);
+  $('pw-input').addEventListener('keydown', e => e.key === 'Enter' && tryLogin());
+
+  // セッション復元
+  if (staffPw) {
+    $('login-screen').style.display = 'none';
+    $('main-screen').style.display = 'block';
+    initMain();
+  }
+
+  // ===== メイン初期化 =====
+  function initMain() {
+    lucide.createIcons();
+    updateDateLabel();
+    loadTab(currentTab);
+
+    $('prev-day-btn').addEventListener('click', () => {
+      const d = new Date(currentDate + 'T00:00:00+09:00');
+      d.setDate(d.getDate() - 1);
+      currentDate = d.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+      updateDateLabel();
+      loadTab(currentTab);
+    });
+    $('next-day-btn').addEventListener('click', () => {
+      const d = new Date(currentDate + 'T00:00:00+09:00');
+      d.setDate(d.getDate() + 1);
+      currentDate = d.toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+      updateDateLabel();
+      loadTab(currentTab);
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        $('tab-' + currentTab).classList.add('active');
+        loadTab(currentTab);
+      });
+    });
+  }
+
+  function updateDateLabel() {
+    const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Tokyo' });
+    const label = fmt(currentDate) + (currentDate === today ? ' (今日)' : '');
+    $('current-date-label').textContent = label;
+  }
+
+  function loadTab(tab) {
+    if (tab === 'reservations') loadReservations();
+    if (tab === 'capacity') loadCapacity();
+    if (tab === 'checkin') initCheckin();
+  }
+
+  // ===== 予約一覧 =====
+  async function loadReservations() {
+    $('rsv-list-container').innerHTML = '<div class="loading">読み込み中...</div>';
+    const res = await fetch(`/api/staff-reservations?date=${currentDate}`, {
+      headers: { 'x-staff-password': staffPw }
+    });
+    if (!res.ok) { handleAuthError(res.status); return; }
+    const data = await res.json();
+
+    $('sum-bbq').textContent = data.summary.bbq_people;
+    $('sum-ls').textContent  = data.summary.ls_people;
+    $('sum-total').textContent = data.summary.bbq_people + data.summary.ls_people;
+
+    if (!data.reservations.length) {
+      $('rsv-list-container').innerHTML = '<div class="empty-state">この日の予約はありません</div>';
+      return;
+    }
+
+    $('rsv-list-container').innerHTML = data.reservations.map(r => {
+      const isBbq = !!r.menus?.slot_duration;
+      const people = isBbq
+        ? `${r.num_people}名`
+        : `男性${r.num_male}名・女性${r.num_female}名`;
+      const time = isBbq
+        ? (r.time_start?.slice(0,5) + '〜')
+        : (r.checkin_time ? 'CI:' + r.checkin_time : '時間未定');
+      const checkedIn = !!r.checked_in_at;
+      const statusClass = checkedIn ? 'checked-in' : r.status;
+      const statusLabel = checkedIn ? 'CI済' : (r.status === 'confirmed' ? '本予約' : '仮予約');
+      const notifClass = r.notif_channel === 'line' ? 'line' : '';
+      const notifLabel = r.notif_channel === 'line'
+        ? (r.line_user_id ? '🟢 LINE連携済' : '🟡 LINE未連携')
+        : '📧 メール';
+
+      return `
+        <div class="rsv-item ${statusClass}">
+          <div class="rsv-item-top">
+            <span class="rsv-code">${r.reservation_code}</span>
+            <span class="rsv-status ${statusClass}">${statusLabel}</span>
+          </div>
+          <div class="rsv-name">${r.name}</div>
+          <div class="rsv-detail">
+            <span>${r.menus?.name || '—'}</span>
+            <span>${time}</span>
+            <span>${people}</span>
+          </div>
+          <div class="rsv-notif ${notifClass}">${notifLabel}</div>
+        </div>`;
+    }).join('');
+  }
+
+  // ===== 残枠調整 =====
+  async function loadCapacity() {
+    $('capacity-container').innerHTML = '<div class="loading">読み込み中...</div>';
+    const res = await fetch(`/api/staff-capacity?date=${currentDate}`, {
+      headers: { 'x-staff-password': staffPw }
+    });
+    if (!res.ok) { handleAuthError(res.status); return; }
+    const { menus, inventory } = await res.json();
+
+    const invMap = {};
+    (inventory || []).forEach(i => {
+      const key = i.menu_id + '_' + (i.time_start || '');
+      invMap[key] = i.capacity;
+    });
+
+    $('capacity-container').innerHTML = menus.map(menu => {
+      const isBbq = !!menu.slot_duration;
+      const key = menu.id + '_';
+      const current = invMap[key] ?? menu.default_capacity;
+
+      return `
+        <div class="capacity-card">
+          <div class="capacity-title">${menu.name}</div>
+          <div class="capacity-row">
+            <label>定員</label>
+            <input type="number" id="cap-${menu.id}" value="${current}" min="0" max="300">
+            <span class="current">（デフォルト: ${menu.default_capacity}名）</span>
+          </div>
+          <button class="capacity-save-btn" onclick="saveCapacity('${menu.id}', '${menu.name}', ${isBbq})">
+            保存
+          </button>
+          <div class="capacity-msg" id="cap-msg-${menu.id}"></div>
+        </div>`;
+    }).join('');
+  }
+
+  window.saveCapacity = async function(menuId, menuName, isBbq) {
+    const input = document.getElementById('cap-' + menuId);
+    const msg   = document.getElementById('cap-msg-' + menuId);
+    const capacity = parseInt(input.value, 10);
+    if (isNaN(capacity) || capacity < 0) {
+      msg.textContent = '有効な数値を入力してください';
+      msg.className = 'capacity-msg err';
+      return;
+    }
+    input.disabled = true;
+    msg.textContent = '保存中...';
+    msg.className = 'capacity-msg';
+
+    const res = await fetch('/api/staff-capacity', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-staff-password': staffPw },
+      body: JSON.stringify({ date: currentDate, menu_id: menuId, capacity })
+    });
+    input.disabled = false;
+    if (res.ok) {
+      msg.textContent = '✓ 保存しました';
+      msg.className = 'capacity-msg ok';
+    } else {
+      msg.textContent = '保存に失敗しました';
+      msg.className = 'capacity-msg err';
+    }
+  };
+
+  // ===== QRチェックイン =====
+  function initCheckin() {
+    $('qr-start-btn').onclick = startQr;
+    $('qr-stop-btn').onclick = stopQr;
+    $('manual-checkin-btn').onclick = () => {
+      const code = $('manual-code').value.trim().toUpperCase();
+      if (code.length === 8) doCheckin(code);
+    };
+    $('manual-code').addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const code = $('manual-code').value.trim().toUpperCase();
+        if (code.length === 8) doCheckin(code);
+      }
+    });
+  }
+
+  async function startQr() {
+    try {
+      qrStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' }
+      });
+      const video = $('qr-video');
+      video.srcObject = qrStream;
+      await video.play();
+      $('qr-video-wrap').style.display = 'block';
+      $('qr-start-btn').style.display = 'none';
+      $('qr-stop-btn').style.display = 'inline-block';
+      scanFrame();
+    } catch (e) {
+      showCheckinResult('err', '⚠️', 'カメラが使用できません', 'ブラウザの設定でカメラへのアクセスを許可してください。');
+    }
+  }
+
+  function stopQr() {
+    cancelAnimationFrame(qrAnimFrame);
+    if (qrStream) { qrStream.getTracks().forEach(t => t.stop()); qrStream = null; }
+    $('qr-video-wrap').style.display = 'none';
+    $('qr-start-btn').style.display = 'inline-block';
+    $('qr-stop-btn').style.display = 'none';
+  }
+
+  function scanFrame() {
+    const video = $('qr-video');
+    if (video.readyState !== video.HAVE_ENOUGH_DATA) {
+      qrAnimFrame = requestAnimationFrame(scanFrame);
+      return;
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'dontInvert' });
+
+    if (code) {
+      const text = code.data.trim().toUpperCase();
+      const now = Date.now();
+      // 同じコードは5秒間再スキャンしない
+      if (text !== lastQrResult || now - lastQrTime > 5000) {
+        lastQrResult = text;
+        lastQrTime = now;
+        // 予約番号（8文字英数字）を抽出
+        const match = text.match(/[A-Z0-9]{8}/);
+        if (match) {
+          stopQr();
+          doCheckin(match[0]);
+          return;
+        }
+      }
+    }
+    qrAnimFrame = requestAnimationFrame(scanFrame);
+  }
+
+  async function doCheckin(code) {
+    showCheckinResult('', '⏳', '確認中...', '');
+    const res = await fetch('/api/staff-checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-staff-password': staffPw },
+      body: JSON.stringify({ reservation_code: code })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      const r = data.reservation;
+      showCheckinResult('ok', '✅', 'チェックイン完了',
+        `${r.name} 様\n${r.menu_name} / ${r.people}\n${r.time_start ? r.time_start.slice(0,5) + '〜' : ''}`
+      );
+    } else if (data.already_checked_in) {
+      showCheckinResult('warn', '⚠️', 'すでにCI済み', data.error);
+    } else {
+      showCheckinResult('err', '❌', 'エラー', data.error || 'チェックインに失敗しました');
+    }
+
+    $('manual-code').value = '';
+    // 予約一覧を更新
+    if (currentTab === 'reservations') loadReservations();
+  }
+
+  function showCheckinResult(type, icon, msg, detail) {
+    const el = $('checkin-result');
+    el.className = 'checkin-result' + (type ? ' ' + type : '');
+    el.style.display = 'block';
+    $('checkin-icon').textContent = icon;
+    $('checkin-msg').textContent = msg;
+    $('checkin-detail').textContent = detail;
+  }
+
+  function handleAuthError(status) {
+    if (status === 401) {
+      sessionStorage.removeItem('staff_pw');
+      staffPw = '';
+      $('main-screen').style.display = 'none';
+      $('login-screen').style.display = 'flex';
+      $('login-error').textContent = 'セッションが切れました。再度ログインしてください。';
+    }
+  }
+})();
+</script>
+</body>
+</html>
