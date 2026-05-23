@@ -348,6 +348,48 @@ p {
   backdrop-filter: blur(8px);
 }
 
+/* --- Hero 天気ウィジェット --- */
+.hero-weather {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(255,255,255,0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 14px;
+  padding: 0.55rem 0.9rem 0.55rem 0.65rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+.hw-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.hw-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.1rem;
+}
+.hw-desc {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.hw-temp {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+}
+
 /* --- Cards --- */
 .card {
   background: var(--white);
