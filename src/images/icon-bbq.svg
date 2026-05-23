@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <g transform="translate(50,50) rotate(-42)">
+    <!-- 肉の本体（2つの楕円を結合したピーナッツ形） -->
+    <ellipse cx="0" cy="-13" rx="22" ry="19" fill="#7B3000"/>
+    <ellipse cx="0" cy="13"  rx="22" ry="19" fill="#7B3000"/>
+    <rect x="-20" y="-13" width="40" height="26" fill="#7B3000"/>
+
+    <!-- 上の骨シャフト -->
+    <rect x="-5" y="-39" width="10" height="26" rx="5" fill="#7B3000"/>
+    <!-- 上の骨ノブ（2ローブ） -->
+    <circle cx="-10" cy="-43" r="9.5" fill="white" stroke="#7B3000" stroke-width="2"/>
+    <circle cx="10"  cy="-43" r="9.5" fill="white" stroke="#7B3000" stroke-width="2"/>
+
+    <!-- 下の骨シャフト -->
+    <rect x="-5" y="13" width="10" height="26" rx="5" fill="#7B3000"/>
+    <!-- 下の骨ノブ（2ローブ） -->
+    <circle cx="-10" cy="43" r="9.5" fill="white" stroke="#7B3000" stroke-width="2"/>
+    <circle cx="10"  cy="43" r="9.5" fill="white" stroke="#7B3000" stroke-width="2"/>
+  </g>
+</svg>

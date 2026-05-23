@@ -120,9 +120,9 @@
   display: flex; flex-direction: column; gap: 3px;
 }
 .cal-icon-row {
-  display: flex; align-items: center; gap: 3px; font-size: 0.68rem;
+  display: flex; align-items: center; gap: 4px; font-size: 0.72rem;
 }
-.cal-icon-row svg { flex-shrink: 0; }
+.cal-icon-row img { flex-shrink: 0; }
 .cal-status-badge {
   font-weight: 800; font-size: 0.72rem;
 }
@@ -171,8 +171,9 @@
   display: flex; flex-direction: column; align-items: center; gap: 3px;
 }
 .cal-card-icon-row {
-  display: flex; align-items: center; gap: 2px; font-size: 0.65rem;
+  display: flex; align-items: center; gap: 3px; font-size: 0.65rem;
 }
+.cal-card-icon-row img { flex-shrink: 0; }
 .cal-card-events { display: flex; flex-direction: column; gap: 2px; margin-top: 3px; }
 .cal-card-ev {
   font-size: 0.55rem; font-weight: 700; padding: 1px 3px; border-radius: 3px;
@@ -202,9 +203,9 @@
 
   function inSeason(d) { return d >= SEASON_START && d <= SEASON_END; }
 
-  // SVGアイコン
-  const SVG_BBQ = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M12 11V3M8 3h8M6 21l2-5M18 21l-2-5M10 16h4"/><circle cx="7" cy="3" r="1.5"/></svg>`;
-  const SVG_SHOWER = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><line x1="12" y1="12" x2="12" y2="12.01"/><line x1="8"  y1="16" x2="8"  y2="16.01"/><line x1="12" y1="16" x2="12" y2="16.01"/><line x1="16" y1="16" x2="16" y2="16.01"/><line x1="8"  y1="20" x2="8"  y2="20.01"/><line x1="12" y1="20" x2="12" y2="20.01"/><line x1="16" y1="20" x2="16" y2="20.01"/></svg>`;
+  // アイコン（SVGファイル参照）
+  const SVG_BBQ    = `<img src="/images/icon-bbq.svg"    width="18" height="18" alt="BBQ" style="display:block;">`;
+  const SVG_SHOWER = `<img src="/images/icon-shower.svg" width="18" height="18" alt="シャワー" style="display:block;">`;
 
   function statusMark(s) {
     if (s === 'open')    return '<span class="cal-status-badge status-open">◯</span>';

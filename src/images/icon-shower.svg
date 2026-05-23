@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- パイプアーム（太い逆J字カーブ） -->
+  <path d="M 80 8 L 80 52 Q 80 72 58 72 Q 48 72 43 64"
+        stroke="#3D4852" stroke-width="13" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- シャワーヘッド本体 -->
+  <g transform="translate(33,60) rotate(-45)">
+    <rect x="-18" y="-11" width="36" height="23" rx="6" fill="#3D4852"/>
+    <!-- ブルーのフェイス部分 -->
+    <rect x="-18" y="4"   width="36" height="9"  rx="4" fill="#3B82F6"/>
+  </g>
+
+  <!-- 水滴（ファン状に配置） -->
+  <circle cx="20" cy="59" r="3.2" fill="#3B82F6"/>
+  <circle cx="11" cy="64" r="3.2" fill="#3B82F6"/>
+  <circle cx="7"  cy="55" r="3.2" fill="#3B82F6"/>
+  <circle cx="4"  cy="72" r="3.2" fill="#3B82F6"/>
+  <circle cx="15" cy="74" r="3.2" fill="#3B82F6"/>
+  <circle cx="24" cy="70" r="3.2" fill="#3B82F6"/>
+  <circle cx="8"  cy="82" r="3.2" fill="#3B82F6"/>
+  <circle cx="20" cy="82" r="3.2" fill="#3B82F6"/>
+  <circle cx="28" cy="58" r="3.2" fill="#3B82F6"/>
+</svg>
