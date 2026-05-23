@@ -351,43 +351,54 @@ p {
 /* --- Hero 天気ウィジェット --- */
 .hero-weather {
   position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  background: rgba(255,255,255,0.22);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.45);
-  border-radius: 14px;
-  padding: 0.55rem 0.9rem 0.55rem 0.65rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  gap: 1rem;
+  background: rgba(0, 20, 50, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 22px;
+  padding: 0.9rem 1.8rem 0.9rem 1.2rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+  white-space: nowrap;
 }
 .hw-icon {
-  font-size: 2rem;
+  font-size: 3rem;
   line-height: 1;
   flex-shrink: 0;
 }
-.hw-label {
-  font-size: 0.6rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: 0.1rem;
+.hw-body {
+  display: flex;
+  flex-direction: column;
+}
+.hw-main-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 .hw-desc {
-  font-size: 0.82rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: white;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
 .hw-temp {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.9);
+  font-size: 1.9rem;
+  color: white;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.hw-label {
+  font-size: 0.62rem;
   font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.4px;
+  margin-top: 0.15rem;
 }
 
 /* --- Cards --- */

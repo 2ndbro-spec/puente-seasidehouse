@@ -1,25 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <!-- パイプアーム：上右から下へ、左にフック -->
-  <path d="M 82 8 L 82 48 Q 82 68 60 68 Q 46 68 42 56"
-        stroke="#3D4852" stroke-width="12" fill="none"
-        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- アーム: 右上から接続点(42,56)へ滑らかなカーブ -->
+  <path d="M 82 8 C 82 35 55 43 42 56"
+        stroke="#3D4852" stroke-width="11" fill="none"
+        stroke-linecap="round"/>
 
-  <!-- シャワーヘッド本体：-45度回転、x負方向（左下）が噴出面 -->
-  <g transform="translate(30,68) rotate(-45)">
-    <!-- 本体（濃いグレー） -->
-    <rect x="-18" y="-9" width="34" height="18" rx="5" fill="#3D4852"/>
-    <!-- ブルーの噴出面：x負端（左下方向） -->
-    <rect x="-18" y="-9" width="11" height="18" rx="5" fill="#3B82F6"/>
+  <!-- シャワーヘッド: translate(32,66) rotate(-45)
+       接続端(x=+14) → スクリーン(42,56) = アーム末端
+       噴出面(x=-16) → スクリーン(21,77)
+       高さ26px = アーム径(11)の約2.4倍で明確に区別 -->
+  <g transform="translate(32,66) rotate(-45)">
+    <rect x="-16" y="-13" width="30" height="26" rx="7" fill="#3D4852"/>
+    <rect x="-16" y="-13" width="12" height="26" rx="7" fill="#3B82F6"/>
   </g>
 
-  <!-- 水滴：噴出面（左下方向）へファン状に拡散 -->
-  <circle cx="16" cy="75" r="3.2" fill="#3B82F6"/>
-  <circle cx="8"  cy="80" r="3.2" fill="#3B82F6"/>
-  <circle cx="12" cy="68" r="3.2" fill="#3B82F6"/>
-  <circle cx="3"  cy="87" r="3.2" fill="#3B82F6"/>
-  <circle cx="18" cy="86" r="3.2" fill="#3B82F6"/>
-  <circle cx="6"  cy="72" r="3.2" fill="#3B82F6"/>
-  <circle cx="24" cy="78" r="3.2" fill="#3B82F6"/>
-  <circle cx="10" cy="92" r="3.2" fill="#3B82F6"/>
-  <circle cx="22" cy="93" r="3.2" fill="#3B82F6"/>
+  <!-- 水滴: ノズル面(21,77)の下へファン状 (全て cy > 77) -->
+  <circle cx="8"  cy="86" r="3.2" fill="#3B82F6"/>
+  <circle cx="15" cy="83" r="3.2" fill="#3B82F6"/>
+  <circle cx="22" cy="81" r="3.2" fill="#3B82F6"/>
+  <circle cx="29" cy="84" r="3.2" fill="#3B82F6"/>
+  <circle cx="36" cy="82" r="3.2" fill="#3B82F6"/>
+  <circle cx="5"  cy="93" r="3.2" fill="#3B82F6"/>
+  <circle cx="13" cy="95" r="3.2" fill="#3B82F6"/>
+  <circle cx="21" cy="94" r="3.2" fill="#3B82F6"/>
+  <circle cx="30" cy="92" r="3.2" fill="#3B82F6"/>
 </svg>
