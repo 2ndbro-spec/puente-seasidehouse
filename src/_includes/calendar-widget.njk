@@ -1,0 +1,352 @@
+<!-- ===== 営業カレンダー ===== -->
+<section class="section calendar-section" id="calendar" style="background: #F0F4F8;">
+  <div class="container">
+    <div class="section-title">
+      <span>Calendar</span>
+      <h2>営業日・予約状況</h2>
+    </div>
+
+    <!-- 凡例 -->
+    <div class="cal-legend">
+      <div class="cal-legend-item"><span class="cal-dot open"></span>余裕あり</div>
+      <div class="cal-legend-item"><span class="cal-dot limited"></span>残りわずか</div>
+      <div class="cal-legend-item"><span class="cal-dot full"></span>満席</div>
+      <div class="cal-legend-item cal-legend-events">
+        <span class="cal-ev-dot beach"></span>海水浴場<span class="cal-ev-dot puente"></span>PUENTE
+      </div>
+    </div>
+
+    <!-- デスクトップ：月ナビ＋グリッド -->
+    <div class="cal-desktop" id="cal-desktop">
+      <div class="cal-month-nav">
+        <button class="cal-nav-btn" id="cal-prev" onclick="calPrevMonth()">‹</button>
+        <div class="cal-month-label" id="cal-month-label">読み込み中...</div>
+        <button class="cal-nav-btn" id="cal-next" onclick="calNextMonth()">›</button>
+      </div>
+      <div class="cal-grid" id="cal-grid">
+        <div class="cal-day-head">日</div><div class="cal-day-head">月</div>
+        <div class="cal-day-head">火</div><div class="cal-day-head">水</div>
+        <div class="cal-day-head">木</div><div class="cal-day-head">金</div>
+        <div class="cal-day-head">土</div>
+      </div>
+    </div>
+
+    <!-- スマホ：横スクロールカード -->
+    <div class="cal-mobile" id="cal-mobile">
+      <div class="cal-strip" id="cal-strip">
+        <!-- JS で挿入 -->
+      </div>
+    </div>
+
+    <div class="cal-reserve-link">
+      <a href="reserve.html" class="btn btn-primary" style="margin: 0 auto;">予約する</a>
+    </div>
+  </div>
+</section>
+
+<style>
+/* ===== カレンダー共通 ===== */
+.calendar-section { padding-top: 3rem; padding-bottom: 3rem; }
+
+.cal-legend {
+  display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem;
+  justify-content: center; margin-bottom: 1.5rem; font-size: 0.78rem; color: #555;
+}
+.cal-legend-item { display: flex; align-items: center; gap: 0.35rem; }
+.cal-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+}
+.cal-dot.open    { background: #38A169; }
+.cal-dot.limited { background: #D69E2E; }
+.cal-dot.full    { background: #E53E3E; }
+.cal-legend-events { gap: 0.35rem; }
+.cal-ev-dot {
+  display: inline-block; width: 8px; height: 8px; border-radius: 2px;
+  margin: 0 0.1rem;
+}
+.cal-ev-dot.beach  { background: #2E8CB8; }
+.cal-ev-dot.puente { background: #36B5A0; }
+
+/* ===== デスクトップグリッド ===== */
+.cal-desktop { display: none; }
+@media (min-width: 768px) {
+  .cal-desktop { display: block; }
+  .cal-mobile  { display: none; }
+}
+
+.cal-month-nav {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.5rem; margin-bottom: 1rem;
+}
+.cal-nav-btn {
+  background: white; border: 1.5px solid #E2E8F0; border-radius: 8px;
+  width: 36px; height: 36px; font-size: 1.1rem; cursor: pointer;
+  color: #1A5276; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.cal-nav-btn:hover { background: #EBF8FF; }
+.cal-nav-btn:disabled { opacity: 0.3; cursor: default; }
+.cal-month-label { font-size: 1.05rem; font-weight: 800; color: #1A5276; min-width: 120px; text-align: center; }
+
+.cal-grid {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  gap: 4px; background: #E2E8F0; border-radius: 12px; overflow: hidden; padding: 4px;
+}
+.cal-day-head {
+  background: #1A5276; color: white; text-align: center;
+  font-size: 0.72rem; font-weight: 700; padding: 0.4rem 0;
+  border-radius: 6px;
+}
+.cal-day-head:first-child { color: #FCA5A5; }
+.cal-day-head:last-child  { color: #93C5FD; }
+
+.cal-cell {
+  background: white; border-radius: 8px; min-height: 80px;
+  padding: 0.4rem 0.45rem; position: relative;
+}
+.cal-cell.empty     { background: transparent; }
+.cal-cell.off-season { background: #F7FAFC; }
+.cal-cell.is-today  { outline: 2px solid #2E8CB8; outline-offset: -2px; }
+
+.cal-date-num {
+  font-size: 0.82rem; font-weight: 700; color: #2D3748; margin-bottom: 0.3rem;
+}
+.cal-cell.off-season .cal-date-num { color: #CBD5E0; }
+.cal-date-sun .cal-date-num { color: #E53E3E; }
+.cal-date-sat .cal-date-num { color: #3182CE; }
+
+/* アイコン行 */
+.cal-icons {
+  display: flex; flex-direction: column; gap: 3px;
+}
+.cal-icon-row {
+  display: flex; align-items: center; gap: 3px; font-size: 0.68rem;
+}
+.cal-icon-row svg { flex-shrink: 0; }
+.cal-status-badge {
+  font-weight: 800; font-size: 0.72rem;
+}
+.status-open    { color: #38A169; }
+.status-limited { color: #D69E2E; }
+.status-full    { color: #E53E3E; }
+
+/* イベントドット */
+.cal-events {
+  display: flex; flex-wrap: wrap; gap: 2px; margin-top: 3px;
+}
+.cal-event-chip {
+  font-size: 0.6rem; font-weight: 700; padding: 1px 4px; border-radius: 3px;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  line-height: 1.4;
+}
+.cal-event-chip.beach  { background: #BEE3F8; color: #2C5282; }
+.cal-event-chip.puente { background: #B2F5EA; color: #276749; }
+
+/* ===== スマホ横スクロール ===== */
+.cal-mobile { display: block; }
+@media (min-width: 768px) { .cal-mobile { display: none; } }
+
+.cal-strip {
+  display: flex; gap: 0.5rem; overflow-x: auto;
+  padding: 0.25rem 0.25rem 0.75rem;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.cal-strip::-webkit-scrollbar { display: none; }
+
+.cal-card {
+  flex-shrink: 0; width: 80px; background: white;
+  border-radius: 12px; border: 1.5px solid #E2E8F0;
+  padding: 0.55rem 0.5rem; text-align: center;
+}
+.cal-card.is-today { border-color: #2E8CB8; border-width: 2px; }
+.cal-card.off-season { background: #F7FAFC; opacity: 0.6; }
+
+.cal-card-dow  { font-size: 0.65rem; color: #718096; font-weight: 600; margin-bottom: 1px; }
+.cal-card-date { font-size: 1rem; font-weight: 800; color: #1A5276; margin-bottom: 0.4rem; }
+.cal-card.is-today .cal-card-date { color: #2E8CB8; }
+.cal-card-dow.sun, .cal-card-date.sun { color: #E53E3E; }
+.cal-card-dow.sat, .cal-card-date.sat { color: #3182CE; }
+
+.cal-card-icons {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+}
+.cal-card-icon-row {
+  display: flex; align-items: center; gap: 2px; font-size: 0.65rem;
+}
+.cal-card-events { display: flex; flex-direction: column; gap: 2px; margin-top: 3px; }
+.cal-card-ev {
+  font-size: 0.55rem; font-weight: 700; padding: 1px 3px; border-radius: 3px;
+  max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cal-card-ev.beach  { background: #BEE3F8; color: #2C5282; }
+.cal-card-ev.puente { background: #B2F5EA; color: #276749; }
+
+.cal-reserve-link {
+  display: flex; justify-content: center; margin-top: 1.5rem;
+}
+.cal-loading {
+  text-align: center; padding: 2rem; color: #718096; font-size: 0.85rem;
+}
+</style>
+
+<script>
+(function() {
+  const SEASON_START = '2026-07-03';
+  const SEASON_END   = '2026-09-06';
+  const MONTHS = ['', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+  const DAYS   = ['日', '月', '火', '水', '木', '金', '土'];
+
+  let calData = {};   // date → day object
+  let currentMonth = 7; // 7=July
+  const today = new Date().toISOString().slice(0, 10);
+
+  function inSeason(d) { return d >= SEASON_START && d <= SEASON_END; }
+
+  // SVGアイコン
+  const SVG_BBQ = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M12 11V3M8 3h8M6 21l2-5M18 21l-2-5M10 16h4"/><circle cx="7" cy="3" r="1.5"/></svg>`;
+  const SVG_SHOWER = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><line x1="12" y1="12" x2="12" y2="12.01"/><line x1="8"  y1="16" x2="8"  y2="16.01"/><line x1="12" y1="16" x2="12" y2="16.01"/><line x1="16" y1="16" x2="16" y2="16.01"/><line x1="8"  y1="20" x2="8"  y2="20.01"/><line x1="12" y1="20" x2="12" y2="20.01"/><line x1="16" y1="20" x2="16" y2="20.01"/></svg>`;
+
+  function statusMark(s) {
+    if (s === 'open')    return '<span class="cal-status-badge status-open">◯</span>';
+    if (s === 'limited') return '<span class="cal-status-badge status-limited">△</span>';
+    if (s === 'full')    return '<span class="cal-status-badge status-full">✕</span>';
+    return '';
+  }
+
+  // データ取得
+  async function fetchCalendar() {
+    try {
+      const res = await fetch('/api/calendar?from=' + SEASON_START + '&to=' + SEASON_END);
+      const json = await res.json();
+      calData = {};
+      (json.days || []).forEach(d => { calData[d.date] = d; });
+    } catch(e) {
+      console.warn('calendar fetch failed', e);
+    }
+    renderDesktop();
+    renderMobile();
+  }
+
+  // ===== デスクトップ =====
+  window.calPrevMonth = function() {
+    if (currentMonth > 7) { currentMonth--; renderDesktop(); }
+  };
+  window.calNextMonth = function() {
+    if (currentMonth < 9) { currentMonth++; renderDesktop(); }
+  };
+
+  function renderDesktop() {
+    document.getElementById('cal-month-label').textContent = '2026年 ' + MONTHS[currentMonth];
+    document.getElementById('cal-prev').disabled = currentMonth <= 7;
+    document.getElementById('cal-next').disabled = currentMonth >= 9;
+
+    const grid = document.getElementById('cal-grid');
+    // ヘッダー行を残して日付セルを削除
+    const heads = grid.querySelectorAll('.cal-day-head');
+    grid.innerHTML = '';
+    heads.forEach(h => grid.appendChild(h));
+
+    const firstDay = new Date(2026, currentMonth - 1, 1).getDay();
+    const lastDate = new Date(2026, currentMonth, 0).getDate();
+
+    // 空セル
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div');
+      el.className = 'cal-cell empty';
+      grid.appendChild(el);
+    }
+
+    for (let d = 1; d <= lastDate; d++) {
+      const dateStr = `2026-${String(currentMonth).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const dow = new Date(2026, currentMonth - 1, d).getDay();
+      const dayData = calData[dateStr];
+      const isToday = dateStr === today;
+      const inSeas = inSeason(dateStr);
+
+      const el = document.createElement('div');
+      el.className = 'cal-cell' +
+        (isToday ? ' is-today' : '') +
+        (!inSeas ? ' off-season' : '');
+
+      let inner = `<div class="cal-date-num ${dow===0?'cal-date-sun':dow===6?'cal-date-sat':''}">${d}</div>`;
+
+      if (inSeas && dayData) {
+        inner += `<div class="cal-icons">
+          <div class="cal-icon-row" style="color:#4A5568">${SVG_BBQ} ${statusMark(dayData.bbq?.status)}</div>
+          <div class="cal-icon-row" style="color:#4A5568">${SVG_SHOWER} ${statusMark(dayData.ls?.status)}</div>
+        </div>`;
+        if (dayData.events?.length) {
+          inner += '<div class="cal-events">' +
+            dayData.events.map(e => `<span class="cal-event-chip ${e.type}" title="${e.title}">${e.title}</span>`).join('') +
+            '</div>';
+        }
+      } else if (inSeas) {
+        inner += `<div class="cal-icons">
+          <div class="cal-icon-row" style="color:#CBD5E0">${SVG_BBQ} <span style="color:#CBD5E0;font-size:0.7rem;">-</span></div>
+          <div class="cal-icon-row" style="color:#CBD5E0">${SVG_SHOWER} <span style="color:#CBD5E0;font-size:0.7rem;">-</span></div>
+        </div>`;
+      }
+
+      el.innerHTML = inner;
+      grid.appendChild(el);
+    }
+  }
+
+  // ===== スマホ横スクロール =====
+  function renderMobile() {
+    const strip = document.getElementById('cal-strip');
+    const startDate = today >= SEASON_START ? today : SEASON_START;
+    const start = new Date(startDate + 'T00:00:00Z');
+    const cards = [];
+
+    for (let i = 0; i < 21; i++) {
+      const cur = new Date(start);
+      cur.setUTCDate(cur.getUTCDate() + i);
+      const dateStr = cur.toISOString().slice(0, 10);
+      if (dateStr > SEASON_END) break;
+
+      const dow = cur.getUTCDay();
+      const dayData = calData[dateStr];
+      const isToday = dateStr === today;
+      const inSeas = inSeason(dateStr);
+
+      let evHtml = '';
+      if (dayData?.events?.length) {
+        evHtml = '<div class="cal-card-events">' +
+          dayData.events.slice(0, 2).map(e =>
+            `<div class="cal-card-ev ${e.type}">${e.title}</div>`
+          ).join('') + '</div>';
+      }
+
+      let iconsHtml = '';
+      if (inSeas && dayData) {
+        iconsHtml = `<div class="cal-card-icons">
+          <div class="cal-card-icon-row" style="color:#4A5568">${SVG_BBQ}${statusMark(dayData.bbq?.status)}</div>
+          <div class="cal-card-icon-row" style="color:#4A5568">${SVG_SHOWER}${statusMark(dayData.ls?.status)}</div>
+        </div>`;
+      } else if (!inSeas) {
+        iconsHtml = '<div style="font-size:0.6rem;color:#CBD5E0;margin-top:2px;">営業外</div>';
+      }
+
+      cards.push(`
+        <div class="cal-card${isToday ? ' is-today' : ''}${!inSeas ? ' off-season' : ''}">
+          <div class="cal-card-dow ${dow===0?'sun':dow===6?'sat':''}">${DAYS[dow]}</div>
+          <div class="cal-card-date ${dow===0?'sun':dow===6?'sat':''}">${cur.getUTCDate()}</div>
+          ${iconsHtml}
+          ${evHtml}
+        </div>
+      `);
+    }
+
+    strip.innerHTML = cards.join('') || '<div class="cal-loading">準備中</div>';
+  }
+
+  // 初期化
+  if (today >= '2026-07-03') {
+    currentMonth = parseInt(today.slice(5, 7));
+    if (currentMonth < 7) currentMonth = 7;
+    if (currentMonth > 9) currentMonth = 9;
+  }
+  fetchCalendar();
+})();
+</script>

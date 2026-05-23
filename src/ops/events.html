@@ -1,0 +1,306 @@
+---
+layout: null
+permalink: /ops/events.html
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>PUENTE — イベント管理</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ocean: #2E8CB8; --teal: #36B5A0; --deep: #1A5276;
+  --bg: #F0F4F8; --white: #ffffff; --text: #2D3748;
+  --muted: #718096; --border: #E2E8F0; --radius: 14px;
+  --beach: #2E8CB8; --puente: #36B5A0;
+}
+body {
+  font-family: -apple-system, 'Helvetica Neue', 'Noto Sans JP', Arial, sans-serif;
+  background: var(--bg); color: var(--text); font-size: 15px;
+  line-height: 1.6; -webkit-font-smoothing: antialiased; padding-bottom: 5rem;
+}
+.header {
+  background: linear-gradient(135deg, var(--deep), var(--ocean));
+  padding: 1.5rem 1.25rem 1.25rem; text-align: center; color: white;
+}
+.header-logo { font-size: 1.2rem; font-weight: 800; letter-spacing: 4px; }
+.header-sub  { font-size: 0.75rem; opacity: 0.75; margin-top: 0.1rem; }
+
+.content { padding: 1.25rem 1rem; }
+
+/* フォームカード */
+.form-card {
+  background: white; border-radius: var(--radius);
+  border: 1.5px solid var(--border); padding: 1.25rem; margin-bottom: 1.25rem;
+}
+.form-title {
+  font-size: 0.85rem; font-weight: 800; color: var(--deep);
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;
+}
+.field { margin-bottom: 0.85rem; }
+.field label {
+  display: block; font-size: 0.72rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.35rem;
+}
+.field input, .field select, .field textarea {
+  width: 100%; padding: 0.6rem 0.8rem;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  font-size: 0.88rem; font-family: inherit; color: var(--text);
+  background: white; -webkit-appearance: none; appearance: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--ocean);
+  box-shadow: 0 0 0 3px rgba(46,140,184,0.12);
+}
+.field textarea { height: 70px; resize: vertical; }
+.type-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.type-btn {
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+  padding: 0.6rem 0.5rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
+  border: 2px solid var(--border); background: var(--bg); color: var(--muted);
+  cursor: pointer; transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+}
+.type-btn.active.beach  { background: #EBF8FF; border-color: var(--beach); color: var(--beach); }
+.type-btn.active.puente { background: #E6FFFA; border-color: var(--puente); color: var(--puente); }
+.submit-btn {
+  width: 100%; padding: 0.85rem; border-radius: 10px; border: none;
+  background: var(--deep); color: white; font-size: 0.9rem; font-weight: 700;
+  font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s;
+}
+.submit-btn:active { opacity: 0.8; }
+.submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.toast {
+  position: fixed; bottom: 5rem; left: 50%; transform: translateX(-50%);
+  background: #276749; color: white; font-size: 0.82rem; font-weight: 700;
+  padding: 0.6rem 1.4rem; border-radius: 99px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  opacity: 0; transition: opacity 0.3s; pointer-events: none; white-space: nowrap;
+}
+.toast.show { opacity: 1; }
+.toast.error { background: #9B2C2C; }
+
+/* イベント一覧 */
+.list-header {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.78rem; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 0.6rem; padding: 0 0.25rem;
+}
+.event-item {
+  background: white; border-radius: 10px; border: 1.5px solid var(--border);
+  padding: 0.75rem 0.9rem; margin-bottom: 0.6rem;
+  display: flex; align-items: flex-start; gap: 0.75rem;
+}
+.event-type-badge {
+  flex-shrink: 0; font-size: 0.65rem; font-weight: 700;
+  padding: 0.15rem 0.5rem; border-radius: 4px; margin-top: 2px;
+}
+.badge-beach  { background: #EBF8FF; color: #2C5282; }
+.badge-puente { background: #E6FFFA; color: #276749; }
+.event-body { flex: 1; min-width: 0; }
+.event-date  { font-size: 0.72rem; color: var(--muted); margin-bottom: 0.1rem; }
+.event-title { font-size: 0.88rem; font-weight: 700; }
+.event-desc  { font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem; }
+.delete-btn {
+  flex-shrink: 0; background: none; border: 1.5px solid var(--border);
+  border-radius: 6px; padding: 0.25rem 0.5rem; font-size: 0.72rem;
+  color: #9B2C2C; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.delete-btn:active { background: #FFF5F5; }
+.empty-msg {
+  text-align: center; font-size: 0.82rem; color: var(--muted);
+  padding: 1.5rem; background: white; border-radius: 10px;
+  border: 1.5px dashed var(--border);
+}
+.loading-msg { text-align: center; font-size: 0.8rem; color: var(--muted); padding: 1rem; }
+
+/* 月ナビ */
+.month-nav {
+  display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;
+}
+.month-nav select {
+  flex: 1; padding: 0.45rem 0.7rem; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 0.85rem; font-family: inherit; background: white;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">PUENTE</div>
+  <div class="header-sub">イベント管理</div>
+</div>
+
+<div class="content">
+
+  <!-- 登録フォーム -->
+  <div class="form-card">
+    <div class="form-title">＋ イベントを追加</div>
+
+    <div class="field">
+      <label>日付</label>
+      <input type="date" id="inp-date" min="2026-07-03" max="2026-09-06">
+    </div>
+
+    <div class="field">
+      <label>イベント種別</label>
+      <div class="type-row">
+        <button class="type-btn beach active" onclick="setType('beach')">🏖️ 海水浴場全体</button>
+        <button class="type-btn puente" onclick="setType('puente')">🏠 PUENTEのみ</button>
+      </div>
+      <input type="hidden" id="inp-type" value="beach">
+    </div>
+
+    <div class="field">
+      <label>タイトル</label>
+      <input type="text" id="inp-title" placeholder="例：花火大会、貸切営業">
+    </div>
+
+    <div class="field">
+      <label>補足説明（任意）</label>
+      <textarea id="inp-desc" placeholder="例：逗子海岸花火大会のため18:00以降は入場不可"></textarea>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="addEvent()">追加する</button>
+  </div>
+
+  <!-- イベント一覧 -->
+  <div class="list-header">
+    <span>登録済みイベント</span>
+    <div class="month-nav">
+      <select id="month-filter" onchange="renderList()">
+        <option value="2026-07">7月</option>
+        <option value="2026-08">8月</option>
+        <option value="2026-09">9月</option>
+      </select>
+    </div>
+  </div>
+
+  <div id="event-list"><div class="loading-msg">読み込み中...</div></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<a href="/ops/" style="
+  position: fixed; bottom: 1.25rem; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.4rem;
+  background: #1A5276; color: white; font-size: 0.8rem; font-weight: 700;
+  padding: 0.6rem 1.4rem; border-radius: 99px; text-decoration: none;
+  box-shadow: 0 4px 16px rgba(26,82,118,0.35); z-index: 100;
+  -webkit-tap-highlight-color: transparent;
+">← ポータルに戻る</a>
+
+<script>
+const SUPABASE_URL = 'https://rwptdctdiubxjqklogza.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MjU0MTQsImV4cCI6MjA2MTMwMTQxNH0.3vMGDLQ7fJg9bMdVJVPPLUfRJyEKjfDr0yVHvpRTbos';
+
+let allEvents = [];
+
+function setType(t) {
+  document.getElementById('inp-type').value = t;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.type-btn.' + t).classList.add('active');
+}
+
+function showToast(msg, isError = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isError ? ' error' : '');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+async function fetchEvents() {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/events?select=*&order=date.asc`, {
+    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+  });
+  allEvents = await res.json();
+  renderList();
+}
+
+function renderList() {
+  const month = document.getElementById('month-filter').value;
+  const filtered = allEvents.filter(e => e.date.startsWith(month));
+  const el = document.getElementById('event-list');
+
+  if (filtered.length === 0) {
+    el.innerHTML = '<div class="empty-msg">この月のイベントはまだありません</div>';
+    return;
+  }
+
+  const fmt = d => {
+    const dt = new Date(d + 'T00:00:00');
+    const w = ['日','月','火','水','木','金','土'];
+    return `${dt.getMonth()+1}月${dt.getDate()}日（${w[dt.getDay()]}）`;
+  };
+
+  el.innerHTML = filtered.map(e => `
+    <div class="event-item">
+      <span class="event-type-badge ${e.type === 'beach' ? 'badge-beach' : 'badge-puente'}">
+        ${e.type === 'beach' ? '🏖️ 海水浴場' : '🏠 PUENTE'}
+      </span>
+      <div class="event-body">
+        <div class="event-date">${fmt(e.date)}</div>
+        <div class="event-title">${e.title}</div>
+        ${e.description ? `<div class="event-desc">${e.description}</div>` : ''}
+      </div>
+      <button class="delete-btn" onclick="deleteEvent('${e.id}')">削除</button>
+    </div>
+  `).join('');
+}
+
+async function addEvent() {
+  const date  = document.getElementById('inp-date').value;
+  const type  = document.getElementById('inp-type').value;
+  const title = document.getElementById('inp-title').value.trim();
+  const desc  = document.getElementById('inp-desc').value.trim();
+
+  if (!date || !title) { showToast('日付とタイトルは必須です', true); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+    method: 'POST',
+    headers: {
+      apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json', Prefer: 'return=representation'
+    },
+    body: JSON.stringify({ date, type, title, description: desc || null })
+  });
+
+  btn.disabled = false;
+
+  if (res.ok) {
+    document.getElementById('inp-date').value = '';
+    document.getElementById('inp-title').value = '';
+    document.getElementById('inp-desc').value = '';
+    showToast('✓ イベントを追加しました');
+    await fetchEvents();
+    // 追加した月を選択
+    document.getElementById('month-filter').value = date.slice(0, 7);
+    renderList();
+  } else {
+    showToast('エラーが発生しました', true);
+  }
+}
+
+async function deleteEvent(id) {
+  if (!confirm('このイベントを削除しますか？')) return;
+  await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${id}`, {
+    method: 'DELETE',
+    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+  });
+  showToast('削除しました');
+  await fetchEvents();
+}
+
+// 初期化
+fetchEvents();
+</script>
+</body>
+</html>
