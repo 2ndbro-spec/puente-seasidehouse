@@ -197,6 +197,7 @@
   let calData = {};      // date → day object
   let weatherData = {}; // date → emoji string
   let currentMonth = 7; // 7=July
+  let isAnimating = false;
   const today = new Date().toISOString().slice(0, 10);
 
   function inSeason(d) { return d >= SEASON_START && d <= SEASON_END; }
@@ -249,11 +250,13 @@
     renderDesktop();
   }
 
-  // ===== 月切り替えアニメーション =====
+  // ===== ボタン用月切り替えアニメーション =====
   function animateMonth(direction, callback) {
+    if (isAnimating) return;
+    isAnimating = true;
     const grid = document.getElementById('cal-grid');
-    const outX = direction === 'next' ? '-50px' : '50px';
-    const inX  = direction === 'next' ?  '50px' : '-50px';
+    const outX = direction === 'next' ? '-60px' : '60px';
+    const inX  = direction === 'next' ?  '60px' : '-60px';
 
     grid.style.transition = 'transform 0.18s ease, opacity 0.18s ease';
     grid.style.transform  = `translateX(${outX})`;
@@ -269,6 +272,7 @@
           grid.style.transition = 'transform 0.18s ease, opacity 0.18s ease';
           grid.style.transform  = '';
           grid.style.opacity    = '';
+          setTimeout(() => { isAnimating = false; }, 200);
         });
       });
     }, 180);
@@ -348,17 +352,71 @@
   }
   fetchCalendar();
 
-  // タッチスワイプ（左 → 次月 / 右 → 前月）
-  const calWrap = document.getElementById('cal-desktop');
-  let touchStartX = 0;
-  calWrap.addEventListener('touchstart', e => {
-    touchStartX = e.touches[0].clientX;
-  }, { passive: true });
-  calWrap.addEventListener('touchend', e => {
-    const delta = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(delta) < 50) return; // 50px未満は無視
-    if (delta < 0) window.calNextMonth();
-    else           window.calPrevMonth();
-  }, { passive: true });
+  // タッチスワイプ（指に追従）
+  (function() {
+    const wrap = document.getElementById('cal-desktop');
+    const grid = document.getElementById('cal-grid');
+    let startX = 0, dragging = false;
+
+    wrap.addEventListener('touchstart', e => {
+      if (isAnimating) return;
+      startX   = e.touches[0].clientX;
+      dragging = true;
+      grid.style.transition = 'none';
+    }, { passive: true });
+
+    wrap.addEventListener('touchmove', e => {
+      if (!dragging || isAnimating) return;
+      let delta = e.touches[0].clientX - startX;
+      // 端月でゴム紐抵抗（20%の動き）
+      const atStart = currentMonth <= 7 && delta > 0;
+      const atEnd   = currentMonth >= 9 && delta < 0;
+      if (atStart || atEnd) delta *= 0.2;
+      const capped = Math.max(-160, Math.min(160, delta));
+      grid.style.transform = `translateX(${capped}px)`;
+      grid.style.opacity   = String(1 - Math.abs(capped) / 320);
+    }, { passive: true });
+
+    wrap.addEventListener('touchend', e => {
+      if (!dragging) return;
+      dragging = false;
+      const delta  = e.changedTouches[0].clientX - startX;
+      const goNext = delta < 0 && currentMonth < 9;
+      const goPrev = delta > 0 && currentMonth > 7;
+
+      if (Math.abs(delta) >= 50 && (goNext || goPrev)) {
+        // 月切り替え確定
+        isAnimating = true;
+        const outX = delta < 0 ? '-110%' : '110%';
+        const inX  = delta < 0 ?  '110%' : '-110%';
+
+        grid.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        grid.style.transform  = `translateX(${outX})`;
+        grid.style.opacity    = '0';
+
+        setTimeout(() => {
+          if (goNext) currentMonth++;
+          else        currentMonth--;
+          renderDesktop();
+          grid.style.transition = 'none';
+          grid.style.transform  = `translateX(${inX})`;
+          grid.style.opacity    = '0';
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              grid.style.transition = 'transform 0.22s ease, opacity 0.22s ease';
+              grid.style.transform  = '';
+              grid.style.opacity    = '';
+              setTimeout(() => { isAnimating = false; }, 240);
+            });
+          });
+        }, 200);
+      } else {
+        // スナップバック
+        grid.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
+        grid.style.transform  = '';
+        grid.style.opacity    = '';
+      }
+    }, { passive: true });
+  })();
 })();
 </script>

@@ -1052,7 +1052,10 @@ p {
 }
 
 .rsv-date-input {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  min-height: 50px;
   padding: 12px 16px;
   border: 1.5px solid var(--turquoise);
   border-radius: var(--radius-btn);
@@ -1060,6 +1063,9 @@ p {
   font-family: var(--font-body);
   color: var(--dark-text);
   background: var(--sand);
+  -webkit-appearance: none;
+  appearance: none;
+  box-sizing: border-box;
 }
 
 .rsv-loading {
