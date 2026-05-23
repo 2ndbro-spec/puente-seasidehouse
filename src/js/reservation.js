@@ -68,6 +68,15 @@
       state.date = e.target.value;
       fetchAvailability();
     });
+
+    // カレンダーから日付指定で遷移してきた場合に自動セット
+    const preDate = new URLSearchParams(location.search).get('date');
+    if (preDate && preDate >= today) {
+      input.value = preDate;
+      state.date = preDate;
+      fetchAvailability();
+      setTimeout(() => $('reservation-app').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
+    }
   }
 
   async function fetchAvailability() {

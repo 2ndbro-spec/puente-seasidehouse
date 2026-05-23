@@ -128,6 +128,12 @@
 .cal-s-full    { background: #E53E3E; }
 .cal-s-none    { background: #CBD5E0; }
 
+/* クリック可能セル */
+.cal-cell.is-link { cursor: pointer; transition: background 0.15s, box-shadow 0.15s; }
+.cal-cell.is-link:hover { background: #EBF8FF; box-shadow: inset 0 0 0 1.5px #2E8CB8; }
+.cal-card.is-link { cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; }
+.cal-card.is-link:hover { border-color: #2E8CB8; box-shadow: 0 3px 12px rgba(46,140,184,0.2); }
+
 /* アイコン行 */
 .cal-icons {
   display: flex; flex-direction: column; gap: 3px;
@@ -298,7 +304,9 @@
       const el = document.createElement('div');
       el.className = 'cal-cell' +
         (isToday ? ' is-today' : '') +
-        (!inSeas ? ' off-season' : '');
+        (!inSeas ? ' off-season' : '') +
+        (inSeas  ? ' is-link'   : '');
+      if (inSeas) el.addEventListener('click', () => { location.href = 'reserve.html?date=' + dateStr; });
 
       const wxEmoji = weatherData[dateStr] || '';
       let inner = `<div class="cal-date-num ${dow===0?'cal-date-sun':dow===6?'cal-date-sat':''}">
@@ -361,7 +369,8 @@
       }
 
       cards.push(`
-        <div class="cal-card${isToday ? ' is-today' : ''}${!inSeas ? ' off-season' : ''}">
+        <div class="cal-card${isToday ? ' is-today' : ''}${!inSeas ? ' off-season' : ''}${inSeas ? ' is-link' : ''}"
+             ${inSeas ? `onclick="location.href='reserve.html?date=${dateStr}'"` : ''}>
           <div class="cal-card-dow ${dow===0?'sun':dow===6?'sat':''}">${DAYS[dow]}</div>
           <div class="cal-card-date ${dow===0?'sun':dow===6?'sat':''}">${cur.getUTCDate()}</div>
           ${cardWx}
