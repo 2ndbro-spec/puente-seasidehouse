@@ -1169,9 +1169,21 @@ p {
 .text-coral { color: var(--coral); }
 
 .ls-gender-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ls-gender-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ls-gender-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--dark-text);
 }
 
 .rsv-select {

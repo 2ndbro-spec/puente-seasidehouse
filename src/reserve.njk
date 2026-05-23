@@ -41,8 +41,11 @@ permalink: /reserve.html
           <!-- BBQ用フィールド -->
           <div id="bbq-fields" class="hidden">
             <div class="rsv-card">
-              <h3 class="rsv-step-title">時間帯を選んでください <span class="rsv-note">（2時間制）</span></h3>
-              <div id="time-slots-grid" class="time-slots-grid"></div>
+              <h3 class="rsv-step-title">開始時間 <span class="rsv-note">（2時間制）</span></h3>
+              <select id="time-slot-select" class="rsv-select">
+                <option value="">時間帯を選択してください</option>
+              </select>
+              <p id="time-slot-status" class="rsv-note mt-1" style="min-height:1.2em;"></p>
             </div>
 
             <div class="rsv-card">
@@ -63,8 +66,8 @@ permalink: /reserve.html
             <div class="rsv-card">
               <p id="ls-remaining" class="ls-remaining"></p>
               <div class="ls-gender-row">
-                <div>
-                  <h3 class="rsv-step-title">男性</h3>
+                <div class="ls-gender-item">
+                  <span class="ls-gender-label">男性</span>
                   <div class="number-stepper">
                     <button type="button" class="num-btn" data-target="num-male" data-action="minus">−</button>
                     <span id="num-male-display" class="num-value">0</span>
@@ -72,8 +75,8 @@ permalink: /reserve.html
                     <button type="button" class="num-btn" data-target="num-male" data-action="plus">+</button>
                   </div>
                 </div>
-                <div>
-                  <h3 class="rsv-step-title">女性</h3>
+                <div class="ls-gender-item">
+                  <span class="ls-gender-label">女性</span>
                   <div class="number-stepper">
                     <button type="button" class="num-btn" data-target="num-female" data-action="minus">−</button>
                     <span id="num-female-display" class="num-value">0</span>

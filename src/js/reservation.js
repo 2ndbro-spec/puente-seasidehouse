@@ -96,30 +96,36 @@
   }
 
   function renderTimeSlots(slots) {
-    const container = $('time-slots-grid');
-    container.innerHTML = '';
+    const select = $('time-slot-select');
+    const statusEl = $('time-slot-status');
     state.timeSlot = null;
 
+    select.innerHTML = '<option value="">時間帯を選択してください</option>';
+    if (statusEl) statusEl.textContent = '';
+
     slots.forEach(slot => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'time-slot-btn';
+      const opt = document.createElement('option');
+      opt.value = slot.time_start;
       const isEmpty = slot.remaining <= 0;
-      if (isEmpty) btn.classList.add('full');
-      btn.disabled = isEmpty;
-      btn.dataset.time = slot.time_start;
-      btn.innerHTML = `
-        <span class="slot-time">${slot.time_start}〜</span>
-        <span class="slot-remaining">${isEmpty ? '満席' : `残${slot.remaining}名`}</span>
-      `;
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.time-slot-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        state.timeSlot = slot.time_start;
-        updatePeopleBounds();
-      });
-      container.appendChild(btn);
+      opt.disabled = isEmpty;
+      opt.textContent = isEmpty
+        ? `${slot.time_start}〜（満席）`
+        : `${slot.time_start}〜（残${slot.remaining}名）`;
+      select.appendChild(opt);
     });
+
+    select.onchange = () => {
+      state.timeSlot = select.value || null;
+      if (state.timeSlot) {
+        updatePeopleBounds();
+        const slot = slots.find(s => s.time_start === state.timeSlot);
+        if (statusEl && slot) {
+          statusEl.textContent = slot.remaining <= 0 ? '満席' : `残${slot.remaining}名`;
+        }
+      } else {
+        if (statusEl) statusEl.textContent = '';
+      }
+    };
   }
 
   function renderLsAvailability(data) {
