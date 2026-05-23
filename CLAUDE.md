@@ -45,3 +45,26 @@ CSS変数で管理（`css/style.css` 冒頭の `:root`）。
 ## デプロイ
 静的サイト。ローカルプレビューは `python3 -m http.server 8080` で確認可能。
 本番は Vercel または Netlify にデプロイ予定。
+
+## ⚠️ デザイン修正の必須ワークフロー
+
+**デザイン・CSS・HTML・JSの変更は、コミット＆プッシュの前に必ずローカルdevサーバーで確認すること。**
+
+### 手順（この順番を守ること）
+1. ファイルを編集
+2. `npm run build` でビルド
+3. `python3 -m http.server 8080 --directory _site` でdevサーバー起動（バックグラウンド）
+4. `http://localhost:8080` で該当ページを実際に目視確認
+5. 問題なければ `git commit` → `git push`
+6. Netlifyへの手動デプロイ（自動デプロイが機能しない場合）
+
+### devサーバー起動コマンド
+```bash
+# バックグラウンド起動
+python3 -m http.server 8080 --directory _site &
+
+# 停止
+kill $(lsof -ti:8080)
+```
+
+> この手順を省略してコミット・プッシュしてはならない。
