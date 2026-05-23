@@ -16,18 +16,20 @@
       </div>
     </div>
 
-    <!-- デスクトップ：月ナビ＋グリッド -->
+    <!-- 月ナビ＋グリッド（全デバイス共通） -->
     <div class="cal-desktop" id="cal-desktop">
       <div class="cal-month-nav">
         <button class="cal-nav-btn" id="cal-prev" onclick="calPrevMonth()">‹</button>
         <div class="cal-month-label" id="cal-month-label">読み込み中...</div>
         <button class="cal-nav-btn" id="cal-next" onclick="calNextMonth()">›</button>
       </div>
-      <div class="cal-grid" id="cal-grid">
-        <div class="cal-day-head">日</div><div class="cal-day-head">月</div>
-        <div class="cal-day-head">火</div><div class="cal-day-head">水</div>
-        <div class="cal-day-head">木</div><div class="cal-day-head">金</div>
-        <div class="cal-day-head">土</div>
+      <div class="cal-grid-wrap">
+        <div class="cal-grid" id="cal-grid">
+          <div class="cal-day-head">日</div><div class="cal-day-head">月</div>
+          <div class="cal-day-head">火</div><div class="cal-day-head">水</div>
+          <div class="cal-day-head">木</div><div class="cal-day-head">金</div>
+          <div class="cal-day-head">土</div>
+        </div>
       </div>
     </div>
 
@@ -40,6 +42,12 @@
 <style>
 /* ===== カレンダー共通 ===== */
 .calendar-section { padding-top: 3rem; padding-bottom: 3rem; }
+
+/* 両サイドのスペースを半分に */
+.calendar-section .container {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 
 .cal-legend {
   display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem;
@@ -90,9 +98,11 @@
 .cal-day-head:first-child { color: #FCA5A5; }
 .cal-day-head:last-child  { color: #93C5FD; }
 
+.cal-grid-wrap { overflow: hidden; }
+
 .cal-cell {
-  background: white; border-radius: 8px; min-height: 80px;
-  padding: 0.4rem 0.45rem; position: relative;
+  background: white; border-radius: 8px; min-height: 90px;
+  padding: 0.5rem 0.55rem; position: relative;
 }
 .cal-cell.empty     { background: transparent; }
 .cal-cell.off-season { background: #F7FAFC; }
@@ -144,28 +154,29 @@
 .cal-event-chip.beach  { background: #BEE3F8; color: #2C5282; }
 .cal-event-chip.puente { background: #B2F5EA; color: #276749; }
 
-/* ===== スマホ：月間グリッドをコンパクトに ===== */
+/* ===== スマホ：月間グリッド ===== */
 @media (max-width: 767px) {
   .cal-cell {
-    min-height: 62px;
-    padding: 0.22rem 0.18rem;
+    min-height: 76px;
+    padding: 0.3rem 0.25rem;
   }
   .cal-date-num {
-    font-size: 0.7rem;
-    margin-bottom: 0.15rem;
+    font-size: 0.78rem;
+    font-weight: 800;
+    margin-bottom: 0.2rem;
     gap: 2px;
   }
-  .cal-wx { font-size: 0.68rem; }
+  .cal-wx { font-size: 0.75rem; }
   .cal-icons { gap: 2px; }
   .cal-icon-row { gap: 3px; }
   .cal-lbl-bbq,
-  .cal-lbl-sw  { font-size: 0.52rem; letter-spacing: 0; }
-  .cal-s-dot   { width: 7px; height: 7px; }
+  .cal-lbl-sw  { font-size: 0.58rem; letter-spacing: 0; }
+  .cal-s-dot   { width: 8px; height: 8px; }
   .cal-month-nav { gap: 0.75rem; margin-bottom: 0.75rem; }
-  .cal-month-label { font-size: 0.9rem; }
-  .cal-nav-btn { width: 32px; height: 32px; font-size: 1rem; }
-  .cal-day-head { font-size: 0.65rem; padding: 0.3rem 0; }
-  .cal-event-chip { font-size: 0.5rem; padding: 1px 2px; }
+  .cal-month-label { font-size: 1rem; }
+  .cal-nav-btn { width: 36px; height: 36px; font-size: 1.1rem; }
+  .cal-day-head { font-size: 0.7rem; padding: 0.4rem 0; }
+  .cal-grid { gap: 3px; padding: 3px; }
 }
 
 .cal-reserve-link {
@@ -238,12 +249,38 @@
     renderDesktop();
   }
 
-  // ===== デスクトップ =====
+  // ===== 月切り替えアニメーション =====
+  function animateMonth(direction, callback) {
+    const grid = document.getElementById('cal-grid');
+    const outX = direction === 'next' ? '-50px' : '50px';
+    const inX  = direction === 'next' ?  '50px' : '-50px';
+
+    grid.style.transition = 'transform 0.18s ease, opacity 0.18s ease';
+    grid.style.transform  = `translateX(${outX})`;
+    grid.style.opacity    = '0';
+
+    setTimeout(() => {
+      callback();
+      grid.style.transition = 'none';
+      grid.style.transform  = `translateX(${inX})`;
+      grid.style.opacity    = '0';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          grid.style.transition = 'transform 0.18s ease, opacity 0.18s ease';
+          grid.style.transform  = '';
+          grid.style.opacity    = '';
+        });
+      });
+    }, 180);
+  }
+
   window.calPrevMonth = function() {
-    if (currentMonth > 7) { currentMonth--; renderDesktop(); }
+    if (currentMonth <= 7) return;
+    animateMonth('prev', () => { currentMonth--; renderDesktop(); });
   };
   window.calNextMonth = function() {
-    if (currentMonth < 9) { currentMonth++; renderDesktop(); }
+    if (currentMonth >= 9) return;
+    animateMonth('next', () => { currentMonth++; renderDesktop(); });
   };
 
   function renderDesktop() {
@@ -310,5 +347,18 @@
     if (currentMonth > 9) currentMonth = 9;
   }
   fetchCalendar();
+
+  // タッチスワイプ（左 → 次月 / 右 → 前月）
+  const calWrap = document.getElementById('cal-desktop');
+  let touchStartX = 0;
+  calWrap.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  calWrap.addEventListener('touchend', e => {
+    const delta = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(delta) < 50) return; // 50px未満は無視
+    if (delta < 0) window.calNextMonth();
+    else           window.calPrevMonth();
+  }, { passive: true });
 })();
 </script>
