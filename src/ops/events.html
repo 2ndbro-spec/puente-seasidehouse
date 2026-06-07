@@ -197,7 +197,7 @@ body {
 
 <script>
 const SUPABASE_URL = 'https://rwptdctdiubxjqklogza.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU3MjU0MTQsImV4cCI6MjA2MTMwMTQxNH0.3vMGDLQ7fJg9bMdVJVPPLUfRJyEKjfDr0yVHvpRTbos';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU';
 
 let allEvents = [];
 
@@ -215,11 +215,21 @@ function showToast(msg, isError = false) {
 }
 
 async function fetchEvents() {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/events?select=*&order=date.asc`, {
-    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
-  });
-  allEvents = await res.json();
-  renderList();
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/events?select=*&order=date.asc`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(`APIエラー ${res.status}: ${err.message || err.code || res.statusText}`);
+    }
+    const data = await res.json();
+    allEvents = Array.isArray(data) ? data : [];
+    renderList();
+  } catch (e) {
+    document.getElementById('event-list').innerHTML =
+      `<div class="empty-msg" style="color:#9B2C2C;">読み込みに失敗しました。<br><small>${e.message}</small></div>`;
+  }
 }
 
 function renderList() {
@@ -264,18 +274,21 @@ async function addEvent() {
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
 
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/events`, {
-    method: 'POST',
-    headers: {
-      apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY,
-      'Content-Type': 'application/json', Prefer: 'return=representation'
-    },
-    body: JSON.stringify({ date, type, title, description: desc || null })
-  });
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/events`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json', Prefer: 'return=representation'
+      },
+      body: JSON.stringify({ date, type, title, description: desc || null })
+    });
 
-  btn.disabled = false;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || err.code || `HTTP ${res.status}`);
+    }
 
-  if (res.ok) {
     document.getElementById('inp-date').value = '';
     document.getElementById('inp-title').value = '';
     document.getElementById('inp-desc').value = '';
@@ -284,19 +297,26 @@ async function addEvent() {
     // 追加した月を選択
     document.getElementById('month-filter').value = date.slice(0, 7);
     renderList();
-  } else {
-    showToast('エラーが発生しました', true);
+  } catch (e) {
+    showToast('エラー: ' + e.message, true);
+  } finally {
+    btn.disabled = false;
   }
 }
 
 async function deleteEvent(id) {
   if (!confirm('このイベントを削除しますか？')) return;
-  await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${id}`, {
-    method: 'DELETE',
-    headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
-  });
-  showToast('削除しました');
-  await fetchEvents();
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/events?id=eq.${id}`, {
+      method: 'DELETE',
+      headers: { apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY }
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    showToast('削除しました');
+    await fetchEvents();
+  } catch (e) {
+    showToast('削除に失敗しました: ' + e.message, true);
+  }
 }
 
 // 初期化
