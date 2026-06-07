@@ -57,9 +57,6 @@
     $('bbq-fields').classList.toggle('hidden', !isBbq);
     $('ls-fields').classList.toggle('hidden', isBbq);
     $('step-date').classList.remove('hidden');
-    // BBQ選択時にアレルギーヒントを表示
-    const hint = $('notes-bbq-hint');
-    if (hint) hint.classList.toggle('hidden', !isBbq);
 
     if (state.date) fetchAvailability();
     renderAddonOptions();

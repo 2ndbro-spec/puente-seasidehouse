@@ -1265,17 +1265,6 @@ p {
   line-height: 1.6;
 }
 
-.rsv-allergy-hint {
-  background: #fff8e1;
-  border-left: 4px solid #F5A623;
-  border-radius: 4px;
-  padding: 0.65rem 0.85rem;
-  font-size: 0.85rem;
-  color: #7D5A00;
-  margin-bottom: 0.75rem;
-  line-height: 1.6;
-}
-
 .rsv-errors {
   background: #fff0f0;
   border: 1px solid var(--coral);
