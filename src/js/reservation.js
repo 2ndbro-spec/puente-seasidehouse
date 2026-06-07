@@ -15,6 +15,7 @@
     notifChannel: 'line',
     name: '',
     email: '',
+    notes: '',
     availability: null,
   };
 
@@ -52,9 +53,13 @@
     state.availability = null;
 
     document.querySelectorAll('.menu-tab').forEach(b => b.classList.toggle('active', b.dataset.id === menu.id));
-    $('bbq-fields').classList.toggle('hidden', !!menu.slot_duration === false);
-    $('ls-fields').classList.toggle('hidden', !!menu.slot_duration === true);
+    const isBbq = !!menu.slot_duration;
+    $('bbq-fields').classList.toggle('hidden', !isBbq);
+    $('ls-fields').classList.toggle('hidden', isBbq);
     $('step-date').classList.remove('hidden');
+    // BBQ選択時にアレルギーヒントを表示
+    const hint = $('notes-bbq-hint');
+    if (hint) hint.classList.toggle('hidden', !isBbq);
 
     if (state.date) fetchAvailability();
     renderAddonOptions();
@@ -229,6 +234,7 @@
       if (!validateForm()) return;
       state.name = $('customer-name').value.trim();
       state.email = $('customer-email').value.trim();
+      state.notes = $('customer-notes').value.trim();
       showConfirmScreen();
     });
   }
@@ -281,6 +287,7 @@
         <tr><th>お名前</th><td>${state.name}</td></tr>
         <tr><th>メール</th><td>${state.email}</td></tr>
         <tr><th>通知方法</th><td>${state.notifChannel === 'line' ? 'LINE' : 'メールのみ'}</td></tr>
+        ${state.notes ? `<tr><th>備考</th><td style="white-space:pre-wrap">${state.notes}</td></tr>` : ''}
       </table>
     `;
     screen.scrollIntoView({ behavior: 'smooth' });
@@ -311,6 +318,7 @@
       status: state.bookingType,
       name: state.name,
       email: state.email,
+      notes: state.notes || null,
       notif_channel: state.notifChannel,
       addon_ids: state.addonIds,
       ...(isBbq

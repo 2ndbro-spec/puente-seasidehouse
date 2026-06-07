@@ -8,7 +8,7 @@ const supabase = createClient(
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-function buildConfirmationEmail({ reservation, menu, notif_channel }) {
+function buildConfirmationEmail({ reservation, menu, notif_channel, notes }) {
   const isBbq = !!menu.slot_duration;
   const statusLabel = reservation.status === 'confirmed' ? '本予約' : '仮予約';
   const people = isBbq
@@ -51,6 +51,7 @@ function buildConfirmationEmail({ reservation, menu, notif_channel }) {
           <tr><td style="padding:8px 0;color:#8896A6">日付</td><td style="padding:8px 0">${reservation.date}</td></tr>
           ${timeRow}
           <tr><td style="padding:8px 0;color:#8896A6">人数</td><td style="padding:8px 0">${people}</td></tr>
+          ${notes ? `<tr><td style="padding:8px 0;color:#8896A6;vertical-align:top">備考</td><td style="padding:8px 0;white-space:pre-wrap">${notes}</td></tr>` : ''}
         </table>
       </div>
 
@@ -82,7 +83,7 @@ exports.handler = async (event) => {
   catch { return { statusCode: 400, body: JSON.stringify({ error: 'Invalid JSON' }) }; }
 
   const { menu_id, date, time_start, num_people, num_male, num_female,
-          checkin_time, status, name, email, notif_channel, addon_ids, provisional_days } = body;
+          checkin_time, status, name, email, notes, notif_channel, addon_ids, provisional_days } = body;
 
   if (!menu_id || !date || !name || !email) {
     return { statusCode: 400, body: JSON.stringify({ error: '必須項目が不足しています' }) };
@@ -152,6 +153,7 @@ exports.handler = async (event) => {
 
   const insertData = {
     menu_id, date, name, email,
+    notes: notes || null,
     status: status || 'confirmed',
     notif_channel: notif_channel || 'email',
     provisional_expires_at,
@@ -180,7 +182,7 @@ exports.handler = async (event) => {
   // 確認メール送信（失敗しても予約は成功扱い）
   if (process.env.RESEND_API_KEY) {
     try {
-      const { subject, html } = buildConfirmationEmail({ reservation, menu, notif_channel });
+      const { subject, html } = buildConfirmationEmail({ reservation, menu, notif_channel, notes });
       await resend.emails.send({
         from: 'PUENTE seaside house <noreply@puente-seasidehouse.com>',
         to: [reservation.email],
