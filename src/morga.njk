@@ -1,0 +1,102 @@
+---
+permalink: /morga.html
+---
+{% set page_title = "MORGA — PUENTE seaside house" %}
+{% set page_description = "MORGA × PUENTE seaside house — 逗子海岸からの特別な音楽体験。近日公開。" %}
+{% set og_title = "MORGA — PUENTE seaside house" %}
+{% set og_description = "MORGA × PUENTE seaside house — 近日公開。" %}
+{% set og_image = "images/ogp-top.jpg" %}
+{% set head_extra %}
+<style>
+  .morga-hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+    background: var(--deep-ocean);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .morga-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 60%, rgba(46,140,184,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 75% 30%, rgba(54,181,160,0.15) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .morga-eyebrow {
+    font-family: var(--font-accent);
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--turquoise);
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+
+  .morga-name {
+    font-family: var(--font-accent);
+    font-size: clamp(3.5rem, 16vw, 8rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    margin: 0 0 1rem;
+    color: var(--white);
+  }
+
+  .morga-at {
+    font-family: var(--font-body);
+    font-size: clamp(0.85rem, 3vw, 1rem);
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+  }
+
+  .morga-coming {
+    display: inline-block;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 99px;
+    padding: 0.55rem 2rem;
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .morga-footer {
+    margin-top: 4rem;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 1px;
+  }
+
+  .morga-footer a {
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+  }
+  .morga-footer a:hover { color: var(--turquoise); }
+</style>
+{% endset %}
+{% include "header.njk" %}
+
+<section class="morga-hero">
+  <p class="morga-eyebrow">Artist</p>
+  <h1 class="morga-name">MORGA</h1>
+  <p class="morga-at">at PUENTE seaside house, 逗子</p>
+  <span class="morga-coming">Coming Soon</span>
+  <p class="morga-footer">
+    <a href="/">← PUENTE seaside house</a>
+  </p>
+</section>
+
+{% include "footer.njk" %}
