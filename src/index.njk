@@ -17,7 +17,7 @@ permalink: /index.html
     </div>
     <div class="hero-overlay"></div>
     <!-- 天気ウィジェット -->
-    <div class="hero-weather" id="hero-weather" style="display:none;">
+    <div class="hero-weather" id="hero-weather" style="display:none;" aria-live="polite">
       <div class="hw-header">今日の天気</div>
       <div class="hw-row">
         <div class="hw-icon" id="hw-icon">—</div>
@@ -230,17 +230,41 @@ permalink: /index.html
   function emoji(c) { return WMO_EMOJI[c] || (c<=48?'🌫':c<=65?'🌧':c<=82?'🌦':'⛈'); }
   function text(c)  { return WMO_TEXT[c]  || '—'; }
 
-  fetch('https://api.open-meteo.com/v1/forecast?latitude=35.2948&longitude=139.574&current_weather=true&timezone=Asia%2FTokyo')
-    .then(r => r.json())
-    .then(data => {
-      const cw = data.current_weather;
-      if (!cw) return;
-      document.getElementById('hw-icon').textContent = emoji(cw.weathercode);
-      document.getElementById('hw-desc').textContent = text(cw.weathercode);
-      document.getElementById('hw-temp').textContent = Math.round(cw.temperature) + '°C';
-      document.getElementById('hero-weather').style.display = 'flex';
-    })
-    .catch(function(){});
+  const CACHE_KEY = 'puente_wx_v1';
+  const CACHE_TTL = 15 * 60 * 1000; // 15分
+
+  function applyWeather(cw) {
+    document.getElementById('hw-icon').textContent = emoji(cw.weathercode);
+    document.getElementById('hw-desc').textContent = text(cw.weathercode);
+    document.getElementById('hw-temp').textContent = Math.round(cw.temperature) + '°C';
+    document.getElementById('hero-weather').style.display = 'flex';
+  }
+
+  function fetchFresh() {
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=35.2948&longitude=139.574&current_weather=true&timezone=Asia%2FTokyo')
+      .then(r => r.json())
+      .then(data => {
+        const cw = data.current_weather;
+        if (!cw) return;
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({ cw, ts: Date.now() })); } catch (_) {}
+        applyWeather(cw);
+      })
+      .catch(function(){});
+  }
+
+  // キャッシュがあれば即表示（stale-while-revalidate）
+  try {
+    const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    if (cached?.cw) {
+      applyWeather(cached.cw);
+      // 15分以上古い場合はバックグラウンドで更新
+      if (Date.now() - cached.ts > CACHE_TTL) fetchFresh();
+      return; // 新鮮なキャッシュならfetchしない
+    }
+  } catch (_) {}
+
+  // キャッシュなし → 通常フェッチ
+  fetchFresh();
 })();
 </script>
 {% include "footer.njk" %}
