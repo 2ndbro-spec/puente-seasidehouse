@@ -143,13 +143,13 @@ permalink: /story.html
   <!-- EDIT: story-hero — ファーストビュー -->
   <section class="hero" style="min-height: 500px; height: 70vh;">
     <div class="hero-bg">
-      <img src="{{ story.hero_image }}" alt="{{ story.hero_alt }}" loading="eager">
+      <img src="{{ story.hero.image }}" alt="{{ story.hero.alt }}" loading="eager">
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="text-accent" style="font-family: var(--font-handwrite); font-size: 1.6rem; color: var(--deep-ocean); text-shadow: 0 0 16px rgba(255,255,255,0.8); letter-spacing: 0.05em; margin-bottom: 0.5rem;">Our Story</p>
-      <h1>{{ story.hero_h1 | safe }}</h1>
-      <p class="tagline">{{ story.hero_tagline }}</p>
+      <h1>{{ story.hero.title | safe }}</h1>
+      <p class="tagline">{{ story.hero.tagline }}</p>
     </div>
   </section>
 
@@ -161,7 +161,7 @@ permalink: /story.html
         <h2>PUENTEとは？</h2>
       </div>
       <div class="value-cards">
-        {% for card in story.about_cards %}
+        {% for card in story.about.cards %}
         <div class="value-card reveal">
           <div class="value-icon">{{ card.icon }}</div>
           <h3>{{ card.title }}</h3>
@@ -180,13 +180,13 @@ permalink: /story.html
         <h2>なぜPUENTEをつくったのか</h2>
       </div>
       <div class="story-lead mb-4">
-        {% for p in story.why_paragraphs %}
+        {% for p in story.why.paragraphs %}
         <p>{{ p }}</p>
         {% endfor %}
       </div>
       <div class="story-quote reveal">
-        <p>{{ story.quote_text }}</p>
-        <p class="quote-author">{{ story.quote_author }}</p>
+        <p>{{ story.why.quote }}</p>
+        <p class="quote-author">{{ story.why.quote_author }}</p>
       </div>
     </div>
   </section>
@@ -199,10 +199,10 @@ permalink: /story.html
         <h2>2025年の挑戦</h2>
       </div>
       <div class="challenge-box reveal">
-        <img src="{{ story.challenge_image }}" alt="PUENTEチーム" class="challenge-img">
+        <img src="{{ story.challenge.image }}" alt="{{ story.challenge.alt }}" class="challenge-img">
         <div class="challenge-body">
-          <h3>{{ story.challenge_title }}</h3>
-          {% for p in story.challenge_paragraphs %}
+          <h3>{{ story.challenge.title }}</h3>
+          {% for p in story.challenge.paragraphs %}
           <p>{{ p }}</p>
           {% endfor %}
           <p class="text-muted" style="font-size: 0.85rem;">※ クラウドファンディングページへのリンクはオープン後に掲載予定</p>
@@ -219,10 +219,10 @@ permalink: /story.html
         <h2>子どもたちに届けたい体験</h2>
       </div>
       <p class="text-center story-lead mb-4" style="max-width: 640px; margin-left: auto; margin-right: auto;">
-        {{ story.kids_intro | safe }}
+        {{ story.kids.lead | safe }}
       </p>
       <div class="scene-grid">
-        {% for scene in story.kids_scenes %}
+        {% for scene in story.kids.scenes %}
         <div class="scene-item reveal">
           <img src="{{ scene.image }}" alt="{{ scene.alt }}" loading="lazy">
           <div class="scene-body">
@@ -243,10 +243,10 @@ permalink: /story.html
         <h2>大人にとってのPUENTE</h2>
       </div>
       <p class="text-center story-lead mb-4" style="max-width: 640px; margin-left: auto; margin-right: auto;">
-        {{ story.adults_intro | safe }}
+        {{ story.adults.lead | safe }}
       </p>
       <div class="scene-grid">
-        {% for scene in story.adults_scenes %}
+        {% for scene in story.adults.scenes %}
         <div class="scene-item reveal">
           <img src="{{ scene.image }}" alt="{{ scene.alt }}" loading="lazy">
           <div class="scene-body">
@@ -267,7 +267,7 @@ permalink: /story.html
         <h2>PUENTEの1日</h2>
       </div>
       <div class="timeline">
-        {% for item in story.timeline %}
+        {% for item in story.timeline.items %}
         <div class="timeline-item">
           <div class="timeline-time">{{ item.time }}</div>
           <div>
@@ -293,7 +293,7 @@ permalink: /story.html
         <h2>これからのPUENTE</h2>
       </div>
       <div class="story-lead">
-        {% for p in story.future_paragraphs %}
+        {% for p in story.future.paragraphs %}
         <p>{{ p }}</p>
         {% endfor %}
       </div>
@@ -306,11 +306,11 @@ permalink: /story.html
       <h2>PUENTEとつながる</h2>
       <p style="color: rgba(255,255,255,0.8); margin-bottom: 2rem;">応援・協賛・イベント貸切のご相談もお気軽にどうぞ。</p>
       <div class="cta-grid">
-        {% for card in story.cta_cards %}
+        {% for card in story.cta.cards %}
         <div class="cta-card">
           <h3>{{ card.icon }} {{ card.title }}</h3>
           <p class="text-muted" style="font-size: 0.85rem;">{{ card.description }}</p>
-          <a href="{{ card.url }}"{% if card.external %} target="_blank" rel="noopener"{% endif %} class="btn btn-outline" style="margin-top: 0.5rem; padding: 8px 20px; font-size: 0.85rem;">{{ card.label }}</a>
+          <a href="{{ card.link_url }}"{% if card.external %} target="_blank" rel="noopener"{% endif %} class="btn btn-outline" style="margin-top: 0.5rem; padding: 8px 20px; font-size: 0.85rem;">{{ card.link_text }}</a>
         </div>
         {% endfor %}
       </div>
