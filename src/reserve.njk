@@ -52,7 +52,7 @@ permalink: /reserve.html
               <h3 class="rsv-step-title">人数</h3>
               <div class="number-stepper">
                 <button type="button" class="num-btn" data-target="num-people" data-action="minus">−</button>
-                <span id="num-people-display" class="num-value">2</span>
+                <input type="number" id="num-people-display" class="num-value" value="2" min="1">
                 <button type="button" class="num-btn" data-target="num-people" data-action="plus">+</button>
               </div>
               <p class="rsv-note mt-1">※ 2名〜100名</p>
@@ -70,8 +70,7 @@ permalink: /reserve.html
                   <span class="ls-gender-label">男性</span>
                   <div class="number-stepper">
                     <button type="button" class="num-btn" data-target="num-male" data-action="minus">−</button>
-                    <span id="num-male-display" class="num-value">0</span>
-                    <input type="hidden" id="num-male" value="0">
+                    <input type="number" id="num-male-display" class="num-value" value="0" min="0">
                     <button type="button" class="num-btn" data-target="num-male" data-action="plus">+</button>
                   </div>
                 </div>
@@ -79,8 +78,7 @@ permalink: /reserve.html
                   <span class="ls-gender-label">女性</span>
                   <div class="number-stepper">
                     <button type="button" class="num-btn" data-target="num-female" data-action="minus">−</button>
-                    <span id="num-female-display" class="num-value">0</span>
-                    <input type="hidden" id="num-female" value="0">
+                    <input type="number" id="num-female-display" class="num-value" value="0" min="0">
                     <button type="button" class="num-btn" data-target="num-female" data-action="plus">+</button>
                   </div>
                 </div>

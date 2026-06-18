@@ -142,8 +142,8 @@
 
   function updateLsPeopleBounds(max) {
     const maxPeople = Math.min(state.selectedMenu?.max_people || 30, max);
-    $('num-male').max = maxPeople;
-    $('num-female').max = maxPeople;
+    $('num-male-display').max = maxPeople;
+    $('num-female-display').max = maxPeople;
   }
 
   function updatePeopleBounds() {
@@ -152,7 +152,7 @@
     const max = slot ? Math.min(state.selectedMenu.max_people, slot.remaining) : state.selectedMenu.max_people;
     const min = state.selectedMenu.min_people || 1;
     state.numPeople = Math.max(state.numPeople, min);
-    $('num-people-display').textContent = state.numPeople;
+    $('num-people-display').value = state.numPeople;
   }
 
   function renderAddonOptions() {
@@ -182,7 +182,7 @@
         const target = btn.dataset.target;
         const display = $(`${target}-display`);
         const menu = state.selectedMenu;
-        let val = parseInt(display.textContent);
+        let val = parseInt(display.value) || 0;
 
         if (target === 'num-people') {
           const min = menu?.min_people || 1;
@@ -197,7 +197,25 @@
           val = action === 'plus' ? val + 1 : Math.max(val - 1, 0);
           state.numFemale = val;
         }
-        display.textContent = val;
+        display.value = val;
+      });
+    });
+  }
+
+  function bindNumberInputs() {
+    [
+      { id: 'num-people-display', key: 'numPeople', getMin: () => state.selectedMenu?.min_people || 1, getMax: () => { const slot = state.availability?.slots?.find(s => s.time_start === state.timeSlot); return slot ? Math.min(state.selectedMenu?.max_people || 100, slot.remaining) : (state.selectedMenu?.max_people || 100); } },
+      { id: 'num-male-display',   key: 'numMale',   getMin: () => 0, getMax: () => state.selectedMenu?.max_people || 100 },
+      { id: 'num-female-display', key: 'numFemale', getMin: () => 0, getMax: () => state.selectedMenu?.max_people || 100 },
+    ].forEach(({ id, key, getMin, getMax }) => {
+      const input = $(id);
+      if (!input) return;
+      input.addEventListener('change', () => {
+        let val = parseInt(input.value);
+        if (isNaN(val)) val = getMin();
+        val = Math.max(getMin(), Math.min(val, getMax()));
+        input.value = val;
+        state[key] = val;
       });
     });
   }
@@ -388,6 +406,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     init();
     bindNumberButtons();
+    bindNumberInputs();
     bindBookingType();
     bindNotifChannel();
     bindCheckinTime();
