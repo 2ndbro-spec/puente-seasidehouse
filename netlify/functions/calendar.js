@@ -44,29 +44,29 @@ exports.handler = async (event) => {
 
     const dates = dateRange(from, to);
 
-    // --- イベント取得 ---
-    const { data: eventsRaw } = await supabase
-      .from('events')
-      .select('*')
-      .gte('date', from)
-      .lte('date', to)
-      .order('date');
+    // 5クエリを並列実行
+    const [
+      { data: eventsRaw },
+      { data: bbqInv },
+      { data: bbqRsv },
+      { data: lsInv },
+      { data: lsRsv },
+    ] = await Promise.all([
+      supabase.from('events').select('*').gte('date', from).lte('date', to).order('date'),
+      supabase.from('inventory').select('date, capacity').eq('menu_id', BBQ_ID).gte('date', from).lte('date', to),
+      supabase.from('reservations').select('date, time_start, num_people').eq('menu_id', BBQ_ID).gte('date', from).lte('date', to).in('status', ['confirmed', 'pending']),
+      supabase.from('inventory').select('date, capacity').eq('menu_id', LS_ID).gte('date', from).lte('date', to).is('time_start', null),
+      supabase.from('reservations').select('date, num_male, num_female, num_people').eq('menu_id', LS_ID).gte('date', from).lte('date', to).in('status', ['confirmed', 'pending']),
+    ]);
 
+    // --- イベント ---
     const eventsByDate = {};
     (eventsRaw || []).forEach(e => {
       if (!eventsByDate[e.date]) eventsByDate[e.date] = [];
       eventsByDate[e.date].push({ id: e.id, title: e.title, type: e.type, description: e.description });
     });
 
-    // --- BBQ 予約状況（スロット単位の最悪値を集計）---
-    const { data: bbqInv } = await supabase
-      .from('inventory')
-      .select('date, capacity')
-      .eq('menu_id', BBQ_ID)
-      .gte('date', from)
-      .lte('date', to);
-
-    // BBQは時間帯別なので日ごとに capacity の最小を使う（最も埋まっているスロット基準）
+    // --- BBQ ---
     const bbqInvByDate = {};
     (bbqInv || []).forEach(r => {
       if (!bbqInvByDate[r.date] || r.capacity < bbqInvByDate[r.date]) {
@@ -74,41 +74,16 @@ exports.handler = async (event) => {
       }
     });
 
-    const { data: bbqRsv } = await supabase
-      .from('reservations')
-      .select('date, time_start, num_people')
-      .eq('menu_id', BBQ_ID)
-      .gte('date', from)
-      .lte('date', to)
-      .in('status', ['confirmed', 'pending']);
-
-    // スロット別に集計 → 日ごとに「最も混んでいるスロット」の残枠を返す
-    const bbqSlotBooked = {};  // { date: { timeStart: booked } }
+    const bbqSlotBooked = {};
     (bbqRsv || []).forEach(r => {
       const t = r.time_start?.slice(0, 5) || 'all';
       if (!bbqSlotBooked[r.date]) bbqSlotBooked[r.date] = {};
       bbqSlotBooked[r.date][t] = (bbqSlotBooked[r.date][t] || 0) + (r.num_people || 0);
     });
 
-    // --- L/S 予約状況（日単位）---
-    const { data: lsInv } = await supabase
-      .from('inventory')
-      .select('date, capacity')
-      .eq('menu_id', LS_ID)
-      .gte('date', from)
-      .lte('date', to)
-      .is('time_start', null);
-
+    // --- L/S ---
     const lsInvByDate = {};
     (lsInv || []).forEach(r => { lsInvByDate[r.date] = r.capacity; });
-
-    const { data: lsRsv } = await supabase
-      .from('reservations')
-      .select('date, num_male, num_female, num_people')
-      .eq('menu_id', LS_ID)
-      .gte('date', from)
-      .lte('date', to)
-      .in('status', ['confirmed', 'pending']);
 
     const lsBookedByDate = {};
     (lsRsv || []).forEach(r => {

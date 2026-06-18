@@ -232,28 +232,55 @@
     return '<span class="cal-s-dot cal-s-none"></span>';
   }
 
-  // データ取得（予約状況 + 天気予報を並列フェッチ）
-  async function fetchCalendar() {
-    const calFetch = fetch('/api/calendar?from=' + SEASON_START + '&to=' + SEASON_END)
+  // 天気フェッチ（届いたら再レンダリング）
+  function fetchWeather() {
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=35.2948&longitude=139.574&daily=weathercode&timezone=Asia%2FTokyo&forecast_days=16')
       .then(r => r.json())
-      .catch(() => ({ days: [] }));
-    const wxFetch = fetch('https://api.open-meteo.com/v1/forecast?latitude=35.2948&longitude=139.574&daily=weathercode&timezone=Asia%2FTokyo&forecast_days=16')
-      .then(r => r.json())
-      .catch(() => null);
+      .then(wxJson => {
+        if (!wxJson?.daily?.time) return;
+        wxJson.daily.time.forEach((date, i) => {
+          weatherData[date] = wmoEmoji(wxJson.daily.weathercode[i]);
+        });
+        renderDesktop();
+      })
+      .catch(() => {});
+  }
 
-    const [calJson, wxJson] = await Promise.all([calFetch, wxFetch]);
-
-    calData = {};
-    (calJson.days || []).forEach(d => { calData[d.date] = d; });
-
-    weatherData = {};
-    if (wxJson?.daily?.time) {
-      wxJson.daily.time.forEach((date, i) => {
-        weatherData[date] = wmoEmoji(wxJson.daily.weathercode[i]);
-      });
-    }
-
+  // データ取得（即座に描画 → 予約状況・天気が届き次第更新）
+  function fetchCalendar() {
+    // まず日付グリッドだけ即座に表示
     renderDesktop();
+
+    // sessionStorage キャッシュ（5分有効）
+    const CACHE_KEY = 'puente_cal_v2';
+    const CACHE_TTL = 5 * 60 * 1000;
+    try {
+      const cached = sessionStorage.getItem(CACHE_KEY);
+      if (cached) {
+        const { data, ts } = JSON.parse(cached);
+        if (Date.now() - ts < CACHE_TTL) {
+          calData = data;
+          renderDesktop();
+          fetchWeather();
+          return;
+        }
+      }
+    } catch (_) {}
+
+    // 予約状況と天気を独立して並列フェッチ
+    fetch('/api/calendar?from=' + SEASON_START + '&to=' + SEASON_END)
+      .then(r => r.json())
+      .then(calJson => {
+        calData = {};
+        (calJson.days || []).forEach(d => { calData[d.date] = d; });
+        try {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data: calData, ts: Date.now() }));
+        } catch (_) {}
+        renderDesktop();
+      })
+      .catch(() => {});
+
+    fetchWeather();
   }
 
   // ===== ボタン用月切り替えアニメーション =====
