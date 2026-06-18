@@ -1,23 +1,22 @@
 {
-  "note": "※ スタッフ情報はオープン後に更新予定です。",
   "members": [
+    {
+      "name": "Mika",
+      "image": "/images/staff-mika.jpg",
+      "alt": "スタッフ 美夏(Mika)",
+      "comment": "最高の夏の思い出を一緒につくりましょう♡ 普段は裏側担当ですが、お店で見かけた際はぜひ声かけてください。",
+      "instagram": "#"
+    },
+    {
+      "name": "タナカ",
+      "image": "/images/staff-tanaka.jpg",
+      "alt": "スタッフ タナカ",
+      "comment": "一言コメントが入ります",
+      "instagram": "#"
+    },
     {
       "name": "スタッフ名",
       "image": "/images/staff-member-1.jpg",
-      "alt": "スタッフ1",
-      "comment": "一言コメントが入ります",
-      "instagram": "#"
-    },
-    {
-      "name": "スタッフ名",
-      "image": "/images/hair-arrange-beach.jpg",
-      "alt": "スタッフ2",
-      "comment": "一言コメントが入ります",
-      "instagram": "#"
-    },
-    {
-      "name": "スタッフ名",
-      "image": "/images/hair-arrange-styling.jpg",
       "alt": "スタッフ3",
       "comment": "一言コメントが入ります",
       "instagram": "#"
