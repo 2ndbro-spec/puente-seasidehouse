@@ -10,6 +10,7 @@
     numMale: 0,
     numFemale: 0,
     checkinTime: '11:00',
+    includeBbq: true,
     addonIds: [],
     bookingType: 'confirmed',
     notifChannel: 'line',
@@ -34,10 +35,16 @@
     bindDateInput();
   }
 
+  const DINING_MENU_NAME = 'ダイニングエリア席予約';
+
+  function menuDisplayName(menu) {
+    return menu.slot_duration ? DINING_MENU_NAME : menu.name;
+  }
+
   function renderMenuTabs() {
     const tabs = $('menu-tabs');
     tabs.innerHTML = state.menus.map(m => `
-      <button class="menu-tab" data-id="${m.id}">${m.name}</button>
+      <button class="menu-tab" data-id="${m.id}">${menuDisplayName(m)}</button>
     `).join('');
     tabs.querySelectorAll('.menu-tab').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -51,6 +58,8 @@
     state.selectedMenu = menu;
     state.timeSlot = null;
     state.availability = null;
+    state.includeBbq = true;
+    state.addonIds = [];
 
     document.querySelectorAll('.menu-tab').forEach(b => b.classList.toggle('active', b.dataset.id === menu.id));
     const isBbq = !!menu.slot_duration;
@@ -159,17 +168,39 @@
     const container = $('addon-options');
     if (!container) return;
     const menu = state.selectedMenu;
-    if (!menu?.addons?.length) { container.classList.add('hidden'); return; }
+
+    // ダイニングエリア（時間制メニュー）のみ表示
+    if (!menu?.slot_duration) { container.classList.add('hidden'); return; }
+
     container.classList.remove('hidden');
-    container.innerHTML = menu.addons.map(a => `
+    container.innerHTML = `
+      <h3 class="rsv-step-title">ご利用内容 <span class="required">必須</span></h3>
+      <p class="rsv-note" style="margin-bottom:0.75rem;">BBQ・飲み放題のいずれか、または組み合わせて選択してください。</p>
       <label class="addon-label">
-        <input type="checkbox" class="addon-check" data-id="${a.id}" data-price="${a.price}">
-        <span>${a.name} <strong>¥${a.price.toLocaleString()}/人（税込）</strong></span>
+        <input type="checkbox" id="bbq-check" ${state.includeBbq ? 'checked' : ''}>
+        <span>BBQ席（食材・機材はお持ちください） <strong>¥${menu.price.toLocaleString()}/人（税込）</strong></span>
       </label>
-    `).join('');
-    container.querySelectorAll('.addon-check').forEach(cb => {
+      ${(menu.addons || []).map(a => `
+        <label class="addon-label">
+          <input type="checkbox" class="nomihodai-check" data-id="${a.id}" data-price="${a.price}" ${state.addonIds.includes(a.id) ? 'checked' : ''}>
+          <span>飲み放題 ${a.name} <strong>¥${a.price.toLocaleString()}/人（税込）</strong></span>
+        </label>
+      `).join('')}
+    `;
+
+    $('bbq-check').addEventListener('change', e => {
+      state.includeBbq = e.target.checked;
+    });
+
+    container.querySelectorAll('.nomihodai-check').forEach(cb => {
       cb.addEventListener('change', () => {
-        state.addonIds = Array.from(container.querySelectorAll('.addon-check:checked')).map(c => c.dataset.id);
+        // 飲み放題は1種類のみ選択可（排他制御）
+        if (cb.checked) {
+          container.querySelectorAll('.nomihodai-check').forEach(other => {
+            if (other !== cb) other.checked = false;
+          });
+        }
+        state.addonIds = Array.from(container.querySelectorAll('.nomihodai-check:checked')).map(c => c.dataset.id);
       });
     });
   }
@@ -259,6 +290,7 @@
     if (!state.date) errors.push('日付を選択してください');
     if (state.selectedMenu?.slot_duration && !state.timeSlot) errors.push('時間帯を選択してください');
     if (!state.selectedMenu?.slot_duration && (state.numMale + state.numFemale) < 1) errors.push('人数を入力してください');
+    if (state.selectedMenu?.slot_duration && !state.includeBbq && state.addonIds.length === 0) errors.push('BBQまたは飲み放題を選択してください');
     if (!$('customer-name').value.trim()) errors.push('お名前を入力してください');
     if (!$('customer-email').value.trim()) errors.push('メールアドレスを入力してください');
 
@@ -281,22 +313,28 @@
     const menu = state.selectedMenu;
     const isBbq = !!menu.slot_duration;
     const people = isBbq ? state.numPeople : (state.numMale + state.numFemale);
+    const bbqBasePrice = isBbq && state.includeBbq ? menu.price : 0;
     const addonTotal = state.addonIds.reduce((s, id) => {
       const a = menu.addons?.find(x => x.id === id);
       return s + (a ? a.price * people : 0);
     }, 0);
-    const total = menu.price * people + addonTotal;
+    const total = bbqBasePrice * people + addonTotal;
+
+    const selectedItems = [
+      ...(isBbq && state.includeBbq ? ['BBQ席'] : []),
+      ...menu.addons.filter(a => state.addonIds.includes(a.id)).map(a => `飲み放題 ${a.name}`),
+    ];
 
     screen.querySelector('.confirm-details').innerHTML = `
       <table class="confirm-table">
-        <tr><th>メニュー</th><td>${menu.name}</td></tr>
+        <tr><th>メニュー</th><td>${menuDisplayName(menu)}</td></tr>
+        ${isBbq ? `<tr><th>ご利用内容</th><td>${selectedItems.join('、')}</td></tr>` : ''}
         <tr><th>日付</th><td>${state.date}</td></tr>
         ${isBbq ? `<tr><th>時間帯</th><td>${state.timeSlot}〜（2時間）</td></tr>` : ''}
         ${isBbq ? `<tr><th>人数</th><td>${state.numPeople}名</td></tr>` : `
           <tr><th>人数</th><td>男性 ${state.numMale}名 / 女性 ${state.numFemale}名</td></tr>
           <tr><th>チェックイン予定</th><td>${state.checkinTime}</td></tr>
         `}
-        ${state.addonIds.length ? `<tr><th>オプション</th><td>${menu.addons.filter(a => state.addonIds.includes(a.id)).map(a => a.name).join('、')}</td></tr>` : ''}
         <tr><th>料金</th><td>¥${total.toLocaleString()}（税込）</td></tr>
         <tr><th>予約種別</th><td>${state.bookingType === 'confirmed' ? '本予約' : '仮予約'}</td></tr>
         <tr><th>お名前</th><td>${state.name}</td></tr>
@@ -327,13 +365,24 @@
     const menu = state.selectedMenu;
     const isBbq = !!menu.slot_duration;
 
+    // ダイニングエリアの選択内容をノートに自動付記（バックエンド/メールに反映）
+    let notesWithItems = state.notes || '';
+    if (isBbq) {
+      const selectedItems = [
+        ...(state.includeBbq ? ['BBQ席'] : []),
+        ...menu.addons.filter(a => state.addonIds.includes(a.id)).map(a => `飲み放題 ${a.name}`),
+      ];
+      const itemsNote = `【ご利用内容】${selectedItems.join('、')}`;
+      notesWithItems = notesWithItems ? `${itemsNote}\n${notesWithItems}` : itemsNote;
+    }
+
     const payload = {
       menu_id: menu.id,
       date: state.date,
       status: state.bookingType,
       name: state.name,
       email: state.email,
-      notes: state.notes || null,
+      notes: notesWithItems || null,
       notif_channel: state.notifChannel,
       addon_ids: state.addonIds,
       ...(isBbq
