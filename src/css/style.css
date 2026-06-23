@@ -156,6 +156,12 @@ p {
   height: 64px;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
 .logo {
   font-family: var(--font-display);
   font-size: 1.25rem;
@@ -346,6 +352,44 @@ p {
   padding: 8px 24px;
   border-radius: 24px;
   backdrop-filter: blur(8px);
+}
+
+/* --- Hero キャッチコピー（上部） --- */
+.hero-catch {
+  position: absolute;
+  top: 22%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  z-index: 2;
+  font-family: 'Klee One', cursive;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 3.2vw, 2.67rem);
+  color: #fff;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  -webkit-text-stroke: 1.5px #fff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+  animation: handwrite 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+}
+
+@keyframes handwrite {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.6;
+  }
+  to {
+    clip-path: inset(0 0% 0 0);
+    opacity: 1;
+  }
+}
+
+.btn-hero {
+  font-size: 1.1rem;
+  padding: 18px 48px;
+  display: block;
+  width: fit-content;
+  margin: 1.5rem auto 0;
 }
 
 /* --- Hero 天気ウィジェット --- */
@@ -856,69 +900,46 @@ p {
 }
 
 /* ============================================
-   Countdown Timer
+   Countdown — モバイル: ヘッダー直下の固定バー
    ============================================ */
-.countdown-section {
-  background: var(--dark-text);
-  color: #fff;
-  padding: 2rem 20px;
-  text-align: center;
-}
-
-.countdown-label {
-  font-family: var(--font-accent);
-  font-size: 0.9rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  opacity: 0.6;
-  margin: 0 0 1.25rem;
-}
-
-.countdown-grid {
+.header-countdown {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(10, 20, 35, 0.82);
+  backdrop-filter: blur(6px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  justify-content: center;
+  gap: 0.1em;
+  padding: 6px 12px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
-.countdown-item {
-  text-align: center;
-  min-width: 64px;
+.cd-label {
+  margin-right: 0.6em;
+  opacity: 0.85;
+  font-size: 11px;
 }
 
-.countdown-item span:first-child {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 2.8rem;
+.cd-num {
+  display: inline-block;
+  min-width: 2.2ch;
+  text-align: right;
   font-weight: 700;
+  font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: var(--turquoise);
 }
 
-.countdown-item .cd-unit {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 0.1em;
-  opacity: 0.55;
-  margin-top: 0.3rem;
-}
-
-.countdown-sep {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--turquoise);
-  opacity: 0.4;
-  line-height: 1;
-  padding-bottom: 1.2rem;
-}
-
-.countdown-date {
-  font-size: 0.8rem;
-  opacity: 0.45;
-  margin: 0;
-  letter-spacing: 0.05em;
+.cd-unit {
+  margin-right: 0.5em;
+  opacity: 0.75;
 }
 
 /* ============================================
@@ -942,7 +963,23 @@ p {
   }
 
   .header-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     height: 72px;
+  }
+
+  .header-countdown {
+    position: static;
+    background: none;
+    backdrop-filter: none;
+    padding: 0;
+    font-size: 36px;
+    top: auto;
+    z-index: auto;
+  }
+
+  .cd-label {
+    font-size: 14px;
   }
 
   .hamburger {

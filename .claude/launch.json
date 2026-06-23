@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "8080", "--directory", "/Users/chamac/puente-seasidehouse/_site"],
       "port": 8080
+    },
+    {
+      "name": "puente-root",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8081", "--directory", "/Users/chamac/puente-seasidehouse"],
+      "port": 8081
     }
   ]
 }

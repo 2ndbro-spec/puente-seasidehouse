@@ -8,6 +8,7 @@ permalink: /index.html
 {% set og_image = "images/ogp-top.jpg" %}
 {% set og_type = "website" %}
 {% set twitter_card = "summary_large_image" %}
+{% set showCountdown = true %}
 {% include "header.njk" %}
 
   <!-- EDIT: hero-image / hero-copy — FV写真・キャッチコピー -->
@@ -30,42 +31,14 @@ permalink: /index.html
         </div>
       </div>
     </div>
+    <p class="hero-catch">海辺の美容サロンー逗子海岸唯一の美容に特化した海の家</p>
     <div class="hero-content">
       <p class="text-accent" style="font-family: var(--font-handwrite); font-size: 1.6rem; margin-bottom: 0.5rem; color: var(--deep-ocean); text-shadow: 0 0 16px rgba(255,255,255,0.8); letter-spacing: 0.05em;">Zushi Beach</p>
       <h1><span class="hero-h1-visual">PUENTE</span><span class="sr-only">逗子海岸唯一の美容特化海の家「PUENTE seaside house」</span></h1>
-      <p class="tagline">{{ hero.tagline }}</p>
-      <a href="reserve.html" class="btn btn-primary">{{ hero.cta_text }}</a>
+      <a href="reserve.html" class="btn btn-primary btn-hero">{{ hero.cta_text }}</a>
     </div>
   </section>
 
-  <!-- カウントダウンタイマー -->
-  <section id="countdown-section" class="countdown-section">
-    <div class="container">
-      <p class="countdown-label">OPEN まであと</p>
-      <div class="countdown-grid">
-        <div class="countdown-item">
-          <span id="cd-days">--</span>
-          <span class="cd-unit">日</span>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-item">
-          <span id="cd-hours">--</span>
-          <span class="cd-unit">時間</span>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-item">
-          <span id="cd-minutes">--</span>
-          <span class="cd-unit">分</span>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-item">
-          <span id="cd-seconds">--</span>
-          <span class="cd-unit">秒</span>
-        </div>
-      </div>
-      <p class="countdown-date">2026年7月3日（金）9:00 OPEN</p>
-    </div>
-  </section>
   <script>
     (function () {
       var target = new Date('2026-07-03T09:00:00+09:00').getTime();
@@ -73,18 +46,14 @@ permalink: /index.html
       function tick() {
         var diff = target - Date.now();
         if (diff <= 0) {
-          var s = document.getElementById('countdown-section');
-          if (s) s.style.display = 'none';
+          var bar = document.getElementById('header-countdown');
+          if (bar) bar.style.display = 'none';
           return;
         }
-        var days    = Math.floor(diff / 86400000);
-        var hours   = Math.floor(diff % 86400000 / 3600000);
-        var minutes = Math.floor(diff % 3600000  / 60000);
-        var seconds = Math.floor(diff % 60000    / 1000);
-        document.getElementById('cd-days').textContent    = pad(days);
-        document.getElementById('cd-hours').textContent   = pad(hours);
-        document.getElementById('cd-minutes').textContent = pad(minutes);
-        document.getElementById('cd-seconds').textContent = pad(seconds);
+        document.getElementById('cd-days').textContent    = pad(Math.floor(diff / 86400000));
+        document.getElementById('cd-hours').textContent   = pad(Math.floor(diff % 86400000 / 3600000));
+        document.getElementById('cd-minutes').textContent = pad(Math.floor(diff % 3600000  / 60000));
+        document.getElementById('cd-seconds').textContent = pad(Math.floor(diff % 60000    / 1000));
         setTimeout(tick, 1000);
       }
       tick();

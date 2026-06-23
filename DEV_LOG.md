@@ -261,17 +261,68 @@ Phase 4（スタッフ管理画面）完了
 
 ---
 
+## 2026-05-23（Session 5）
+
+### 概要
+TOPページ UX 強化 — 天気ウィジェット・カレンダー改善・シャワーアイコン修正
+
+---
+
+### 実装内容
+
+#### ① ヒーロー天気ウィジェット（`src/index.njk` + `src/css/style.css`）
+- Open-Meteo API（APIキー不要、無料）から逗子海岸の現在天気を取得
+  - エンドポイント: `lat=35.2948&lon=139.574&current_weather=true&timezone=Asia/Tokyo`
+  - WMO天気コード → 絵文字 + 日本語テキストにマッピング
+- ヒーローセクション中央下に白半透明カード（フロストガラス効果）を表示
+  - `background: rgba(255,255,255,0.40)` + `backdrop-filter: blur(18px)`
+  - 「今日の天気」を手書きフォント（Caveat / `--font-handwrite`）で表示
+  - デスクトップで 1.5 倍スケール（`@media (min-width: 768px)` でフォントサイズ拡大）
+- APIエラー時は非表示（`style="display:none;"` → fetchに成功後のみ表示）
+
+#### ② カレンダー天気予報表示（`src/_includes/calendar-widget.njk`）
+- Open-Meteo Daily API から 16 日分の天気予報を取得
+  - `?daily=weathercode&forecast_days=16&timezone=Asia/Tokyo`
+- 予約API（Supabase）と天気APIを `Promise.all` で並列フェッチ
+- 各日セルの右上に WMO 絵文字（☀️☁️🌧⛈ 等）を表示
+
+#### ③ カレンダーアイコン → テキストラベル化
+- BBQ アイコン（SVG）→ **`BBQ`** テキスト（茶色 `#7B3000`）
+- シャワーアイコン（SVG）→ **`SW`** テキスト（ブルー `#2E8CB8`）
+- CSS クラス: `.cal-lbl-bbq` / `.cal-lbl-sw`
+
+#### ④ カレンダー空き状況ドット化
+- ◯△✕ シンボル → 凡例と同色の塗り潰し円（直径 9px）
+  - 🟢 `#38A169`（空きあり） / 🟡 `#D69E2E`（残わずか） / 🔴 `#E53E3E`（満席） / ⚫ `#CBD5E0`（データなし）
+- CSS クラス: `.cal-s-dot` + `.cal-s-open` / `.cal-s-limited` / `.cal-s-full` / `.cal-s-none`
+
+#### ⑤ カレンダー日付クリック → 予約ページ遷移
+- デスクトップ（`.cal-cell`）: クリックで `reserve.html?date=YYYY-MM-DD` に遷移
+- モバイル（`.cal-card`）: `onclick="location.href='reserve.html?date=…'"` を付与
+- 営業期間外・データなし日はリンクなし（`is-link` クラスを付与しない）
+- ホバー時: セル枠をブルー強調（`.cal-cell.is-link:hover` / `.cal-card.is-link:hover`）
+
+#### ⑥ 予約フォーム日付自動セット（`src/js/reservation.js`）
+- URL パラメータ `?date=YYYY-MM-DD` を読み取り、`bindDateInput()` 内で自動セット
+- 過去日付は無視（`preDate >= today` チェック）
+- セット後に `fetchAvailability()` → 残枠を即時表示
+- `scrollIntoView()` で予約フォームまで自動スクロール
+
+#### ⑦ シャワー SVG アイコン修正（`src/images/icon-shower.svg`）
+- **問題**: アームが J フック型で上下逆に見えた
+- **修正**:
+  - アーム: `M 82 8 C 82 35 55 43 42 56`（右上 → 左下へのCカーブ）
+  - シャワーヘッド: `translate(32,66) rotate(-45)` で接続点(42,56)と一致
+  - 水滴: 全て `cy > 77`（ノズル面の下）に統一
+
+---
+
 ## 次回以降の予定
 
 ### 残タスク
 - Resend ドメイン認証完了確認（DNS反映待ち）
 - 飲み放題の料金設定（DB: menu_addons の price が ¥0 仮置き）
 - APIキーのローテーション（LINE / Resend がセッション中にチャットへ露出）
-
-### 残タスク
-- Resend ドメイン認証完了確認（DNS反映待ち）
-- 飲み放題の料金設定
-- Resend / LINE / Netlify の API キーのローテーション（チャットに露出したため）
 
 ---
 

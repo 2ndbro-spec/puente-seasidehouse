@@ -4,3 +4,5 @@ Thumbs.db
 *.swo
 node_modules/
 _site/
+.env
+.env.local
