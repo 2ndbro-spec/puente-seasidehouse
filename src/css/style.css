@@ -856,6 +856,72 @@ p {
 }
 
 /* ============================================
+   Countdown Timer
+   ============================================ */
+.countdown-section {
+  background: var(--dark-text);
+  color: #fff;
+  padding: 2rem 20px;
+  text-align: center;
+}
+
+.countdown-label {
+  font-family: var(--font-accent);
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin: 0 0 1.25rem;
+}
+
+.countdown-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.countdown-item {
+  text-align: center;
+  min-width: 64px;
+}
+
+.countdown-item span:first-child {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--turquoise);
+}
+
+.countdown-item .cd-unit {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  margin-top: 0.3rem;
+}
+
+.countdown-sep {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--turquoise);
+  opacity: 0.4;
+  line-height: 1;
+  padding-bottom: 1.2rem;
+}
+
+.countdown-date {
+  font-size: 0.8rem;
+  opacity: 0.45;
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
    Responsive — Tablet (768px+)
    ============================================ */
 @media (min-width: 768px) {
