@@ -1,5 +1,6 @@
 const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
+const { getEventCapacity } = require('./lib/event-capacity');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -109,7 +110,14 @@ exports.handler = async (event) => {
   }
 
   // 在庫チェック
-  if (menu.slot_duration) {
+  if (menu.is_event) {
+    // イベントは通し券が全部の席を消費するため、部・通しを横断した実効残席で判定
+    const { info } = await getEventCapacity(supabase, date);
+    const remaining = info[menu.id]?.remaining ?? 0;
+    if (totalPeople > remaining) {
+      return { statusCode: 409, body: JSON.stringify({ error: '満席のため予約できません。人数を調整するか、別の部をお選びください。' }) };
+    }
+  } else if (menu.slot_duration) {
     const { data: inv } = await supabase
       .from('inventory').select('capacity')
       .eq('menu_id', menu_id).eq('date', date).eq('time_start', time_start).single();

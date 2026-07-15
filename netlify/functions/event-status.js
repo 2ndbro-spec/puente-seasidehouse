@@ -127,6 +127,18 @@ exports.handler = async (event) => {
       };
     });
 
+    // 通し券は全部の席を消費するため、実効残席に反映
+    const passPart = parts.find(p => p.name.includes('通し'));
+    const passBooked = passPart ? passPart.reserved : 0;
+    parts.forEach(p => {
+      if (p !== passPart) p.remaining = p.capacity - p.reserved - passBooked;
+    });
+    if (passPart) {
+      const partRemainings = parts.filter(p => p !== passPart).map(p => p.remaining);
+      const ownRemaining = passPart.capacity - passBooked;
+      passPart.remaining = partRemainings.length ? Math.min(ownRemaining, ...partRemainings) : ownRemaining;
+    }
+
     const total_reserved = parts.reduce((sum, p) => sum + p.reserved, 0);
 
     // 5. BBQ集計（reservation_addonsが1件以上ある予約）

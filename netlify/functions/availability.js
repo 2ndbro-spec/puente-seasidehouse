@@ -1,4 +1,5 @@
 const { createClient } = require('@supabase/supabase-js');
+const { getEventCapacity } = require('./lib/event-capacity');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -31,6 +32,21 @@ exports.handler = async (event) => {
   if (!menu) return { statusCode: 404, body: JSON.stringify({ error: 'Menu not found' }) };
 
   const headers = { 'Content-Type': 'application/json' };
+
+  if (menu.is_event) {
+    // イベントは通し券が全部の席を消費するため、横断計算した実効残席を返す
+    const { info } = await getEventCapacity(supabase, date);
+    const rec = info[menu.id] || { capacity: menu.default_capacity, remaining: 0 };
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify({
+        type: 'timed',
+        slots: [{ time_start: menu.open_time.slice(0, 5), capacity: rec.capacity, remaining: rec.remaining }],
+        menu
+      })
+    };
+  }
 
   if (menu.slot_duration) {
     // BBQ: 時間帯ごとの在庫
