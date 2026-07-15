@@ -6,6 +6,17 @@
 
 .hidden { display: none !important; }
 
+/* --- Webフォント: 851マカポップ（手書き風・日本語対応） ---
+   サイト内で使用する文字のみのサブセット版（フル4.5MB→約170KB）。
+   新しい漢字を手書きフォント箇所に追加する場合はサブセット再生成が必要 */
+@font-face {
+  font-family: '851MkPOP';
+  src: url('/fonts/851mkpop-subset.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* --- CSS Variables --- */
 :root {
   --deep-ocean: #2E8CB8;
@@ -23,7 +34,7 @@
   --font-heading-jp: 'Noto Serif JP', serif;
   --font-body: 'Noto Sans JP', sans-serif;
   --font-accent: 'Cormorant Garamond', serif;
-  --font-handwrite: 'Caveat', cursive;
+  --font-handwrite: '851MkPOP', 'Caveat', cursive;
 
   --max-width: 1200px;
   --section-padding: 60px 20px;

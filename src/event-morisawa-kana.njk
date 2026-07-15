@@ -39,6 +39,17 @@ permalink: /event-morisawa-kana.html
     color: #FFF6D6;
     margin-bottom: 0.8rem;
   }
+  .ev-eyebrow span { white-space: nowrap; } /* 語句の途中で折り返さない */
+
+  /* 折り返し制御ユーティリティ */
+  .nw { white-space: nowrap; }
+  .br-sp { display: none; } /* スマホ専用改行 */
+  @media (max-width: 767px) {
+    .br-sp { display: inline; }
+    .ev-eyebrow { font-size: 0.68rem; letter-spacing: 3px; }
+    .ev-eyebrow .ev-eyebrow-loc { display: none; } /* スマホでは所在地を省略して2行に収める */
+    .ev-title-en span { display: block; } /* 英字サブタイトルは2行に分けて中央揃え */
+  }
   .ev-handwrite {
     font-family: var(--font-handwrite);
     font-size: clamp(1.6rem, 6vw, 2.4rem);
@@ -126,7 +137,7 @@ permalink: /event-morisawa-kana.html
     z-index: 1;
   }
   .ev-float.f1 { top: 16%; left: 6%; animation-delay: 0s; }
-  .ev-float.f2 { top: 10%; right: 8%; animation-delay: 1.2s; }
+  .ev-float.f2 { top: 5%; right: 4%; animation-delay: 1.2s; }
   .ev-float.f3 { top: 46%; left: 10%; animation-delay: 2.1s; }
   .ev-float.f4 { top: 40%; right: 6%; animation-delay: 0.7s; }
   @keyframes ev-bob {
@@ -175,18 +186,13 @@ permalink: /event-morisawa-kana.html
   .ev-part-card.p1 { --part-color: var(--coral); }
   .ev-part-card.p2 { --part-color: var(--teal); }
   .ev-part-card.p3 { --part-color: var(--deep-ocean); }
-  .ev-part-num {
-    display: inline-flex;
-    align-items: center; justify-content: center;
-    width: 54px; height: 54px;
-    border-radius: 50%;
-    background: var(--part-color, var(--teal));
-    color: var(--white);
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    margin-bottom: 10px;
+  .ev-part-label {
+    font-family: var(--font-heading-jp);
+    font-weight: 700;
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+    color: var(--dark-text);
+    margin-bottom: 4px;
   }
-  .ev-part-label { font-weight: 700; color: var(--dark-text); margin-bottom: 4px; }
   .ev-part-time {
     font-family: var(--font-display);
     font-size: clamp(1.4rem, 5vw, 1.7rem);
@@ -195,6 +201,17 @@ permalink: /event-morisawa-kana.html
   }
   .ev-part-price { color: var(--dark-text); font-weight: 600; }
   .ev-part-price small { display: block; color: var(--muted); font-weight: 400; margin-top: 2px; }
+  .ev-perk-pill {
+    display: inline-block;
+    background: #FFF3C4;
+    color: #7A5A00;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 12px;
+    border-radius: 999px;
+    margin-top: 6px;
+    white-space: nowrap;
+  }
 
   /* 通し券ハイライト */
   .ev-pass {
@@ -282,14 +299,75 @@ permalink: /event-morisawa-kana.html
     text-align: center;
     padding: 60px 20px 70px;
     background: linear-gradient(180deg, var(--sand), #EAF7F4);
+    overflow: hidden; /* フルブリード画像のはみ出しで横スクロールを出さない */
   }
-  .ev-cta .ev-handwrite { color: var(--teal); text-shadow: none; }
   .ev-cta .btn-primary {
     font-size: 1.15rem;
     padding: 18px 56px;
     box-shadow: 0 8px 22px rgba(240,136,112,0.45);
   }
   .ev-cta-note { color: var(--muted); font-size: 0.88rem; margin-top: 14px; }
+
+  .ev-cta-scene {
+    max-width: 560px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .ev-cta-bubble {
+    position: relative;
+    z-index: 2;
+    background: var(--white);
+    border-radius: 24px;
+    padding: 20px 28px;
+    box-shadow: 0 10px 30px rgba(46,140,184,0.18);
+    transform: rotate(-2deg);
+  }
+  .ev-cta-bubble p {
+    margin: 0;
+    font-family: var(--font-handwrite);
+    font-size: clamp(1.9rem, 8vw, 2.8rem);  /* セクション内で最大の文字 */
+    line-height: 1.45;
+    color: var(--teal);
+  }
+  .ev-cta-bubble::after { /* 吹き出しのしっぽ（下の人物に向ける） */
+    content: '';
+    position: absolute;
+    bottom: -14px;
+    left: 34%;
+    width: 26px;
+    height: 26px;
+    background: var(--white);
+    transform: rotate(58deg) skewX(20deg);
+    border-radius: 0 0 6px 0;
+    box-shadow: 8px 8px 12px -8px rgba(46,140,184,0.15);
+  }
+  .ev-cta-cutout {
+    display: block;
+    height: clamp(250px, 60vw, 360px);
+    width: auto;
+    margin-top: 18px;
+    filter: drop-shadow(0 12px 26px rgba(0,50,80,0.28));
+    /* 裾の直線カットを自然にフェード */
+    -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 99%);
+    mask-image: linear-gradient(to bottom, #000 82%, transparent 99%);
+  }
+  @media (max-width: 767px) {
+    /* スマホは画面幅いっぱいのフルブリード（左右わずかに見切れOK） */
+    .ev-cta-cutout {
+      width: 104vw;
+      max-width: none;
+      height: auto;
+      flex-shrink: 0;
+      margin-top: 10px; /* 中央揃えはflexの align-items: center に任せる */
+    }
+  }
+  .ev-cta-heading {
+    font-family: var(--font-heading-jp);
+    color: var(--deep-ocean);
+    margin: 28px 0 22px;
+  }
 
   .ev-section-lead {
     text-align: center;
@@ -309,10 +387,10 @@ permalink: /event-morisawa-kana.html
   <span class="ev-float f3">🍉</span>
   <span class="ev-float f4">⛱️</span>
   <div class="ev-hero-inner">
-    <p class="ev-eyebrow">Special Event @ PUENTE seaside house — Zushi Beach</p>
+    <p class="ev-eyebrow"><span>Special Event</span> <span>@ PUENTE seaside house</span> <span class="ev-eyebrow-loc">— Zushi Beach</span></p>
     <p class="ev-handwrite">1日店長、やります！</p>
     <h1 class="ev-title">森沢かな</h1>
-    <p class="ev-title-en">MORISAWA KANA — 1DAY MANAGER</p>
+    <p class="ev-title-en"><span class="nw">MORISAWA KANA</span> <span class="nw">— 1DAY MANAGER</span></p>
     <p class="ev-date-badge">2026.7.30 <small>THU</small>　11:00-18:00</p>
     <figure class="ev-polaroid reveal">
       <img src="images/event-morisawa-kana.jpg" alt="PUENTE seaside houseの前で両手を広げる森沢かなさん">
@@ -340,9 +418,10 @@ permalink: /event-morisawa-kana.html
       <h2>夏のとくべつな1日</h2>
     </div>
     <p class="ev-section-lead">
-      7月30日(木)、逗子海岸の海の家 <strong>PUENTE seaside house</strong> に<br>
-      <strong>森沢かな</strong>さんが1日店長として登場します。<br>
-      海風とビーチサイドで過ごす、夏らしさ全開の3部制イベント。<br>
+      7月30日(木)、逗子海岸の海の家<br class="br-sp">
+      <strong class="nw">PUENTE seaside house</strong> に<br>
+      <strong>森沢かな</strong>さんが<span class="nw">1日店長</span>として登場します。<br>
+      海風とビーチサイドで過ごす、<br class="br-sp">夏らしさ全開の3部制イベント。<br>
       入場券にはブロマイドが付いてきます 🎁
     </p>
   </div>
@@ -357,22 +436,22 @@ permalink: /event-morisawa-kana.html
     </div>
     <div class="ev-parts">
       <div class="ev-part-card p1 reveal">
-        <span class="ev-part-num">1</span>
         <p class="ev-part-label">1部</p>
         <p class="ev-part-time">11:00 - 13:00</p>
-        <p class="ev-part-price">¥3,000<small>ブロマイド付き</small></p>
+        <p class="ev-part-price">¥3,000</p>
+        <span class="ev-perk-pill">🎁 ブロマイド付き</span>
       </div>
       <div class="ev-part-card p2 reveal">
-        <span class="ev-part-num">2</span>
         <p class="ev-part-label">2部</p>
         <p class="ev-part-time">13:30 - 15:30</p>
-        <p class="ev-part-price">¥3,000<small>ブロマイド付き</small></p>
+        <p class="ev-part-price">¥3,000</p>
+        <span class="ev-perk-pill">🎁 ブロマイド付き</span>
       </div>
       <div class="ev-part-card p3 reveal">
-        <span class="ev-part-num">3</span>
         <p class="ev-part-label">3部</p>
         <p class="ev-part-time">16:00 - 18:00</p>
-        <p class="ev-part-price">¥3,000<small>ブロマイド付き</small></p>
+        <p class="ev-part-price">¥3,000</p>
+        <span class="ev-perk-pill">🎁 ブロマイド付き</span>
       </div>
     </div>
     <div class="ev-pass reveal">
@@ -394,7 +473,8 @@ permalink: /event-morisawa-kana.html
         <span class="ev-goods-emoji">📸</span>
         <p class="ev-goods-name">ツーショット</p>
         <p class="ev-goods-price">¥2,000</p>
-        <p class="ev-goods-note">5枚おまとめで特典あり<br>※当日のおたのしみ</p>
+        <span class="ev-perk-pill">🎁 5枚おまとめで特典あり</span>
+        <p class="ev-goods-note">※当日のおたのしみ</p>
       </div>
       <div class="ev-goods-card reveal">
         <span class="ev-goods-emoji">🎞️</span>
@@ -440,7 +520,7 @@ permalink: /event-morisawa-kana.html
       <ul>
         <li>💴 お支払いはすべて<strong>当日・現地にて</strong>お願いします（事前決済はありません）</li>
         <li>🎫 各部入替制です。1日通し券をお持ちの方は全部にご参加いただけます</li>
-        <li>🏖️ 会場は逗子海岸「PUENTE seaside house」です（悪天候時の対応はSNSでお知らせします）</li>
+        <li>🏖️ 会場は逗子海岸「<span class="nw">PUENTE seaside house</span>」です（悪天候時の対応はSNSでお知らせします）</li>
         <li>📱 最新情報は PUENTE公式Instagram・LINEでご案内します</li>
       </ul>
     </div>
@@ -449,8 +529,13 @@ permalink: /event-morisawa-kana.html
 
 <!-- EDIT: 予約CTA -->
 <section class="ev-cta">
-  <p class="ev-handwrite">夏の思い出、いっしょにつくろう！</p>
-  <h2 style="font-family: var(--font-heading-jp); color: var(--deep-ocean); margin-bottom: 24px;">ご予約はこちらから</h2>
+  <div class="ev-cta-scene">
+    <div class="ev-cta-bubble">
+      <p>夏の思い出、<br>いっしょにつくろう！</p>
+    </div>
+    <img class="ev-cta-cutout" src="images/event-morisawa-kana-cutout.png" alt="両手を広げて誘う森沢かなさん" loading="lazy">
+  </div>
+  <h2 class="ev-cta-heading">ご予約はこちらから</h2>
   <a href="event-morisawa-kana-reserve.html" class="btn btn-primary">この日の予約をする 🌊</a>
   <p class="ev-cta-note">先着順・満席になり次第受付終了となります</p>
 </section>

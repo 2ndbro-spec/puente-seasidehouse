@@ -52,56 +52,133 @@ permalink: /event-morisawa-kana-reserve.html
   .evr-wave { display: block; width: 100%; height: 60px; }
   .evr-wave path { fill: var(--sand); }
 
-  /* 部選択カード */
+  /* 部選択カード（複数選択可） */
   .evr-parts { display: grid; gap: 12px; }
   .evr-part {
     display: flex;
-    align-items: center;
-    gap: 14px;
+    flex-direction: column;
+    gap: 8px;
     background: var(--white);
     border: 2px solid #E2E8F0;
     border-radius: var(--radius-card);
     padding: 14px 16px;
     cursor: pointer;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
-  .evr-part input { accent-color: var(--coral); width: 18px; height: 18px; flex-shrink: 0; }
-  .evr-part.selected { border-color: var(--coral); box-shadow: 0 4px 14px rgba(240,136,112,0.25); }
+  .evr-part.selected { border-color: var(--coral); background: #FFF9F6; box-shadow: 0 4px 14px rgba(240,136,112,0.22); }
   .evr-part.soldout { opacity: 0.55; cursor: not-allowed; }
+  .evr-part-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .evr-part-head input { accent-color: var(--coral); width: 20px; height: 20px; flex-shrink: 0; }
   .evr-part-badge {
     display: inline-flex;
     align-items: center; justify-content: center;
-    width: 42px; height: 42px;
+    width: 30px; height: 30px;
     border-radius: 50%;
     color: var(--white);
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: 0.95rem;
     flex-shrink: 0;
   }
   .evr-part.p1 .evr-part-badge { background: var(--coral); }
   .evr-part.p2 .evr-part-badge { background: var(--teal); }
   .evr-part.p3 .evr-part-badge { background: var(--deep-ocean); }
-  .evr-part.pass .evr-part-badge { background: linear-gradient(135deg, #E0A800, var(--warm-gold)); font-size: 1.3rem; }
-  .evr-part.pass { background: linear-gradient(120deg, #FFFBEC, #FFF3C4); border-style: dashed; border-color: #E0C860; }
-  .evr-part.pass.selected { border-color: #E0A800; box-shadow: 0 4px 14px rgba(224,168,0,0.3); }
-  .evr-part-body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-  .evr-part-label { font-weight: 700; color: var(--dark-text); }
-  .evr-part-label small { font-weight: 600; color: var(--deep-ocean); margin-left: 8px; font-family: var(--font-display); }
-  .evr-part-price { color: var(--coral); font-weight: 700; }
-  .evr-part-price small { display: block; color: var(--muted); font-weight: 400; font-size: 0.78rem; }
+  .evr-part-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--dark-text);
+    flex: 1;
+    min-width: 0;
+  }
+  .evr-part-time {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--deep-ocean);
+    white-space: nowrap;
+    padding-left: 60px; /* head の badge 位置に揃える */
+    font-size: 1rem;
+  }
+  .evr-part-perk {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-left: 60px;
+  }
+  .evr-part-price { color: var(--coral); font-weight: 700; white-space: nowrap; }
   .evr-remaining {
     font-size: 0.78rem;
     font-weight: 700;
     border-radius: 999px;
     padding: 4px 10px;
     flex-shrink: 0;
+    margin-left: auto;
+    white-space: nowrap;
   }
   .evr-remaining.ok { background: #E3F7F2; color: #1E8A76; }
   .evr-remaining.few { background: #FFF2E3; color: #C46A1F; }
   .evr-remaining.full { background: #FBE4E0; color: #C0392B; }
 
-  /* BBQオプション */
+  /* 特典ピル（1特典=1行で収まる） */
+  .evr-perk-tag {
+    display: inline-block;
+    background: #FFF3C4;
+    color: #7A5A00;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* 通し券アップセル */
+  .evr-pass-upsell {
+    margin-top: 12px;
+    border: 1.5px dashed #E0C860;
+    background: #FFFBEC;
+    border-radius: var(--radius-card);
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    color: var(--dark-text);
+    line-height: 1.8;
+    transition: background 0.25s ease;
+  }
+  .evr-pass-upsell.active {
+    background: linear-gradient(120deg, #FFF3C4, #FFE08A);
+    border-style: solid;
+    border-color: #E0A800;
+    font-weight: 700;
+  }
+
+  @media (max-width: 600px) {
+    .evr-part { padding: 12px; }
+    .evr-part-time, .evr-part-perk { padding-left: 60px; }
+    .evr-part-title { font-size: 1.1rem; }
+  }
+
+  /* BBQオプション（イチオシ推し） */
+  .evr-bbq-card {
+    position: relative;
+    border: 2px solid #F5C4B4;
+    background: linear-gradient(150deg, #FFFDFB, #FFF4EF);
+  }
+  .evr-reco-ribbon {
+    position: absolute;
+    top: -12px;
+    right: 14px;
+    background: linear-gradient(120deg, var(--coral), var(--sunset-orange));
+    color: var(--white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 999px;
+    box-shadow: 0 3px 8px rgba(240,136,112,0.4);
+  }
+  .evr-bbq-copy { color: var(--dark-text); font-size: 0.92rem; margin-bottom: 0.9rem; line-height: 1.8; }
   .evr-bbq-label {
     display: flex;
     align-items: flex-start;
@@ -111,10 +188,54 @@ permalink: /event-morisawa-kana-reserve.html
     border-radius: var(--radius-card);
     padding: 16px;
     cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
+  .evr-bbq-label.selected { border-color: var(--coral); box-shadow: 0 4px 14px rgba(240,136,112,0.3); }
   .evr-bbq-label input { accent-color: var(--coral); width: 20px; height: 20px; margin-top: 2px; }
-  .evr-bbq-label strong { color: var(--dark-text); }
-  .evr-bbq-label .rsv-note { display: block; margin-top: 2px; }
+  .evr-bbq-label strong { color: var(--dark-text); font-size: 1.05rem; }
+  .evr-bbq-label .rsv-note { display: block; margin-top: 4px; }
+  .evr-bbq-label .evr-perk-tag { margin-top: 6px; margin-right: 6px; }
+
+  /* 物販の希望 */
+  .evr-goods-opts { display: grid; gap: 10px; }
+  .evr-goods-opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--white);
+    border: 2px solid #E2E8F0;
+    border-radius: var(--radius-card);
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+  .evr-goods-opt.selected { border-color: var(--teal); background: #F4FBF9; }
+  .evr-goods-opt input { accent-color: var(--teal); width: 18px; height: 18px; margin-top: 2px; flex-shrink: 0; }
+  .evr-goods-opt strong { color: var(--dark-text); display: block; }
+  .evr-goods-opt .evr-perk-tag { margin-top: 4px; }
+
+  /* 完了画面: チケットとオペレーション案内 */
+  .evr-op-note {
+    background: #FFF3C4;
+    border: 1.5px solid #E0A800;
+    border-radius: var(--radius-card);
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    color: #5C4400;
+    margin: 1rem 0;
+    line-height: 1.8;
+  }
+  .evr-ticket { margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px dashed #D8E0E8; }
+  .evr-ticket-part {
+    display: inline-block;
+    background: var(--deep-ocean);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 0.88rem;
+    padding: 4px 16px;
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+  }
 
   /* 確認テーブル */
   .evr-confirm-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
@@ -130,7 +251,7 @@ permalink: /event-morisawa-kana-reserve.html
 <section class="evr-hero">
   <p class="ev-handwrite">ご予約はこちら！</p>
   <h1>森沢かな 1日店長</h1>
-  <p class="evr-date">2026.7.30 THU　@ PUENTE seaside house</p>
+  <p class="evr-date"><span style="white-space:nowrap">2026.7.30 THU</span> <span style="white-space:nowrap">@ PUENTE seaside house</span></p>
   <a class="evr-back" href="event-morisawa-kana.html">← イベント詳細にもどる</a>
 </section>
 <svg class="evr-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true" style="background: var(--deep-ocean);">
@@ -148,8 +269,12 @@ permalink: /event-morisawa-kana-reserve.html
       <div id="form-body" class="hidden">
 
         <div class="rsv-card">
-          <h3 class="rsv-step-title">① ご希望の部を選ぶ</h3>
+          <h3 class="rsv-step-title">① ご希望の部を選ぶ <span class="rsv-note" style="font-weight:400;font-size:0.85rem;">（複数選択OK）</span></h3>
           <div id="part-options" class="evr-parts"></div>
+          <div id="pass-upsell" class="evr-pass-upsell">
+            💡 <strong>3部すべて選ぶと「1日通し券 ¥7,500」に自動でおトク切替！</strong><br>
+            <span class="evr-perk-tag">🎬 通し特典：10秒動画つき</span> <span class="evr-perk-tag">💰 ¥1,500おトク</span>
+          </div>
         </div>
 
         <div class="rsv-card">
@@ -162,19 +287,44 @@ permalink: /event-morisawa-kana-reserve.html
           <p class="rsv-note mt-1">※ 1組10名まで</p>
         </div>
 
-        <div class="rsv-card">
+        <div class="rsv-card evr-bbq-card">
+          <span class="evr-reco-ribbon">🔥 イチオシ</span>
           <h3 class="rsv-step-title">③ BBQプラン <span class="rsv-note" style="font-weight:400;font-size:0.85rem;">（任意）</span></h3>
-          <label class="evr-bbq-label">
+          <p class="evr-bbq-copy">店長のお手伝い付きで楽しめるのは<strong>BBQプランだけ</strong>！<br class="br-sp">海を見ながらみんなで乾杯しよう 🍻</p>
+          <label class="evr-bbq-label" id="bbq-label">
             <input type="checkbox" id="bbq-check">
             <span>
-              <strong>🍖 イベント限定BBQ ¥8,500</strong>
-              <span class="rsv-note">飲み放題付き・店長のお手伝い付き！お支払いは当日現地にて。</span>
+              <strong>🍖 BBQプランを申し込む ¥8,500</strong>
+              <span class="rsv-note">お支払いは当日現地にて。</span>
+              <span class="evr-perk-tag">🍻 飲み放題付き</span><span class="evr-perk-tag">💁‍♀️ 店長のお手伝い付き</span>
             </span>
           </label>
         </div>
 
         <div class="rsv-card">
-          <h3 class="rsv-step-title">④ お客様情報</h3>
+          <h3 class="rsv-step-title">④ 物販の希望 <span class="rsv-note" style="font-weight:400;font-size:0.85rem;">（任意・複数OK）</span></h3>
+          <p class="rsv-note" style="margin-bottom:0.75rem;">お支払いは当日会場にて。事前に希望を教えてもらえると、当日のご案内がスムーズです！</p>
+          <div class="evr-goods-opts">
+            <label class="evr-goods-opt">
+              <input type="checkbox" class="goods-check" value="ツーショット">
+              <span>
+                <strong>📸 ツーショット ¥2,000</strong>
+                <span class="evr-perk-tag">🎁 5枚おまとめで特典あり ※当日のおたのしみ</span>
+              </span>
+            </label>
+            <label class="evr-goods-opt">
+              <input type="checkbox" class="goods-check" value="ランダムチェキ">
+              <span><strong>🎞️ ランダムチェキ ¥1,500</strong></span>
+            </label>
+            <label class="evr-goods-opt">
+              <input type="checkbox" class="goods-check" value="個撮20秒">
+              <span><strong>🎬 個撮20秒 ¥2,500</strong></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">⑤ お客様情報</h3>
           <div class="rsv-fields">
             <div class="rsv-field">
               <label class="rsv-label">お名前 <span class="required">必須</span></label>
@@ -188,7 +338,7 @@ permalink: /event-morisawa-kana-reserve.html
         </div>
 
         <div class="rsv-card">
-          <h3 class="rsv-step-title">⑤ 通知方法</h3>
+          <h3 class="rsv-step-title">⑥ 通知方法</h3>
           <div class="radio-group">
             <label class="radio-label">
               <input type="radio" name="notif-channel" value="line" checked>
@@ -237,17 +387,13 @@ permalink: /event-morisawa-kana-reserve.html
           <div class="success-icon">✓</div>
           <h2 style="color: var(--teal);">予約が完了しました</h2>
           <p>ご予約ありがとうございます、<strong id="success-name"></strong> 様。<br>7月30日、PUENTEでお会いしましょう 🌊</p>
-          <div class="rsv-code-box">
-            <p class="rsv-note">予約番号</p>
-            <p class="rsv-code" id="success-code"></p>
-          </div>
-          <div id="qr-code" class="qr-wrapper"></div>
-          <p class="rsv-note mt-2">このQRコードを当日受付でご提示ください</p>
+          <div class="evr-op-note">🎫 当日は受付で<strong>「森沢かなイベントの予約」</strong>とお伝えのうえ、下のQRコード（予約番号）をご提示ください</div>
+          <div id="success-tickets"></div>
           <div id="success-line-prompt" class="line-cta-box mt-2">
             <p class="rsv-note"><strong>LINE通知を受け取るには</strong><br>下記から友だち追加後、この予約番号をLINEで送ってください。</p>
             <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line btn-sm">LINE 友だち追加 →</a>
           </div>
-          <p class="rsv-note mt-2">確認メールをお送りしました。届かない場合はLINEよりお問い合わせください。</p>
+          <p class="rsv-note mt-2">確認メールをお送りしました（複数の部をご予約の場合は部ごとに届きます）。届かない場合はLINEよりお問い合わせください。</p>
         </div>
       </div>
 
