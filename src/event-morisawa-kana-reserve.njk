@@ -1,0 +1,270 @@
+---
+permalink: /event-morisawa-kana-reserve.html
+---
+{% set page_title = "ご予約 — 森沢かな 1日店長 7/30(木) | PUENTE seaside house" %}
+{% set page_description = "森沢かな1日店長イベント（2026年7月30日・逗子海岸 PUENTE seaside house）の専用予約ページ。1部〜3部・1日通し券、BBQプランの予約はこちらから。" %}
+{% set og_title = "ご予約 — 森沢かな 1日店長 @ PUENTE seaside house" %}
+{% set og_description = "7/30(木)開催。各部¥3,000（ブロマイド付き）／1日通し¥7,500。先着順・満席になり次第終了。" %}
+{% set og_image = "images/event-morisawa-kana.jpg" %}
+{% set head_extra %}
+<style>
+  /* ===== イベント予約ページ専用スタイル ===== */
+  .evr-hero {
+    background: linear-gradient(180deg, #9FE0F0 0%, #6EC9E8 45%, var(--deep-ocean) 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 110px 20px 26px;
+    position: relative;
+    overflow: hidden;
+  }
+  .evr-hero .ev-handwrite {
+    font-family: var(--font-handwrite);
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+    color: var(--warm-gold);
+    display: inline-block;
+    transform: rotate(-2deg);
+  }
+  .evr-hero h1 {
+    font-family: var(--font-heading-jp);
+    font-size: clamp(1.7rem, 6.5vw, 2.6rem);
+    color: var(--white);
+    margin: 0.2rem 0 0.6rem;
+    text-shadow: 0 3px 14px rgba(0,60,90,0.35);
+  }
+  .evr-hero .evr-date {
+    display: inline-block;
+    background: var(--warm-gold);
+    color: #7A5A00;
+    font-weight: 700;
+    padding: 6px 20px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    transform: rotate(1deg);
+    margin-bottom: 0.6rem;
+  }
+  .evr-hero .evr-back {
+    display: block;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.85rem;
+    text-decoration: underline;
+  }
+  .evr-wave { display: block; width: 100%; height: 60px; }
+  .evr-wave path { fill: var(--sand); }
+
+  /* 部選択カード */
+  .evr-parts { display: grid; gap: 12px; }
+  .evr-part {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--white);
+    border: 2px solid #E2E8F0;
+    border-radius: var(--radius-card);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+  }
+  .evr-part input { accent-color: var(--coral); width: 18px; height: 18px; flex-shrink: 0; }
+  .evr-part.selected { border-color: var(--coral); box-shadow: 0 4px 14px rgba(240,136,112,0.25); }
+  .evr-part.soldout { opacity: 0.55; cursor: not-allowed; }
+  .evr-part-badge {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+  }
+  .evr-part.p1 .evr-part-badge { background: var(--coral); }
+  .evr-part.p2 .evr-part-badge { background: var(--teal); }
+  .evr-part.p3 .evr-part-badge { background: var(--deep-ocean); }
+  .evr-part.pass .evr-part-badge { background: linear-gradient(135deg, #E0A800, var(--warm-gold)); font-size: 1.3rem; }
+  .evr-part.pass { background: linear-gradient(120deg, #FFFBEC, #FFF3C4); border-style: dashed; border-color: #E0C860; }
+  .evr-part.pass.selected { border-color: #E0A800; box-shadow: 0 4px 14px rgba(224,168,0,0.3); }
+  .evr-part-body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+  .evr-part-label { font-weight: 700; color: var(--dark-text); }
+  .evr-part-label small { font-weight: 600; color: var(--deep-ocean); margin-left: 8px; font-family: var(--font-display); }
+  .evr-part-price { color: var(--coral); font-weight: 700; }
+  .evr-part-price small { display: block; color: var(--muted); font-weight: 400; font-size: 0.78rem; }
+  .evr-remaining {
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 4px 10px;
+    flex-shrink: 0;
+  }
+  .evr-remaining.ok { background: #E3F7F2; color: #1E8A76; }
+  .evr-remaining.few { background: #FFF2E3; color: #C46A1F; }
+  .evr-remaining.full { background: #FBE4E0; color: #C0392B; }
+
+  /* BBQオプション */
+  .evr-bbq-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: linear-gradient(120deg, #FFF4EF, #FFEDE3);
+    border: 2px solid #F5C4B4;
+    border-radius: var(--radius-card);
+    padding: 16px;
+    cursor: pointer;
+  }
+  .evr-bbq-label input { accent-color: var(--coral); width: 20px; height: 20px; margin-top: 2px; }
+  .evr-bbq-label strong { color: var(--dark-text); }
+  .evr-bbq-label .rsv-note { display: block; margin-top: 2px; }
+
+  /* 確認テーブル */
+  .evr-confirm-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .evr-confirm-table td { padding: 10px 0; border-bottom: 1px solid #EEF2F6; }
+  .evr-confirm-table td:first-child { color: var(--muted); width: 110px; vertical-align: top; }
+
+  #ev-loading { text-align: center; color: var(--muted); padding: 40px 0; }
+</style>
+{% endset %}
+{% include "header.njk" %}
+
+<!-- EDIT: イベント予約ヒーロー -->
+<section class="evr-hero">
+  <p class="ev-handwrite">ご予約はこちら！</p>
+  <h1>森沢かな 1日店長</h1>
+  <p class="evr-date">2026.7.30 THU　@ PUENTE seaside house</p>
+  <a class="evr-back" href="event-morisawa-kana.html">← イベント詳細にもどる</a>
+</section>
+<svg class="evr-wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true" style="background: var(--deep-ocean);">
+  <path d="M0,30 C240,60 480,5 720,26 C960,48 1200,10 1440,34 L1440,60 L0,60 Z"></path>
+</svg>
+
+<section class="section" style="padding-top: 30px;">
+  <div class="container" style="max-width: 680px;">
+
+    <div id="reservation-app">
+
+      <div id="ev-loading">予約メニューを読み込み中…</div>
+
+      <!-- フォーム本体 -->
+      <div id="form-body" class="hidden">
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">① ご希望の部を選ぶ</h3>
+          <div id="part-options" class="evr-parts"></div>
+        </div>
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">② 人数</h3>
+          <div class="number-stepper">
+            <button type="button" class="num-btn" data-target="num-people" data-action="minus">−</button>
+            <input type="number" id="num-people-display" class="num-value" value="1" min="1" max="10">
+            <button type="button" class="num-btn" data-target="num-people" data-action="plus">+</button>
+          </div>
+          <p class="rsv-note mt-1">※ 1組10名まで</p>
+        </div>
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">③ BBQプラン <span class="rsv-note" style="font-weight:400;font-size:0.85rem;">（任意）</span></h3>
+          <label class="evr-bbq-label">
+            <input type="checkbox" id="bbq-check">
+            <span>
+              <strong>🍖 イベント限定BBQ ¥8,500</strong>
+              <span class="rsv-note">飲み放題付き・店長のお手伝い付き！お支払いは当日現地にて。</span>
+            </span>
+          </label>
+        </div>
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">④ お客様情報</h3>
+          <div class="rsv-fields">
+            <div class="rsv-field">
+              <label class="rsv-label">お名前 <span class="required">必須</span></label>
+              <input type="text" id="customer-name" class="rsv-input" placeholder="山田 花子">
+            </div>
+            <div class="rsv-field">
+              <label class="rsv-label">メールアドレス <span class="required">必須</span></label>
+              <input type="email" id="customer-email" class="rsv-input" placeholder="example@email.com">
+            </div>
+          </div>
+        </div>
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">⑤ 通知方法</h3>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="notif-channel" value="line" checked>
+              <span>LINE <small>（推奨）</small></span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="notif-channel" value="email">
+              <span>メールのみ</span>
+            </label>
+          </div>
+          <div id="line-cta" class="line-cta-box">
+            <p class="rsv-note">予約確定後、LINE公式アカウントに予約番号を送ると確認・リマインド通知が届きます。</p>
+            <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line btn-sm">LINE 友だち追加 →</a>
+          </div>
+        </div>
+
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">備考 <span class="rsv-note" style="font-weight:400;font-size:0.85rem;">（任意）</span></h3>
+          <p class="rsv-note" style="margin-bottom:0.75rem;">BBQをお申し込みの方でアレルギー・苦手な食材がある場合は必ずご記入ください。</p>
+          <textarea id="customer-notes" class="rsv-input rsv-textarea" placeholder="例：エビアレルギーあり など" rows="3"></textarea>
+        </div>
+
+        <div id="form-errors" class="rsv-errors hidden"></div>
+
+        <div class="text-center mt-3">
+          <button id="confirm-btn" class="btn btn-primary" style="width: 100%; max-width: 360px;">内容を確認する →</button>
+        </div>
+      </div>
+
+      <!-- 確認画面 -->
+      <div id="confirm-screen" class="hidden">
+        <div class="rsv-card">
+          <h3 class="rsv-step-title">予約内容の確認</h3>
+          <div id="confirm-details" class="confirm-details"></div>
+          <p id="submit-error" class="rsv-submit-error hidden"></p>
+          <div class="rsv-confirm-btns">
+            <button id="back-btn" class="btn btn-outline">← 修正する</button>
+            <button id="submit-btn" class="btn btn-primary">予約を確定する</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 完了画面 -->
+      <div id="success-screen" class="hidden">
+        <div class="rsv-card rsv-success">
+          <div class="success-icon">✓</div>
+          <h2 style="color: var(--teal);">予約が完了しました</h2>
+          <p>ご予約ありがとうございます、<strong id="success-name"></strong> 様。<br>7月30日、PUENTEでお会いしましょう 🌊</p>
+          <div class="rsv-code-box">
+            <p class="rsv-note">予約番号</p>
+            <p class="rsv-code" id="success-code"></p>
+          </div>
+          <div id="qr-code" class="qr-wrapper"></div>
+          <p class="rsv-note mt-2">このQRコードを当日受付でご提示ください</p>
+          <div id="success-line-prompt" class="line-cta-box mt-2">
+            <p class="rsv-note"><strong>LINE通知を受け取るには</strong><br>下記から友だち追加後、この予約番号をLINEで送ってください。</p>
+            <a href="{{ site.line_url }}" target="_blank" rel="noopener" class="btn btn-line btn-sm">LINE 友だち追加 →</a>
+          </div>
+          <p class="rsv-note mt-2">確認メールをお送りしました。届かない場合はLINEよりお問い合わせください。</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 注意書き -->
+    <div class="info-box" style="margin-top: 2rem;">
+      <ul style="font-size: 0.9rem; line-height: 1.9; padding-left: 1.2em;">
+        <li>お支払いはすべて<strong>当日・現地にて</strong>お願いします（事前決済はありません）</li>
+        <li>先着順・満席になり次第受付終了です</li>
+        <li>物販（ツーショット・チェキ等）は当日会場でお求めいただけます</li>
+        <li>キャンセル・変更は<a href="https://lin.ee/7boYnzG" target="_blank" rel="noopener">LINE公式アカウント</a>までご連絡ください</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="/js/event-reserve.js"></script>
+{% include "footer.njk" %}

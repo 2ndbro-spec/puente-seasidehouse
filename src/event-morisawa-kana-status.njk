@@ -1,0 +1,347 @@
+---
+permalink: /event-morisawa-kana-status.html
+---
+{% set page_title = "予約状況 — 森沢かな 1日店長 7/30(木) | PUENTE seaside house" %}
+{% set page_description = "森沢かな1日店長イベント（2026年7月30日・逗子海岸 PUENTE seaside house）の予約状況確認ページ（主催者向け）。" %}
+{% set head_extra %}
+<meta name="robots" content="noindex, nofollow">
+<style>
+  /* ===== イベント予約状況ページ専用スタイル ===== */
+  .evs-hero {
+    background: linear-gradient(180deg, #9FE0F0 0%, #2E8CB8 100%);
+    color: var(--white);
+    text-align: center;
+    padding: 90px 20px 26px;
+  }
+  .evs-hero .ev-handwrite {
+    font-family: var(--font-handwrite);
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    color: var(--warm-gold);
+    display: inline-block;
+    transform: rotate(-2deg);
+  }
+  .evs-hero h1 {
+    font-family: var(--font-heading-jp);
+    font-size: clamp(1.5rem, 6vw, 2.2rem);
+    color: var(--white);
+    margin: 0.2rem 0 0.7rem;
+    text-shadow: 0 3px 14px rgba(0,60,90,0.35);
+  }
+  .evs-hero .evs-date {
+    display: inline-block;
+    background: var(--warm-gold);
+    color: #7A5A00;
+    font-weight: 700;
+    padding: 6px 20px;
+    border-radius: 999px;
+    font-size: 0.9rem;
+  }
+
+  .evs-wrap { max-width: 640px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  #evs-loading, #evs-error {
+    text-align: center;
+    color: var(--muted);
+    padding: 60px 20px;
+    font-size: 0.95rem;
+  }
+  #evs-error { color: var(--coral); font-weight: 600; }
+
+  .evs-total-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    text-align: center;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+  }
+  .evs-total-label {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 6px;
+  }
+  .evs-total-num {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 10vw, 3rem);
+    color: var(--deep-ocean);
+    font-weight: 700;
+    line-height: 1;
+    margin: 0;
+  }
+  .evs-total-num small {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark-text);
+    margin-left: 4px;
+  }
+
+  .evs-section-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    margin: 24px 0 10px;
+  }
+
+  .evs-parts { display: grid; gap: 12px; }
+  .evs-part-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: 16px;
+  }
+  .evs-part-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .evs-part-name {
+    font-weight: 700;
+    color: var(--dark-text);
+    font-size: 0.98rem;
+  }
+  .evs-part-count {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--deep-ocean);
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+  .evs-progress-track {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: #E8EEF3;
+    overflow: hidden;
+  }
+  .evs-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+  .evs-part-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .evs-badge-full {
+    display: inline-block;
+    background: #FBE4E0;
+    color: #C0392B;
+    font-weight: 700;
+    font-size: 0.72rem;
+    padding: 2px 10px;
+    border-radius: 999px;
+  }
+
+  .evs-bbq-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: linear-gradient(120deg, #FFF4EF, #FFEDE3);
+    border: 2px solid #F5C4B4;
+    border-radius: var(--radius-card);
+    padding: 16px;
+    margin-top: 20px;
+  }
+  .evs-bbq-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .evs-bbq-title { font-weight: 700; color: var(--dark-text); margin: 0 0 2px; }
+  .evs-bbq-count { color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+  .evs-footer-bar {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #EEF2F6;
+  }
+  .evs-updated-at {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin: 0 0 10px;
+  }
+  .evs-auto-note {
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin: 10px 0 0;
+  }
+</style>
+{% endset %}
+{% include "header.njk" %}
+
+<!-- EDIT: イベント予約状況ヒーロー -->
+<section class="evs-hero">
+  <p class="ev-handwrite">予約状況</p>
+  <h1>森沢かな 1日店長</h1>
+  <p class="evs-date">2026.7.30 THU</p>
+</section>
+
+<section class="section" style="padding-top: 0;">
+  <div class="evs-wrap">
+
+    <div id="evs-loading">予約状況を読み込み中…</div>
+    <div id="evs-error" class="hidden"></div>
+
+    <div id="evs-content" class="hidden">
+
+      <div class="evs-total-card">
+        <p class="evs-total-label">現在の予約合計</p>
+        <p class="evs-total-num"><span id="evs-total-value">0</span><small>名</small></p>
+      </div>
+
+      <p class="evs-section-label">部別 内訳</p>
+      <div id="evs-parts" class="evs-parts"></div>
+
+      <div id="evs-bbq" class="evs-bbq-card">
+        <span class="evs-bbq-icon">🍖</span>
+        <div>
+          <p class="evs-bbq-title">BBQプラン申込</p>
+          <p class="evs-bbq-count" id="evs-bbq-count">0名・0組</p>
+        </div>
+      </div>
+
+      <div class="evs-footer-bar">
+        <p class="evs-updated-at">最終更新 <span id="evs-updated-time">--:--:--</span></p>
+        <button id="evs-refresh-btn" class="btn btn-outline">いま更新</button>
+        <p class="evs-auto-note">60秒ごとに自動更新されます</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{% include "footer.njk" %}
+
+<script>
+(function () {
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function formatPartName(name) {
+    // 例: "【1部】森沢かな1日店長 11:00-13:00" → "1部 11:00-13:00"
+    var partMatch = String(name).match(/【(.+?)】/);
+    var timeMatch = String(name).match(/(\d{1,2}:\d{2}\s*-\s*\d{1,2}:\d{2})/);
+    if (partMatch) {
+      return timeMatch ? (partMatch[1] + ' ' + timeMatch[1]) : partMatch[1];
+    }
+    return String(name);
+  }
+
+  function progressColor(pct) {
+    if (pct >= 80) return 'var(--coral)';
+    if (pct >= 50) return 'var(--warm-gold)';
+    return 'var(--teal)';
+  }
+
+  function pad2(n) { return String(n).padStart(2, '0'); }
+
+  function formatTime(date) {
+    return pad2(date.getHours()) + ':' + pad2(date.getMinutes()) + ':' + pad2(date.getSeconds());
+  }
+
+  var loadingEl = document.getElementById('evs-loading');
+  var errorEl = document.getElementById('evs-error');
+  var contentEl = document.getElementById('evs-content');
+  var totalValueEl = document.getElementById('evs-total-value');
+  var partsEl = document.getElementById('evs-parts');
+  var bbqCountEl = document.getElementById('evs-bbq-count');
+  var updatedTimeEl = document.getElementById('evs-updated-time');
+  var refreshBtn = document.getElementById('evs-refresh-btn');
+
+  var params = new URLSearchParams(window.location.search);
+  var token = params.get('token');
+
+  function showError(message) {
+    loadingEl.classList.add('hidden');
+    contentEl.classList.add('hidden');
+    errorEl.classList.remove('hidden');
+    errorEl.textContent = message;
+  }
+
+  function render(data) {
+    totalValueEl.textContent = data.total_reserved;
+
+    var partsHtml = (data.parts || []).map(function (part) {
+      var capacity = part.capacity || 0;
+      var reserved = part.reserved || 0;
+      var pct = capacity > 0 ? Math.round((reserved / capacity) * 100) : 0;
+      var isFull = part.remaining <= 0;
+      var color = progressColor(pct);
+      var widthPct = Math.min(pct, 100);
+      var name = escapeHtml(formatPartName(part.name));
+
+      return '' +
+        '<div class="evs-part-card">' +
+          '<div class="evs-part-head">' +
+            '<span class="evs-part-name">' + name + '</span>' +
+            '<span class="evs-part-count">' + reserved + ' / ' + capacity + ' 名</span>' +
+          '</div>' +
+          '<div class="evs-progress-track">' +
+            '<div class="evs-progress-fill" style="width:' + widthPct + '%;background:' + color + ';"></div>' +
+          '</div>' +
+          '<div class="evs-part-foot">' +
+            '<span>' + part.groups + '組・残り' + Math.max(part.remaining, 0) + '席</span>' +
+            (isFull ? '<span class="evs-badge-full">満席</span>' : '') +
+          '</div>' +
+        '</div>';
+    }).join('');
+
+    partsEl.innerHTML = partsHtml;
+
+    var bbq = data.bbq || { people: 0, groups: 0 };
+    bbqCountEl.textContent = bbq.people + '名・' + bbq.groups + '組';
+
+    updatedTimeEl.textContent = formatTime(new Date());
+
+    loadingEl.classList.add('hidden');
+    errorEl.classList.add('hidden');
+    contentEl.classList.remove('hidden');
+  }
+
+  function fetchStatus() {
+    return fetch('/api/event-status?token=' + encodeURIComponent(token))
+      .then(function (res) {
+        if (res.status === 401) {
+          showError('URLが正しくありません。主催者にお問い合わせください');
+          return null;
+        }
+        if (!res.ok) {
+          throw new Error('status ' + res.status);
+        }
+        return res.json();
+      })
+      .then(function (data) {
+        if (data) render(data);
+      })
+      .catch(function () {
+        showError('通信エラーが発生しました。時間をおいて再度お試しください。');
+      });
+  }
+
+  if (!token) {
+    showError('アクセスにはトークン付きURLが必要です');
+    return;
+  }
+
+  fetchStatus();
+  setInterval(fetchStatus, 60000);
+
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', function () {
+      fetchStatus();
+    });
+  }
+})();
+</script>

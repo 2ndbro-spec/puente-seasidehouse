@@ -39,6 +39,99 @@ permalink: /index.html
     </div>
   </section>
 
+  <style>
+    .ev-banner-wrap {
+      padding: 20px;
+      background: var(--sand);
+    }
+    .ev-banner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      background: linear-gradient(120deg,#FFF3C4,#FFE08A);
+      border: 2px solid #E0A800;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+      text-decoration: none;
+      transition: transform .25s ease;
+    }
+    .ev-banner:hover {
+      transform: translateY(-3px);
+    }
+    .ev-banner-photo {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: 50% 32%; /* 顔の位置に合わせて切り抜き */
+      border: 3px solid var(--white);
+      flex-shrink: 0;
+    }
+    .ev-banner-date {
+      display: inline-block;
+      background: var(--coral);
+      color: var(--white);
+      font-weight: 700;
+      font-size: .78rem;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+    }
+    .ev-banner-hand {
+      display: block;
+      font-family: var(--font-handwrite);
+      color: #9A7100;
+      font-size: 1.05rem;
+      margin: 4px 0 2px;
+      transform: rotate(-1.5deg);
+    }
+    .ev-banner-title {
+      display: block;
+      font-family: var(--font-heading-jp);
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--dark-text);
+    }
+    .ev-banner-title small {
+      font-family: var(--font-display);
+      font-size: .7rem;
+      letter-spacing: 2px;
+      color: #9A7100;
+      margin-left: 8px;
+    }
+    .ev-banner-cta {
+      margin-left: auto;
+      flex-shrink: 0;
+      background: var(--white);
+      color: var(--coral);
+      font-weight: 700;
+      font-size: .85rem;
+      padding: 8px 16px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+    @media (max-width: 600px) {
+      .ev-banner-cta { display: none; }
+      .ev-banner { padding: 12px 14px; }
+    }
+  </style>
+  <!-- EDIT: 森沢かな1日店長イベント 告知バナー（イベント終了後はこのセクションごと削除） -->
+  <section class="ev-banner-wrap">
+    <a href="event-morisawa-kana.html" class="ev-banner">
+      <img src="images/event-morisawa-kana.jpg" alt="森沢かな" class="ev-banner-photo">
+      <span class="ev-banner-body">
+        <span class="ev-banner-date">7.30 THU</span>
+        <span class="ev-banner-hand">1日店長イベント開催！</span>
+        <span class="ev-banner-title">森沢かな <small>MORISAWA KANA</small></span>
+      </span>
+      <span class="ev-banner-cta">詳しくみる →</span>
+    </a>
+  </section>
+
   <script>
     (function () {
       var target = new Date('2026-07-03T09:00:00+09:00').getTime();

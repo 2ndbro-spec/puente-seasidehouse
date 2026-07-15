@@ -5,11 +5,15 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY
 );
 
-exports.handler = async () => {
+exports.handler = async (event) => {
+  // ?event=1 でイベント専用メニューのみ返す（通常予約ページには出さない）
+  const wantEvent = event?.queryStringParameters?.event === '1';
+
   const { data: menus, error } = await supabase
     .from('menus')
     .select('id, name, description, price, min_people, max_people, open_time, close_time, slot_duration, slot_interval, default_capacity')
     .eq('is_active', true)
+    .eq('is_event', wantEvent)
     .order('created_at');
 
   if (error) return { statusCode: 500, body: JSON.stringify({ error: error.message }) };

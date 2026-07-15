@@ -1,0 +1,458 @@
+---
+permalink: /event-morisawa-kana.html
+---
+{% set page_title = "森沢かな 1日店長 — 7/30(木) PUENTE seaside house" %}
+{% set page_description = "2026年7月30日(木)、逗子海岸の海の家 PUENTE seaside house に森沢かなさんが1日店長として登場！3部制・ブロマイド付き入場券、BBQプラン、チェキ物販も。夏の思い出を一緒につくろう。" %}
+{% set og_title = "森沢かな 1日店長 @ PUENTE seaside house 7/30(木)" %}
+{% set og_description = "逗子海岸の海の家に森沢かなさんが1日店長として登場！入場各部¥3,000（ブロマイド付き）／1日通し¥7,500。BBQ¥8,500（飲み放題付き）。" %}
+{% set og_image = "images/event-morisawa-kana.jpg" %}
+{% set og_type = "website" %}
+{% set twitter_card = "summary_large_image" %}
+{% set head_extra %}
+<style>
+  /* ===== 森沢かな1日店長 イベントページ専用スタイル ===== */
+
+  /* --- ヒーロー：空→海のグラデーション --- */
+  .ev-hero {
+    position: relative;
+    overflow: hidden;
+    padding: 110px 20px 0;
+    text-align: center;
+    color: var(--white);
+    background: linear-gradient(180deg,
+      #9FE0F0 0%,
+      #6EC9E8 30%,
+      var(--deep-ocean) 78%,
+      #23759C 100%);
+  }
+  .ev-hero-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .ev-eyebrow {
+    font-family: var(--font-accent);
+    font-size: 0.8rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #FFF6D6;
+    margin-bottom: 0.8rem;
+  }
+  .ev-handwrite {
+    font-family: var(--font-handwrite);
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    color: var(--warm-gold);
+    display: inline-block;
+    transform: rotate(-2deg);
+    margin-bottom: 0.4rem;
+    text-shadow: 0 2px 10px rgba(0,60,90,0.25);
+  }
+  .ev-title {
+    font-family: var(--font-heading-jp);
+    font-size: clamp(2.6rem, 11vw, 4.4rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 0.3rem;
+    color: var(--white);
+    text-shadow: 0 3px 16px rgba(0,60,90,0.35);
+  }
+  .ev-title-en {
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 3vw, 1.15rem);
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 1.4rem;
+  }
+  .ev-date-badge {
+    display: inline-block;
+    background: var(--warm-gold);
+    color: #7A5A00;
+    font-weight: 700;
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 3.6vw, 1.25rem);
+    padding: 10px 26px;
+    border-radius: 999px;
+    transform: rotate(1.5deg);
+    box-shadow: 0 4px 14px rgba(0,50,80,0.25);
+    margin-bottom: 2.2rem;
+  }
+  .ev-date-badge small { font-weight: 600; font-size: 0.8em; }
+
+  /* ポラロイド風写真 */
+  .ev-polaroid {
+    display: inline-block;
+    background: var(--white);
+    padding: 12px 12px 44px;
+    border-radius: 6px;
+    box-shadow: 0 14px 34px rgba(0,40,70,0.35);
+    transform: rotate(-2.5deg);
+    max-width: min(78vw, 400px);
+    position: relative;
+    margin-bottom: -60px; /* 波と重ねる */
+    transition: transform 0.35s ease;
+  }
+  .ev-polaroid:hover { transform: rotate(-1deg) scale(1.02); }
+  .ev-polaroid::before { /* マスキングテープ */
+    content: '';
+    position: absolute;
+    top: -14px; left: 50%;
+    width: 110px; height: 28px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(126,232,208,0.75);
+    border-radius: 2px;
+  }
+  .ev-polaroid img {
+    width: 100%;
+    display: block;
+    border-radius: 3px;
+  }
+  .ev-polaroid figcaption {
+    font-family: var(--font-handwrite);
+    font-size: 1.35rem;
+    color: #5A6B7A;
+    position: absolute;
+    bottom: 8px; left: 0; right: 0;
+    text-align: center;
+  }
+
+  /* 浮遊する夏モチーフ */
+  .ev-float {
+    position: absolute;
+    font-size: clamp(1.6rem, 5vw, 2.6rem);
+    opacity: 0.85;
+    animation: ev-bob 5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .ev-float.f1 { top: 16%; left: 6%; animation-delay: 0s; }
+  .ev-float.f2 { top: 10%; right: 8%; animation-delay: 1.2s; }
+  .ev-float.f3 { top: 46%; left: 10%; animation-delay: 2.1s; }
+  .ev-float.f4 { top: 40%; right: 6%; animation-delay: 0.7s; }
+  @keyframes ev-bob {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50%      { transform: translateY(-14px) rotate(5deg); }
+  }
+
+  /* 波の区切り */
+  .ev-wave { display: block; width: 100%; height: 90px; margin-top: 0; }
+  .ev-wave path { fill: var(--sand); }
+
+  /* --- ティッカー（マーキー） --- */
+  .ev-ticker {
+    background: var(--teal);
+    color: var(--white);
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 10px 0;
+    font-family: var(--font-display);
+    letter-spacing: 3px;
+    font-size: 0.95rem;
+  }
+  .ev-ticker-track {
+    display: inline-block;
+    animation: ev-marquee 22s linear infinite;
+  }
+  .ev-ticker-track span { margin: 0 1.6em; }
+  @keyframes ev-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* --- タイムテーブル --- */
+  .ev-parts { display: grid; gap: 18px; margin-top: 30px; }
+  @media (min-width: 768px) { .ev-parts { grid-template-columns: repeat(3, 1fr); } }
+  .ev-part-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: 26px 20px;
+    text-align: center;
+    border-top: 6px solid var(--part-color, var(--teal));
+    transition: transform 0.25s ease;
+  }
+  .ev-part-card:hover { transform: translateY(-6px); }
+  .ev-part-card.p1 { --part-color: var(--coral); }
+  .ev-part-card.p2 { --part-color: var(--teal); }
+  .ev-part-card.p3 { --part-color: var(--deep-ocean); }
+  .ev-part-num {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: var(--part-color, var(--teal));
+    color: var(--white);
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  .ev-part-label { font-weight: 700; color: var(--dark-text); margin-bottom: 4px; }
+  .ev-part-time {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 5vw, 1.7rem);
+    color: var(--deep-ocean);
+    margin-bottom: 10px;
+  }
+  .ev-part-price { color: var(--dark-text); font-weight: 600; }
+  .ev-part-price small { display: block; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+  /* 通し券ハイライト */
+  .ev-pass {
+    margin-top: 22px;
+    background: linear-gradient(120deg, #FFF3C4, #FFE08A);
+    border: 2px dashed #E0A800;
+    border-radius: var(--radius-card);
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .ev-pass strong { font-size: clamp(1.2rem, 4.5vw, 1.5rem); color: #7A5A00; }
+  .ev-pass .ev-pass-bonus {
+    display: inline-block;
+    margin-top: 8px;
+    background: var(--white);
+    border-radius: 999px;
+    padding: 6px 18px;
+    font-size: 0.9rem;
+    color: var(--dark-text);
+    box-shadow: var(--shadow);
+  }
+
+  /* --- 物販 --- */
+  .ev-goods { display: grid; gap: 16px; margin-top: 30px; }
+  @media (min-width: 768px) { .ev-goods { grid-template-columns: repeat(3, 1fr); } }
+  .ev-goods-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: 24px 18px;
+    text-align: center;
+  }
+  .ev-goods-emoji { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+  .ev-goods-name { font-weight: 700; color: var(--dark-text); margin-bottom: 4px; }
+  .ev-goods-price {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--coral);
+  }
+  .ev-goods-note { font-size: 0.82rem; color: var(--muted); margin-top: 6px; }
+
+  /* --- BBQバナー --- */
+  .ev-bbq {
+    background: linear-gradient(120deg, var(--coral), var(--sunset-orange));
+    border-radius: var(--radius-card);
+    color: var(--white);
+    padding: 34px 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .ev-bbq::after {
+    content: '🍖';
+    position: absolute;
+    font-size: 7rem;
+    right: -18px; bottom: -26px;
+    opacity: 0.18;
+    transform: rotate(-15deg);
+  }
+  .ev-bbq h3 {
+    font-family: var(--font-heading-jp);
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+    margin-bottom: 6px;
+    color: var(--white);
+  }
+  .ev-bbq-price {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    margin: 6px 0 10px;
+  }
+  .ev-bbq-tags { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .ev-bbq-tags span {
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 0.88rem;
+  }
+
+  /* --- 注意事項・CTA --- */
+  .ev-notes { max-width: 640px; margin: 30px auto 0; }
+  .ev-notes li { margin-bottom: 8px; color: var(--dark-text); font-size: 0.95rem; }
+  .ev-cta {
+    text-align: center;
+    padding: 60px 20px 70px;
+    background: linear-gradient(180deg, var(--sand), #EAF7F4);
+  }
+  .ev-cta .ev-handwrite { color: var(--teal); text-shadow: none; }
+  .ev-cta .btn-primary {
+    font-size: 1.15rem;
+    padding: 18px 56px;
+    box-shadow: 0 8px 22px rgba(240,136,112,0.45);
+  }
+  .ev-cta-note { color: var(--muted); font-size: 0.88rem; margin-top: 14px; }
+
+  .ev-section-lead {
+    text-align: center;
+    color: var(--dark-text);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 2;
+  }
+</style>
+{% endset %}
+{% include "header.njk" %}
+
+<!-- EDIT: 森沢かな1日店長イベント ヒーロー -->
+<section class="ev-hero">
+  <span class="ev-float f1">🌊</span>
+  <span class="ev-float f2">☀️</span>
+  <span class="ev-float f3">🍉</span>
+  <span class="ev-float f4">⛱️</span>
+  <div class="ev-hero-inner">
+    <p class="ev-eyebrow">Special Event @ PUENTE seaside house — Zushi Beach</p>
+    <p class="ev-handwrite">1日店長、やります！</p>
+    <h1 class="ev-title">森沢かな</h1>
+    <p class="ev-title-en">MORISAWA KANA — 1DAY MANAGER</p>
+    <p class="ev-date-badge">2026.7.30 <small>THU</small>　11:00-18:00</p>
+    <figure class="ev-polaroid reveal">
+      <img src="images/event-morisawa-kana.jpg" alt="PUENTE seaside houseの前で両手を広げる森沢かなさん">
+      <figcaption>PUENTEで待ってます 🌊</figcaption>
+    </figure>
+  </div>
+  <svg class="ev-wave" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,48 C240,88 480,8 720,40 C960,72 1200,16 1440,52 L1440,90 L0,90 Z"></path>
+  </svg>
+</section>
+
+<!-- ティッカー -->
+<div class="ev-ticker" aria-hidden="true">
+  <div class="ev-ticker-track">
+    <span>MORISAWA KANA 1DAY MANAGER</span><span>✦</span><span>7.30 THU</span><span>✦</span><span>PUENTE seaside house</span><span>✦</span><span>ZUSHI BEACH</span><span>✦</span>
+    <span>MORISAWA KANA 1DAY MANAGER</span><span>✦</span><span>7.30 THU</span><span>✦</span><span>PUENTE seaside house</span><span>✦</span><span>ZUSHI BEACH</span><span>✦</span>
+  </div>
+</div>
+
+<!-- EDIT: イベント概要 -->
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <span>About</span>
+      <h2>夏のとくべつな1日</h2>
+    </div>
+    <p class="ev-section-lead">
+      7月30日(木)、逗子海岸の海の家 <strong>PUENTE seaside house</strong> に<br>
+      <strong>森沢かな</strong>さんが1日店長として登場します。<br>
+      海風とビーチサイドで過ごす、夏らしさ全開の3部制イベント。<br>
+      入場券にはブロマイドが付いてきます 🎁
+    </p>
+  </div>
+</section>
+
+<!-- EDIT: タイムテーブル・入場料 -->
+<section class="section" style="padding-top: 20px;">
+  <div class="container">
+    <div class="section-title">
+      <span>Time Table</span>
+      <h2>タイムテーブル＆入場料</h2>
+    </div>
+    <div class="ev-parts">
+      <div class="ev-part-card p1 reveal">
+        <span class="ev-part-num">1</span>
+        <p class="ev-part-label">1部</p>
+        <p class="ev-part-time">11:00 - 13:00</p>
+        <p class="ev-part-price">¥3,000<small>ブロマイド付き</small></p>
+      </div>
+      <div class="ev-part-card p2 reveal">
+        <span class="ev-part-num">2</span>
+        <p class="ev-part-label">2部</p>
+        <p class="ev-part-time">13:30 - 15:30</p>
+        <p class="ev-part-price">¥3,000<small>ブロマイド付き</small></p>
+      </div>
+      <div class="ev-part-card p3 reveal">
+        <span class="ev-part-num">3</span>
+        <p class="ev-part-label">3部</p>
+        <p class="ev-part-time">16:00 - 18:00</p>
+        <p class="ev-part-price">¥3,000<small>ブロマイド付き</small></p>
+      </div>
+    </div>
+    <div class="ev-pass reveal">
+      <strong>🎟️ 1日通し券 ¥7,500</strong><br>
+      <span class="ev-pass-bonus">通し特典：10秒動画プレゼント 🎬</span>
+    </div>
+  </div>
+</section>
+
+<!-- EDIT: 物販 -->
+<section class="section" style="padding-top: 20px;">
+  <div class="container">
+    <div class="section-title">
+      <span>Goods</span>
+      <h2>物販メニュー</h2>
+    </div>
+    <div class="ev-goods">
+      <div class="ev-goods-card reveal">
+        <span class="ev-goods-emoji">📸</span>
+        <p class="ev-goods-name">ツーショット</p>
+        <p class="ev-goods-price">¥2,000</p>
+        <p class="ev-goods-note">5枚おまとめで特典あり<br>※当日のおたのしみ</p>
+      </div>
+      <div class="ev-goods-card reveal">
+        <span class="ev-goods-emoji">🎞️</span>
+        <p class="ev-goods-name">ランダムチェキ</p>
+        <p class="ev-goods-price">¥1,500</p>
+      </div>
+      <div class="ev-goods-card reveal">
+        <span class="ev-goods-emoji">🎬</span>
+        <p class="ev-goods-name">個撮 20秒</p>
+        <p class="ev-goods-price">¥2,500</p>
+      </div>
+    </div>
+    <p class="ev-cta-note" style="text-align:center; margin-top:16px;">※ 物販は当日会場にてお求めいただけます</p>
+  </div>
+</section>
+
+<!-- EDIT: BBQプラン -->
+<section class="section" style="padding-top: 20px;">
+  <div class="container">
+    <div class="section-title">
+      <span>Special Menu</span>
+      <h2>店長と楽しむBBQ</h2>
+    </div>
+    <div class="ev-bbq reveal">
+      <h3>🔥 イベント限定 BBQプラン</h3>
+      <p class="ev-bbq-price">¥8,500</p>
+      <div class="ev-bbq-tags">
+        <span>🍻 飲み放題付き</span>
+        <span>💁‍♀️ 店長のお手伝い付き</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDIT: 注意事項 -->
+<section class="section" style="padding-top: 20px;">
+  <div class="container">
+    <div class="section-title">
+      <span>Information</span>
+      <h2>ご案内</h2>
+    </div>
+    <div class="info-box ev-notes">
+      <ul>
+        <li>💴 お支払いはすべて<strong>当日・現地にて</strong>お願いします（事前決済はありません）</li>
+        <li>🎫 各部入替制です。1日通し券をお持ちの方は全部にご参加いただけます</li>
+        <li>🏖️ 会場は逗子海岸「PUENTE seaside house」です（悪天候時の対応はSNSでお知らせします）</li>
+        <li>📱 最新情報は PUENTE公式Instagram・LINEでご案内します</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EDIT: 予約CTA -->
+<section class="ev-cta">
+  <p class="ev-handwrite">夏の思い出、いっしょにつくろう！</p>
+  <h2 style="font-family: var(--font-heading-jp); color: var(--deep-ocean); margin-bottom: 24px;">ご予約はこちらから</h2>
+  <a href="event-morisawa-kana-reserve.html" class="btn btn-primary">この日の予約をする 🌊</a>
+  <p class="ev-cta-note">先着順・満席になり次第受付終了となります</p>
+</section>
+
+{% include "footer.njk" %}

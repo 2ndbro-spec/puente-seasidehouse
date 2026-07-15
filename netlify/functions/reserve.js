@@ -15,7 +15,7 @@ function buildConfirmationEmail({ reservation, menu, notif_channel, notes }) {
     ? `${reservation.num_people}名`
     : `男性 ${reservation.num_male}名 / 女性 ${reservation.num_female}名`;
   const timeRow = isBbq
-    ? `<tr><td style="padding:8px 0;color:#8896A6;width:120px">時間帯</td><td style="padding:8px 0">${reservation.time_start?.slice(0,5)}〜（2時間）</td></tr>`
+    ? `<tr><td style="padding:8px 0;color:#8896A6;width:120px">時間帯</td><td style="padding:8px 0">${reservation.time_start?.slice(0,5)}〜（${menu.slot_duration / 60}時間）</td></tr>`
     : `<tr><td style="padding:8px 0;color:#8896A6">チェックイン</td><td style="padding:8px 0">${reservation.checkin_time || '—'}</td></tr>`;
 
   const lineSection = notif_channel === 'line' ? `
