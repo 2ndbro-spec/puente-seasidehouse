@@ -137,8 +137,8 @@ permalink: /event-morisawa-kana.html
     z-index: 1;
   }
   .ev-float.f1 { top: 16%; left: 6%; animation-delay: 0s; }
-  .ev-float.f2 { top: 5%; right: 4%; animation-delay: 1.2s; }
-  .ev-float.f3 { top: 46%; left: 10%; animation-delay: 2.1s; }
+  .ev-float.f2 { top: 112px; right: 4%; animation-delay: 1.2s; } /* 固定ヘッダー／ハンバーガーの下に確実に逃がす */
+  .ev-float.f3 { top: 46%; left: 2%; animation-delay: 2.1s; } /* ポラロイド写真の左外側に逃がす */
   .ev-float.f4 { top: 40%; right: 6%; animation-delay: 0.7s; }
   @keyframes ev-bob {
     0%, 100% { transform: translateY(0) rotate(-4deg); }
@@ -325,59 +325,19 @@ permalink: /event-morisawa-kana.html
   }
   .ev-cta-note { color: var(--muted); font-size: 0.88rem; margin-top: 14px; }
 
-  .ev-cta-scene {
-    max-width: 560px;
+  .ev-cta-catch {
+    width: 50%;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .ev-cta-bubble {
-    position: relative;
-    z-index: 2;
-    background: var(--white);
-    border-radius: 24px;
-    padding: 20px 28px;
-    box-shadow: 0 10px 30px rgba(46,140,184,0.18);
-    transform: rotate(-2deg);
-  }
-  .ev-cta-bubble p {
-    margin: 0;
     font-family: var(--font-handwrite);
-    font-size: clamp(1.9rem, 8vw, 2.8rem);  /* セクション内で最大の文字 */
-    line-height: 1.45;
+    font-size: clamp(2.3rem, 6vw, 3.6rem); /* セクション内で最大の文字 */
+    line-height: 1.4;
     color: var(--teal);
-  }
-  .ev-cta-bubble::after { /* 吹き出しのしっぽ（下の人物に向ける） */
-    content: '';
-    position: absolute;
-    bottom: -14px;
-    left: 34%;
-    width: 26px;
-    height: 26px;
-    background: var(--white);
-    transform: rotate(58deg) skewX(20deg);
-    border-radius: 0 0 6px 0;
-    box-shadow: 8px 8px 12px -8px rgba(46,140,184,0.15);
-  }
-  .ev-cta-cutout {
-    display: block;
-    height: clamp(250px, 60vw, 360px);
-    width: auto;
-    margin-top: 18px;
-    filter: drop-shadow(0 12px 26px rgba(0,50,80,0.28));
-    /* 裾の直線カットを自然にフェード */
-    -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 99%);
-    mask-image: linear-gradient(to bottom, #000 82%, transparent 99%);
+    text-align: center;
   }
   @media (max-width: 767px) {
-    /* スマホは画面幅いっぱいのフルブリード（左右わずかに見切れOK） */
-    .ev-cta-cutout {
-      width: 104vw;
-      max-width: none;
-      height: auto;
-      flex-shrink: 0;
-      margin-top: 10px; /* 中央揃えはflexの align-items: center に任せる */
+    .ev-cta-catch {
+      width: 90%;
+      font-size: clamp(2.1rem, 9vw, 2.8rem);
     }
   }
   .ev-cta-heading {
@@ -552,12 +512,7 @@ permalink: /event-morisawa-kana.html
 
 <!-- EDIT: 予約CTA -->
 <section class="ev-cta">
-  <div class="ev-cta-scene">
-    <div class="ev-cta-bubble">
-      <p>夏の思い出、<br>いっしょにつくろう！</p>
-    </div>
-    <img class="ev-cta-cutout" src="images/event-morisawa-kana-cutout.png" alt="両手を広げて誘う森沢かなさん" loading="lazy">
-  </div>
+  <p class="ev-cta-catch">夏の思い出、<br>いっしょにつくろう！</p>
   <h2 class="ev-cta-heading">ご予約はこちらから</h2>
   <a href="event-morisawa-kana-reserve.html" class="btn btn-primary">この日の予約をする 🌊</a>
   <p class="ev-cta-note">先着順・満席になり次第受付終了となります</p>
