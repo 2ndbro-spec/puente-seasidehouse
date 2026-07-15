@@ -373,7 +373,7 @@ p {
   right: 0;
   text-align: center;
   z-index: 2;
-  font-family: 'Klee One', cursive;
+  font-family: var(--font-handwrite);
   font-weight: 600;
   font-size: clamp(1.4rem, 3.2vw, 2.67rem);
   color: #fff;
@@ -382,6 +382,11 @@ p {
   -webkit-text-stroke: 1.5px #fff;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
   animation: handwrite 2.4s cubic-bezier(0.4, 0, 0.2, 1) 0.6s both;
+}
+.catch-br { display: none; } /* スマホ専用改行（語中での折り返し防止） */
+@media (max-width: 767px) {
+  .catch-br { display: inline; }
+  .hero-catch { font-size: 1.25rem; }
 }
 
 @keyframes handwrite {
