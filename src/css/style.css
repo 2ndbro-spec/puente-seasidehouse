@@ -979,8 +979,11 @@ p {
   }
 
   .header-inner {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+    /* flexにしておくと、中央のカウントダウンが無いページ（TOP以外）でも
+       ナビがロゴに詰まらず右端に固定される（grid固定3列だと2要素しかない場合に崩れる） */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 72px;
   }
 
