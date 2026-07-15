@@ -406,9 +406,8 @@ tr:last-child td { border-bottom: none; }
       <div class="access-row">
         <div>
           <div class="access-label">パスワード</div>
-          <div class="access-value">puente2026staff</div>
+          <div class="access-value">別途スタッフへ個別にお伝えします（このページには記載しません）</div>
         </div>
-        <button class="copy-btn" onclick="copyPw(this)">コピー</button>
       </div>
     </div>
 
@@ -799,16 +798,6 @@ function toggleFaq(el) {
   el.closest('.faq-item').classList.toggle('open');
 }
 
-function copyPw(btn) {
-  navigator.clipboard.writeText('puente2026staff').then(() => {
-    btn.textContent = '✓ コピー済み';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = 'コピー';
-      btn.classList.remove('copied');
-    }, 2000);
-  });
-}
 </script>
 
 <a href="/ops/" style="
