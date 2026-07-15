@@ -60,9 +60,11 @@
   function remainingBadge(menu) {
     const slot = state.availability[menu.id];
     if (!slot) return '<span class="evr-remaining ok">受付中</span>';
+    // 具体的な残席数は表示しない（裏側の上限はinventoryで管理）
     if (slot.remaining <= 0) return '<span class="evr-remaining full">満席</span>';
-    if (slot.remaining <= 5) return `<span class="evr-remaining few">残り${slot.remaining}席</span>`;
-    return '<span class="evr-remaining ok">空きあり</span>';
+    if (slot.remaining <= 4) return '<span class="evr-remaining few">残りわずか</span>';
+    if (slot.remaining <= 19) return '<span class="evr-remaining mid">残席限りあり</span>';
+    return '<span class="evr-remaining ok">空席あり</span>';
   }
 
   function renderPartOptions() {
@@ -157,13 +159,13 @@
     if (passApplied()) {
       const slot = state.availability[state.passMenu.id];
       if (slot && slot.remaining < state.numPeople) {
-        errors.push(`1日通し券の残席は${Math.max(slot.remaining, 0)}席です。人数を調整してください`);
+        errors.push('1日通し券はご希望の人数分の空きがありません。人数を調整してください');
       }
     } else {
       parts.forEach(menu => {
         const slot = state.availability[menu.id];
         if (slot && slot.remaining < state.numPeople) {
-          errors.push(`${partMeta(menu).label}の残席は${Math.max(slot.remaining, 0)}席です。人数を調整してください`);
+          errors.push(`${partMeta(menu).label}はご希望の人数分の空きがありません。人数を調整してください`);
         }
       });
     }
