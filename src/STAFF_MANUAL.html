@@ -381,13 +381,13 @@ tr:last-child td { border-bottom: none; }
 
 <!-- 目次 -->
 <div class="toc">
-  <button class="toc-btn active" onclick="scrollTo('access')">📱 アクセス</button>
-  <button class="toc-btn" onclick="scrollTo('login')">🔐 ログイン</button>
-  <button class="toc-btn" onclick="scrollTo('tab1')">📋 予約一覧</button>
-  <button class="toc-btn" onclick="scrollTo('tab2')">📅 残枠調整</button>
-  <button class="toc-btn" onclick="scrollTo('tab3')">✅ チェックイン</button>
-  <button class="toc-btn" onclick="scrollTo('faq')">❓ FAQ</button>
-  <button class="toc-btn" onclick="scrollTo('contact')">📞 緊急連絡</button>
+  <button class="toc-btn active" onclick="scrollToSection('access', this)">📱 アクセス</button>
+  <button class="toc-btn" onclick="scrollToSection('login', this)">🔐 ログイン</button>
+  <button class="toc-btn" onclick="scrollToSection('tab1', this)">📋 予約一覧</button>
+  <button class="toc-btn" onclick="scrollToSection('tab2', this)">📅 残枠調整</button>
+  <button class="toc-btn" onclick="scrollToSection('tab3', this)">✅ チェックイン</button>
+  <button class="toc-btn" onclick="scrollToSection('faq', this)">❓ FAQ</button>
+  <button class="toc-btn" onclick="scrollToSection('contact', this)">📞 緊急連絡</button>
 </div>
 
 <div class="content">
@@ -785,13 +785,13 @@ tr:last-child td { border-bottom: none; }
 </div><!-- /content -->
 
 <script>
-function scrollTo(id) {
+function scrollToSection(id, btn) {
   const el = document.getElementById(id);
   if (!el) return;
   const y = el.getBoundingClientRect().top + window.scrollY - 60;
   window.scrollTo({ top: y, behavior: 'smooth' });
   document.querySelectorAll('.toc-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 function toggleFaq(el) {
