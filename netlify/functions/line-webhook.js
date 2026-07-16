@@ -94,6 +94,16 @@ exports.handler = async (event) => {
   await Promise.all(
     events.map(async (ev) => {
       if (ev.type === 'message' && ev.message.type === 'text') {
+        if (ev.source.type === 'group' || ev.source.type === 'room') {
+          // グループ/複数人トークでは予約番号検索はせず、ID確認用の応答のみ行う
+          if (ev.message.text.trim().toLowerCase() === 'id') {
+            await replyMessage(ev.replyToken, [{
+              type: 'text',
+              text: `このグループのID:\n${ev.source.groupId || ev.source.roomId}`,
+            }]);
+          }
+          return;
+        }
         await handleTextMessage(ev.source.userId, ev.replyToken, ev.message.text);
       }
     })
