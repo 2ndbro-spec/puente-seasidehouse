@@ -178,7 +178,7 @@
       <p class="rsv-note" style="margin-bottom:0.75rem;">BBQ・飲み放題のいずれか、または組み合わせて選択してください。</p>
       <label class="addon-label">
         <input type="checkbox" id="bbq-check" ${state.includeBbq ? 'checked' : ''}>
-        <span>BBQ席（食材・機材はお持ちください） <strong>¥${menu.price.toLocaleString()}/人（税込）</strong></span>
+        <span>BBQ（食材・機材込み、手ぶらでOK） <strong>¥${menu.price.toLocaleString()}/人（税込）</strong></span>
       </label>
       ${(menu.addons || []).map(a => `
         <label class="addon-label">
@@ -321,7 +321,7 @@
     const total = bbqBasePrice * people + addonTotal;
 
     const selectedItems = [
-      ...(isBbq && state.includeBbq ? ['BBQ席'] : []),
+      ...(isBbq && state.includeBbq ? ['BBQ'] : []),
       ...menu.addons.filter(a => state.addonIds.includes(a.id)).map(a => `飲み放題 ${a.name}`),
     ];
 
@@ -369,7 +369,7 @@
     let notesWithItems = state.notes || '';
     if (isBbq) {
       const selectedItems = [
-        ...(state.includeBbq ? ['BBQ席'] : []),
+        ...(state.includeBbq ? ['BBQ'] : []),
         ...menu.addons.filter(a => state.addonIds.includes(a.id)).map(a => `飲み放題 ${a.name}`),
       ];
       const itemsNote = `【ご利用内容】${selectedItems.join('、')}`;
