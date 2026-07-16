@@ -17,6 +17,17 @@
   font-display: swap;
 }
 
+/* --- Webフォント: 殴り書きクレヨン（トップページ ヒーローキャッチコピー専用） ---
+   hero-catch で使用する文字のみのサブセット版（フル4.9MB→約12KB）。
+   キャッチコピーの文言を変更する場合はサブセット再生成が必要 */
+@font-face {
+  font-family: 'CrayonScribble';
+  src: url('/fonts/crayon-subset.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* --- CSS Variables --- */
 :root {
   --deep-ocean: #2E8CB8;
@@ -373,7 +384,7 @@ p {
   right: 0;
   text-align: center;
   z-index: 2;
-  font-family: var(--font-handwrite);
+  font-family: 'CrayonScribble', var(--font-handwrite);
   font-weight: 600;
   font-size: clamp(1.4rem, 3.2vw, 2.67rem);
   color: #fff;
