@@ -33,27 +33,31 @@ async function notifyStaffGroups(reservation, menu) {
 
   const text = `🔔 新規予約が入りました\n\n${statusLabel}\n📋 メニュー：${menu.name}\n📅 日付：${reservation.date}\n${timeText}\n👥 人数：${people}\n🙋 お名前：${reservation.name}\n🎫 予約番号：${reservation.reservation_code}`;
 
-  try {
-    const res = await fetch('https://api.line.me/v2/bot/message/multicast', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
-      },
-      body: JSON.stringify({
-        to: LINE_STAFF_GROUP_IDS,
-        messages: [{ type: 'text', text }],
-      }),
-    });
-    if (!res.ok) {
-      const bodyText = await res.text();
-      console.error(`LINEグループ通知失敗: status=${res.status}`, bodyText);
-    } else {
-      console.log('LINEグループ通知成功', { groupCount: LINE_STAFF_GROUP_IDS.length });
+  // multicastは個人ユーザーID宛て専用でグループ/ルームIDを受け付けないため、
+  // グループごとにpushを個別送信する
+  await Promise.all(LINE_STAFF_GROUP_IDS.map(async (groupId) => {
+    try {
+      const res = await fetch('https://api.line.me/v2/bot/message/push', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify({
+          to: groupId,
+          messages: [{ type: 'text', text }],
+        }),
+      });
+      if (!res.ok) {
+        const bodyText = await res.text();
+        console.error(`LINEグループ通知失敗 (${groupId}): status=${res.status}`, bodyText);
+      } else {
+        console.log(`LINEグループ通知成功 (${groupId})`);
+      }
+    } catch (lineErr) {
+      console.error(`LINEグループ通知エラー (${groupId}):`, lineErr);
     }
-  } catch (lineErr) {
-    console.error('LINEグループ通知エラー:', lineErr);
-  }
+  }));
 }
 
 function buildConfirmationEmail({ reservation, menu, notif_channel, notes }) {
