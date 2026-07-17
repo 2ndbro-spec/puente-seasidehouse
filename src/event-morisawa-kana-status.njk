@@ -61,7 +61,7 @@ permalink: /event-morisawa-kana-status.html
     margin: 0 0 6px;
   }
   .evs-total-num {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-size: clamp(2.4rem, 10vw, 3rem);
     color: var(--deep-ocean);
     font-weight: 700;
@@ -104,7 +104,7 @@ permalink: /event-morisawa-kana-status.html
     font-size: 0.98rem;
   }
   .evs-part-count {
-    font-family: var(--font-display);
+    font-family: var(--font-body);
     font-weight: 700;
     color: var(--deep-ocean);
     font-size: 1rem;
@@ -138,6 +138,92 @@ permalink: /event-morisawa-kana-status.html
     font-size: 0.72rem;
     padding: 2px 10px;
     border-radius: 999px;
+  }
+
+  .evs-part-groups {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #E8EEF3;
+    display: grid;
+    gap: 6px;
+  }
+  .evs-group-row-wrap + .evs-group-row-wrap {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dotted #F1F4F7;
+  }
+  .evs-group-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 0.85rem;
+  }
+  .evs-group-goods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .evs-group-goods-item {
+    font-size: 0.72rem;
+    color: var(--teal);
+    background: #F0FAF6;
+    border-radius: 999px;
+    padding: 1px 8px;
+  }
+  .evs-group-name {
+    color: var(--dark-text);
+    font-weight: 600;
+  }
+  .evs-group-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .evs-group-code {
+    font-family: var(--font-display);
+    letter-spacing: 0.03em;
+  }
+  .evs-badge-pending {
+    display: inline-block;
+    background: #FFF3D6;
+    color: #8A6300;
+    font-weight: 700;
+    font-size: 0.68rem;
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+
+  .evs-goods-card {
+    background: var(--white);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-top: 20px;
+  }
+  .evs-goods-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #F1F4F7;
+    font-size: 0.92rem;
+  }
+  .evs-goods-row:last-child { border-bottom: none; }
+  .evs-goods-name { color: var(--dark-text); }
+  .evs-goods-count {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--deep-ocean);
+  }
+  .evs-goods-empty {
+    color: var(--muted);
+    font-size: 0.88rem;
+    text-align: center;
+    padding: 8px 0;
   }
 
   .evs-bbq-card {
@@ -205,6 +291,9 @@ permalink: /event-morisawa-kana-status.html
         </div>
       </div>
 
+      <p class="evs-section-label">物販希望 集計</p>
+      <div id="evs-goods" class="evs-goods-card"></div>
+
       <div class="evs-footer-bar">
         <p class="evs-updated-at">最終更新 <span id="evs-updated-time">--:--:--</span></p>
         <button id="evs-refresh-btn" class="btn btn-outline">いま更新</button>
@@ -257,6 +346,7 @@ permalink: /event-morisawa-kana-status.html
   var totalValueEl = document.getElementById('evs-total-value');
   var partsEl = document.getElementById('evs-parts');
   var bbqCountEl = document.getElementById('evs-bbq-count');
+  var goodsEl = document.getElementById('evs-goods');
   var updatedTimeEl = document.getElementById('evs-updated-time');
   var refreshBtn = document.getElementById('evs-refresh-btn');
 
@@ -282,6 +372,27 @@ permalink: /event-morisawa-kana-status.html
       var widthPct = Math.min(pct, 100);
       var name = escapeHtml(formatPartName(part.name));
 
+      var groupsHtml = (part.reservations || []).map(function (g) {
+        var pendingBadge = g.status === 'pending' ? '<span class="evs-badge-pending">仮予約</span>' : '';
+        var goodsLine = (g.goods && g.goods.length)
+          ? '<div class="evs-group-goods">' + g.goods.map(function (item) {
+              return '<span class="evs-group-goods-item">✅ ' + escapeHtml(item) + '</span>';
+            }).join('') + '</div>'
+          : '';
+        return '' +
+          '<div class="evs-group-row-wrap">' +
+            '<div class="evs-group-row">' +
+              '<span class="evs-group-name">' + escapeHtml(g.name || '（名前未設定）') + '</span>' +
+              '<span class="evs-group-meta">' +
+                '<span class="evs-group-code">' + escapeHtml(g.reservation_code || '—') + '</span>' +
+                '<span>' + (g.num_people || 0) + '名</span>' +
+                pendingBadge +
+              '</span>' +
+            '</div>' +
+            goodsLine +
+          '</div>';
+      }).join('');
+
       return '' +
         '<div class="evs-part-card">' +
           '<div class="evs-part-head">' +
@@ -295,6 +406,7 @@ permalink: /event-morisawa-kana-status.html
             '<span>' + part.groups + '組・残り' + Math.max(part.remaining, 0) + '席</span>' +
             (isFull ? '<span class="evs-badge-full">満席</span>' : '') +
           '</div>' +
+          (groupsHtml ? '<div class="evs-part-groups">' + groupsHtml + '</div>' : '') +
         '</div>';
     }).join('');
 
@@ -302,6 +414,19 @@ permalink: /event-morisawa-kana-status.html
 
     var bbq = data.bbq || { people: 0, groups: 0 };
     bbqCountEl.textContent = bbq.people + '名・' + bbq.groups + '組';
+
+    var goods = data.goods || [];
+    if (goods.length) {
+      goodsEl.innerHTML = goods.map(function (g) {
+        return '' +
+          '<div class="evs-goods-row">' +
+            '<span class="evs-goods-name">' + escapeHtml(g.name) + '</span>' +
+            '<span class="evs-goods-count">' + g.count + '件</span>' +
+          '</div>';
+      }).join('') + (data.goods_groups ? '<p class="evs-goods-empty">計 ' + data.goods_groups + '組が物販希望</p>' : '');
+    } else {
+      goodsEl.innerHTML = '<p class="evs-goods-empty">物販希望はまだありません</p>';
+    }
 
     updatedTimeEl.textContent = formatTime(new Date());
 

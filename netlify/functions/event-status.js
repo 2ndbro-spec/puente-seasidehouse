@@ -8,6 +8,12 @@ const supabase = createClient(
 const EVENT_DATE = '2026-07-30';
 const EVENT_NAME = '森沢かな1日店長';
 
+function parseGoods(notes) {
+  const match = (notes || '').match(/物販希望[：:]\s*(.+)/);
+  if (!match) return [];
+  return match[1].split(/[、,]/).map(s => s.trim()).filter(Boolean);
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'GET') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method not allowed' }) };
@@ -43,6 +49,8 @@ exports.handler = async (event) => {
           total_reserved: 0,
           parts: [],
           bbq: { people: 0, groups: 0 },
+          goods: [],
+          goods_groups: 0,
           generated_at: new Date().toISOString()
         })
       };
@@ -67,7 +75,7 @@ exports.handler = async (event) => {
     {
       const { data: rsvRows, error: rsvError } = await supabase
         .from('reservations')
-        .select('id, menu_id, num_people, reservation_addons(id)')
+        .select('id, menu_id, num_people, name, reservation_code, notes, status, reservation_addons(id)')
         .in('menu_id', menuIds)
         .eq('date', EVENT_DATE)
         .in('status', ['confirmed', 'pending']);
@@ -76,7 +84,7 @@ exports.handler = async (event) => {
         // ネスト埋め込みが失敗した場合、reservation_addonsを別クエリで取得
         const { data: rsvRowsFlat, error: rsvFlatError } = await supabase
           .from('reservations')
-          .select('id, menu_id, num_people')
+          .select('id, menu_id, num_people, name, reservation_code, notes, status')
           .in('menu_id', menuIds)
           .eq('date', EVENT_DATE)
           .in('status', ['confirmed', 'pending']);
@@ -123,7 +131,14 @@ exports.handler = async (event) => {
         reserved,
         capacity,
         remaining,
-        groups
+        groups,
+        reservations: menuReservations.map(r => ({
+          name: r.name,
+          reservation_code: r.reservation_code,
+          num_people: r.num_people,
+          status: r.status,
+          goods: parseGoods(r.notes)
+        }))
       };
     });
 
@@ -148,6 +163,21 @@ exports.handler = async (event) => {
       groups: bbqReservations.length
     };
 
+    // 6. 物販希望の集計（notesの「物販希望: 品目、品目」を集計）
+    const goodsCounts = {};
+    let goodsGroups = 0;
+    reservations.forEach(r => {
+      const items = parseGoods(r.notes);
+      if (!items.length) return;
+      goodsGroups += 1;
+      items.forEach(item => {
+        goodsCounts[item] = (goodsCounts[item] || 0) + 1;
+      });
+    });
+    const goods = Object.entries(goodsCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count);
+
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
@@ -157,6 +187,8 @@ exports.handler = async (event) => {
         total_reserved,
         parts,
         bbq,
+        goods,
+        goods_groups: goodsGroups,
         generated_at: new Date().toISOString()
       })
     };
