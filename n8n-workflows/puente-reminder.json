@@ -12,26 +12,33 @@
           ]
         }
       },
-      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "id": "5c25dbe2-1fce-41ad-a486-44cf5244d962",
       "name": "毎朝0時UTC（JST 9時）",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [240, 300]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
         "jsCode": "const jstNow = new Date(Date.now() + 9 * 60 * 60 * 1000);\nconst tomorrow = new Date(jstNow.getTime() + 24 * 60 * 60 * 1000);\nconst tomorrowStr = tomorrow.toISOString().slice(0, 10);\nreturn [{ json: { tomorrow: tomorrowStr } }];"
       },
-      "id": "a1b2c3d4-0002-0002-0002-000000000002",
+      "id": "53ce8a33-d07b-4f77-a44d-82c2b8634c51",
       "name": "明日の日付を計算",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 300]
+      "position": [
+        224,
+        0
+      ]
     },
     {
       "parameters": {
-        "method": "GET",
         "url": "https://rwptdctdiubxjqklogza.supabase.co/rest/v1/reservations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "supabaseApi",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -55,46 +62,47 @@
         },
         "sendHeaders": true,
         "headerParameters": {
-          "parameters": [
-            {
-              "name": "apikey",
-              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU"
-            },
-            {
-              "name": "Authorization",
-              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3cHRkY3RkaXVieGpxa2xvZ3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzODQzOTIsImV4cCI6MjA5Mzk2MDM5Mn0.rcNsd0YM487JEmJMFia_bH8byvRA8vqc_irTE65LZiU"
-            }
-          ]
+          "parameters": []
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0003-0003-0003-000000000003",
+      "id": "9c848123-2b99-4d5f-9ad7-6331132a44bf",
       "name": "Supabase — 翌日の予約取得",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [680, 300]
+      "position": [
+        448,
+        0
+      ],
+      "credentials": {
+        "supabaseApi": {
+          "id": "IkjWjVd3BYVO5Izo",
+          "name": "Supabase account"
+        }
+      }
     },
     {
       "parameters": {
         "jsCode": "const items = $input.first().json;\nif (!Array.isArray(items) || items.length === 0) return [];\n\nreturn items.map(r => {\n  const isBbq = !!r.time_start;\n  const timeText = isBbq\n    ? r.time_start.slice(0, 5) + '〜（2時間）'\n    : 'チェックイン：' + (r.checkin_time || '当日受付');\n  const peopleText = isBbq\n    ? r.num_people + '名'\n    : '男性' + r.num_male + '名 / 女性' + r.num_female + '名';\n\n  const text = `【PUENTE】明日のご予約のリマインダーです 🌊\\n\\n📋 予約内容\\n━━━━━━━━━━\\n📅 日付：${r.date}\\n⏰ 時間：${timeText}\\n👥 人数：${peopleText}\\n🎫 予約番号：${r.reservation_code}\\n━━━━━━━━━━\\n\\n当日は予約番号またはQRコードをスタッフにご提示ください。\\nお天気に恵まれますように ☀️`;\n\n  return {\n    json: {\n      line_user_id: r.line_user_id,\n      payload: JSON.stringify({\n        to: r.line_user_id,\n        messages: [{ type: 'text', text }]\n      })\n    }\n  };\n});"
       },
-      "id": "a1b2c3d4-0004-0004-0004-000000000004",
+      "id": "4e1e38ed-343b-4ac5-8923-1c4fd21dbe70",
       "name": "メッセージを組み立て",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [900, 300]
+      "position": [
+        672,
+        0
+      ]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.line.me/v2/bot/message/push",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {
-              "name": "Authorization",
-              "value": "Bearer B3v28n22DjddVaVnOPRx0bqX43kJGhvSU9JAwJ3iAfdEkQffFb8/zdOYOgLMzWttnr8/ckbodijjvCWiaXMJmKIleZnNaFW9/7v8xFpQwB3q4vR6qyoK+UX7LE1jOI5OiO+7vSS4Hui+vp4y67fWAQdB04t89/1O/w1cDnyilFU="
-            },
             {
               "name": "Content-Type",
               "value": "application/json"
@@ -107,38 +115,80 @@
         "body": "={{ $json.payload }}",
         "options": {}
       },
-      "id": "a1b2c3d4-0005-0005-0005-000000000005",
+      "id": "9f1e284d-19f6-4fef-8b65-bd9221f193d1",
       "name": "LINE Push — リマインダー送信",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1120, 300]
+      "position": [
+        880,
+        0
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "wEYMG6qFqYBNg25N",
+          "name": "Header Auth account 3"
+        }
+      }
     }
   ],
+  "pinData": {},
   "connections": {
     "毎朝0時UTC（JST 9時）": {
       "main": [
-        [{ "node": "明日の日付を計算", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "明日の日付を計算",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "明日の日付を計算": {
       "main": [
-        [{ "node": "Supabase — 翌日の予約取得", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "Supabase — 翌日の予約取得",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Supabase — 翌日の予約取得": {
       "main": [
-        [{ "node": "メッセージを組み立て", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "メッセージを組み立て",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "メッセージを組み立て": {
       "main": [
-        [{ "node": "LINE Push — リマインダー送信", "type": "main", "index": 0 }]
+        [
+          {
+            "node": "LINE Push — リマインダー送信",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
-    "executionOrder": "v1"
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
   },
+  "versionId": "95ca90c0-7dbf-4894-ae0c-089dbe3eb801",
+  "meta": {
+    "instanceId": "630c4768e6cc80b5f76453ac08c59e03220595e019d350c1170adc728e7563bc"
+  },
+  "nodeGroups": [],
+  "id": "Qss6wHv2d7mFt6Jr",
   "tags": []
 }
