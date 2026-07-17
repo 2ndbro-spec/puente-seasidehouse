@@ -14,7 +14,13 @@ const LINE_STAFF_GROUP_IDS = (process.env.LINE_STAFF_GROUP_IDS || '')
   .split(',').map(id => id.trim()).filter(Boolean);
 
 async function notifyStaffGroups(reservation, menu) {
-  if (!LINE_CHANNEL_ACCESS_TOKEN || !LINE_STAFF_GROUP_IDS.length) return;
+  if (!LINE_CHANNEL_ACCESS_TOKEN || !LINE_STAFF_GROUP_IDS.length) {
+    console.log('LINEグループ通知スキップ: トークンまたはグループID未設定', {
+      hasToken: !!LINE_CHANNEL_ACCESS_TOKEN,
+      groupCount: LINE_STAFF_GROUP_IDS.length,
+    });
+    return;
+  }
 
   const isBbq = !!menu.slot_duration;
   const people = isBbq
@@ -28,7 +34,7 @@ async function notifyStaffGroups(reservation, menu) {
   const text = `🔔 新規予約が入りました\n\n${statusLabel}\n📋 メニュー：${menu.name}\n📅 日付：${reservation.date}\n${timeText}\n👥 人数：${people}\n🙋 お名前：${reservation.name}\n🎫 予約番号：${reservation.reservation_code}`;
 
   try {
-    await fetch('https://api.line.me/v2/bot/message/multicast', {
+    const res = await fetch('https://api.line.me/v2/bot/message/multicast', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -39,6 +45,12 @@ async function notifyStaffGroups(reservation, menu) {
         messages: [{ type: 'text', text }],
       }),
     });
+    if (!res.ok) {
+      const bodyText = await res.text();
+      console.error(`LINEグループ通知失敗: status=${res.status}`, bodyText);
+    } else {
+      console.log('LINEグループ通知成功', { groupCount: LINE_STAFF_GROUP_IDS.length });
+    }
   } catch (lineErr) {
     console.error('LINEグループ通知エラー:', lineErr);
   }
