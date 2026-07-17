@@ -9,6 +9,41 @@ const supabase = createClient(
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const LINE_CHANNEL_ACCESS_TOKEN = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+const LINE_STAFF_GROUP_IDS = (process.env.LINE_STAFF_GROUP_IDS || '')
+  .split(',').map(id => id.trim()).filter(Boolean);
+
+async function notifyStaffGroups(reservation, menu) {
+  if (!LINE_CHANNEL_ACCESS_TOKEN || !LINE_STAFF_GROUP_IDS.length) return;
+
+  const isBbq = !!menu.slot_duration;
+  const people = isBbq
+    ? `${reservation.num_people}名`
+    : `男性${reservation.num_male}名 / 女性${reservation.num_female}名`;
+  const timeText = isBbq
+    ? `⏰ 時間：${reservation.time_start?.slice(0, 5)}〜`
+    : `⏰ チェックイン予定：${reservation.checkin_time || '当日受付'}`;
+  const statusLabel = reservation.status === 'confirmed' ? '✅ 本予約' : '⚠️ 仮予約';
+
+  const text = `🔔 新規予約が入りました\n\n${statusLabel}\n📋 メニュー：${menu.name}\n📅 日付：${reservation.date}\n${timeText}\n👥 人数：${people}\n🙋 お名前：${reservation.name}\n🎫 予約番号：${reservation.reservation_code}`;
+
+  try {
+    await fetch('https://api.line.me/v2/bot/message/multicast', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${LINE_CHANNEL_ACCESS_TOKEN}`,
+      },
+      body: JSON.stringify({
+        to: LINE_STAFF_GROUP_IDS,
+        messages: [{ type: 'text', text }],
+      }),
+    });
+  } catch (lineErr) {
+    console.error('LINEグループ通知エラー:', lineErr);
+  }
+}
+
 function buildConfirmationEmail({ reservation, menu, notif_channel, notes }) {
   const isBbq = !!menu.slot_duration;
   const statusLabel = reservation.status === 'confirmed' ? '本予約' : '仮予約';
@@ -201,6 +236,9 @@ exports.handler = async (event) => {
       console.error('メール送信エラー:', mailErr);
     }
   }
+
+  // スタッフLINEグループへ通知（失敗しても予約は成功扱い）
+  await notifyStaffGroups(reservation, menu);
 
   return {
     statusCode: 200,
