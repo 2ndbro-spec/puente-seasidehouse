@@ -2,7 +2,7 @@ const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_ANON_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
 const BBQ_ID = '618e2221-7a17-4d2a-ab14-f8dd2aa695a2';
